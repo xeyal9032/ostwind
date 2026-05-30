@@ -1,0 +1,15 @@
+/** Ana sayfa hero arka plan slaytları */
+export const HERO_SLIDES = [
+  '/images/hero/slide-01.jpg',
+  '/images/hero/slide-02.jpg',
+  '/images/hero/slide-03.jpg',
+  '/images/hero/slide-04.jpg',
+  '/images/hero/slide-05.jpg',
+  '/images/hero/slide-06.jpg',
+  '/images/hero/slide-07.jpg',
+  '/images/hero/slide-08.jpg',
+  '/images/hero/slide-09.jpg',
+  '/images/hero/slide-10.jpg',
+] as const;
+
+export const HERO_SLIDE_INTERVAL_MS = 3000;

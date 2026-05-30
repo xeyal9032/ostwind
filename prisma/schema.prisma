@@ -1,0 +1,242 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int             @id @default(autoincrement())
+  name         String?
+  email        String          @unique
+  password     String
+  role         String          @default("SUPER_ADMIN")
+  isActive     Boolean         @default(true)
+  permissions  Json?
+  totpSecret   String?         @db.Text
+  totpEnabled  Boolean         @default(false)
+  lastSeenAt   DateTime?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  auditLogs    AdminAuditLog[]
+  sessions     AdminSession[]
+}
+
+model AdminAuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  userEmail String
+  userName  String?
+  action    String
+  entity    String
+  entityId  String?
+  summary   String?  @db.Text
+  metadata  Json?
+  ip        String?
+  userAgent String?  @db.Text
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([entity])
+  @@index([userId])
+}
+
+model AdminSession {
+  id           String   @id @default(cuid())
+  userId       Int
+  userAgent    String?  @db.Text
+  ip           String?
+  lastActiveAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model University {
+  id              Int       @id @default(autoincrement())
+  slug            String    @unique
+  name            Json
+  description     Json
+  country         Json
+  city            Json
+  image           String?
+  tuitionFee      String?
+  metaTitle       Json?
+  metaDescription Json?
+  ogImage         String?
+  deletedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Service {
+  id              Int       @id @default(autoincrement())
+  slug            String    @unique
+  title           Json
+  description     Json
+  icon            String?
+  metaTitle       Json?
+  metaDescription Json?
+  ogImage         String?
+  deletedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model PricingPlan {
+  id        Int       @id @default(autoincrement())
+  name      Json
+  price     String
+  isPopular Boolean   @default(false)
+  features  Json
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  slug      String    @unique
+  name      Json
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  posts     Post[]
+}
+
+model Post {
+  id              Int       @id @default(autoincrement())
+  slug            String    @unique
+  title           Json
+  content         Json
+  image           String?
+  published       Boolean   @default(false)
+  categoryId      Int?
+  metaTitle       Json?
+  metaDescription Json?
+  ogImage         String?
+  deletedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  category        Category? @relation(fields: [categoryId], references: [id])
+
+  @@index([categoryId], map: "Post_categoryId_fkey")
+}
+
+model FAQ {
+  id        Int       @id @default(autoincrement())
+  question  Json
+  answer    Json
+  category  String?
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model TeamMember {
+  id          Int       @id @default(autoincrement())
+  name        String
+  role        Json
+  image       String?
+  socialLinks Json?
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Application {
+  id           Int       @id @default(autoincrement())
+  studentName  String
+  email        String
+  phone        String
+  universityId Int?
+  message      String?   @db.Text
+  status       String    @default("PENDING")
+  readAt       DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Message {
+  id              Int       @id @default(autoincrement())
+  name            String
+  email           String
+  subject         String?
+  message         String    @db.Text
+  readAt          DateTime?
+  adminReply      String?   @db.Text
+  repliedAt       DateTime?
+  repliedByEmail  String?
+  createdAt       DateTime  @default(now())
+}
+
+model ContactContent {
+  id            Int      @id @default(1)
+  address       String   @db.Text
+  phone         String
+  email         String
+  mapsUrl       String?  @db.Text
+  hoursWeekdays String
+  hoursSaturday String
+  sundayClosed  Boolean  @default(true)
+  hoursSunday   String?
+  facebookUrl   String?  @db.Text
+  instagramUrl  String?  @db.Text
+  tiktokUrl     String?  @db.Text
+  pageSubtitle  Json?
+  updatedAt     DateTime @updatedAt
+}
+
+model AboutContent {
+  id           Int      @id @default(1)
+  storyImage   String?  @db.Text
+  storyTitle   Json
+  storyText    Json
+  companyTitle Json?
+  missionTitle Json?
+  missionText  Json?
+  valuesTitle  Json?
+  valuesText   Json?
+  teamTitle    Json?
+  teamText     Json?
+  updatedAt    DateTime @updatedAt
+}
+
+model HomePageContent {
+  id        Int      @id @default(1)
+  content   Json
+  updatedAt DateTime @updatedAt
+}
+
+model EmailSettings {
+  id                          Int      @id @default(1)
+  enabled                     Boolean  @default(false)
+  smtpHost                    String?
+  smtpPort                    Int?     @default(587)
+  smtpSecure                  Boolean  @default(false)
+  smtpUser                    String?
+  smtpPass                    String?  @db.Text
+  fromEmail                   String?
+  notifyAdminOnApplication    Boolean  @default(true)
+  adminNotifyEmail            String?
+  notifyAdminOnMessage        Boolean  @default(true)
+  sendApplicantConfirmation   Boolean  @default(false)
+  applicantEmailSubject       Json?
+  applicantEmailBody          Json?
+  updatedAt                   DateTime @updatedAt
+}
+
+model MediaFile {
+  id           Int      @id @default(autoincrement())
+  filename     String
+  path         String   @unique
+  mimeType     String?
+  sizeBytes    Int?
+  uploadedById Int?
+  createdAt    DateTime @default(now())
+}

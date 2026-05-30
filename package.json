@@ -1,0 +1,40 @@
+{
+  "name": "ostwind",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "postinstall": "prisma generate",
+    "predeploy": "prisma generate && npm run build",
+    "deploy:check": "node scripts/pre-deploy-check.mjs && node scripts/db-stats.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.21.0",
+    "bcrypt": "^5.1.1",
+    "next": "16.2.6",
+    "next-auth": "^4.24.11",
+    "next-intl": "^4.12.0",
+    "nodemailer": "^7.0.13",
+    "otplib": "^13.4.0",
+    "qrcode": "^1.5.4",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "prisma": "^5.21.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

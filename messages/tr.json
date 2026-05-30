@@ -1,0 +1,197 @@
+{
+  "Index": {
+    "title": "Uluslararası Eğitime Giden Yolunuz",
+    "description": "OstWindGroup ile hayalinizdeki üniversiteye başvurun."
+  },
+  "Header": {
+    "home": "Ana Sayfa",
+    "universities": "Üniversiteler",
+    "services": "Hizmetler",
+    "pricing": "Fiyatlandırma",
+    "faq": "SSS",
+    "blog": "Blog",
+    "about": "Hakkımızda",
+    "contact": "İletişim",
+    "applyNow": "Hemen Başvur"
+  },
+  "ScrollTop": {
+    "label": "Yukarı çık"
+  },
+  "Footer": {
+    "description": "Uluslararası eğitim danışmanlığında güvenilir ortağınız.",
+    "quickLinks": "Hızlı Linkler",
+    "universities": "Üniversiteler",
+    "services": "Hizmetler",
+    "pricing": "Fiyatlandırma",
+    "faq": "SSS",
+    "blog": "Blog",
+    "about": "Hakkımızda",
+    "contact": "İletişim",
+    "contactUs": "Bize Ulaşın",
+    "followUs": "Bizi Takip Edin",
+    "language": "Dil",
+    "allRightsReserved": "Tüm hakları saklıdır.",
+    "brandLogoAlt": "OstWind Group logosu",
+    "openLogo": "Logoyu büyük aç",
+    "closeLogo": "Kapat"
+  },
+  "UniversityDetail": {
+    "backToUniversities": "Üniversitelere Dön",
+    "aboutUniversity": "Üniversite Hakkında",
+    "applyNow": "Hemen Başvur",
+    "applyDescription": "{name} üniversitesi için başvuru sürecinizi OstWind Group güvencesiyle başlatın.",
+    "fillApplicationForm": "Başvuru Formunu Doldur",
+    "haveQuestions": "Sorularınız mı var?",
+    "talkToAdvisor": "Danışmanımızla Görüşün"
+  },
+  "Home": {
+    "heroTitle1": "Uluslararası Eğitimin",
+    "heroTitleHighlight": "En Güvenilir Yolu",
+    "heroDescription": "OstWind Group ile hayallerinizdeki üniversiteye adım atın. Kabulden vizeye, konaklamadan rehberliğe tüm süreçte yanınızdayız.",
+    "heroApplyNow": "Hemen Başvur",
+    "heroExplore": "Üniversiteleri Keşfet",
+    "stats": {
+      "students": "Mutlu Öğrenci",
+      "universities": "Anlaşmalı Üniversite",
+      "countries": "Ülke Seçeneği",
+      "acceptance": "Kabul Oranı"
+    },
+    "features": {
+      "title": "Neden OstWind Group?",
+      "subtitle": "Eğitim hayatınızı şansa bırakmayın, uzman ekibimizle garantili adımlar atın.",
+      "card1Title": "Uluslararası Diploma",
+      "card1Desc": "Tüm dünyada geçerli mavi diploma ile kariyerinize küresel bir başlangıç yapın.",
+      "card2Title": "Güvenilir Partnerler",
+      "card2Desc": "Doğrudan temsilcisi olduğumuz devlet ve köklü özel üniversitelerde sınavsız kabul şansı.",
+      "card3Title": "Uçtan Uca Hizmet",
+      "card3Desc": "Evrak tercümesinden havalimanı karşılamaya, ilk gün kayıtlarına kadar 7/24 destek."
+    },
+    "featured": {
+      "title": "Öne Çıkan Üniversiteler",
+      "viewAll": "Tümünü Gör",
+      "viewDetails": "Detayları Gör",
+      "noUniversities": "Henüz üniversite eklenmemiş. Lütfen Admin panelinden ekleyin."
+    },
+    "cta": {
+      "title": "Eğitim Maceranız Başlıyor mu?",
+      "desc": "Ücretsiz danışmanlık formunu doldurun, eğitim uzmanlarımız sizin için en uygun rotayı çizsin.",
+      "button": "Ücretsiz Danışmanlık Al"
+    }
+  },
+  "UniversitiesList": {
+    "subtitle": "Dünyanın en iyi üniversitelerinde eğitim alma fırsatını yakalayın.",
+    "noImage": "Görsel Yok",
+    "noFeeInfo": "Ücret Bilgisi Yok",
+    "viewDetails": "Detayları Gör"
+  },
+  "Services": {
+    "title": "Hizmetlerimiz",
+    "description": "Yurtdışı eğitim yolculuğunuzun her aşamasında profesyonel destek.",
+    "intro": "OstWind Group olarak evrak hazırlığından vize sürecine, konaklamadan dil hazırlığına kadar öğrencilerimize uçtan uca çözümler sunuyoruz.",
+    "corporateSolutions": "Profesyonel Hizmetler",
+    "viewDetails": "Detayları Gör",
+    "noServices": "Henüz hizmet eklenmemiş.",
+    "whyTitle": "Neden OstWind Group?",
+    "whyDesc": "Binlerce öğrencinin güvendiği ekiple hayalinizdeki eğitime adım adım ulaşın.",
+    "whyExpertTitle": "Uzman ekip",
+    "whyExpertDesc": "Her ülke ve üniversite için kişiye özel strateji oluşturur, süreci sizin için sadeleştiririz.",
+    "whyTransparentTitle": "Şeffaf süreç",
+    "whyTransparentDesc": "Her adımda sizi bilgilendirir, evrak durumunu net şekilde takip etmenizi sağlarız.",
+    "whySupportTitle": "Sürekli destek",
+    "whySupportDesc": "Kabulden vizeye, yerleşimden adaptasyona kadar sadece söz değil, pratik yardım sunarız.",
+    "processTitle": "Nasıl çalışıyoruz?",
+    "processDesc": "Basit, yapılandırılmış ve sonuç odaklı 4 adımlı süreç.",
+    "processStep1Title": "Ücretsiz danışmanlık",
+    "processStep1Desc": "Hedeflerinizi dinler, uygun üniversite ve programları birlikte belirleriz.",
+    "processStep2Title": "Evrak hazırlığı",
+    "processStep2Desc": "Başvuru ve kabul için gerekli tüm belgeleri profesyonelce hazırlarız.",
+    "processStep3Title": "Vize ve konaklama",
+    "processStep3Desc": "Vize sürecinde yanınızda olur, konaklama bulma ve resmileştirmede destek veririz.",
+    "processStep4Title": "Yola çıkış",
+    "processStep4Desc": "Yurt dışına gitmeden önce son kontroller ve pratik önerilerle yanınızdayız.",
+    "ctaTitle": "Geleceğinizi Birlikte İnşa Edelim",
+    "ctaDesc": "Hangi hizmetimizin size en uygun olduğunu öğrenmek ve ücretsiz danışmanlık almak için hemen bizimle iletişime geçin.",
+    "ctaButton": "Ücretsiz Danışmanlık Al",
+    "ctaContact": "İletişime Geç"
+  },
+  "ServiceDetail": {
+    "backToServices": "Tüm Hizmetler",
+    "whatsIncluded": "Bu Hizmet Kapsamında Neler Var?",
+    "feature1": "Kişiye özel durum analizi ve yol haritası",
+    "feature2": "Gerekli tüm evrakların kontrolü ve düzenlenmesi",
+    "feature3": "Süreç boyunca kesintisiz uzman desteği",
+    "interested": "Bu hizmet ilginizi çekti mi?",
+    "interestedDesc": "Hemen başvurun, uzmanlarımız size ulaşsın.",
+    "applyNow": "Hemen Başvur"
+  },
+  "About": {
+    "title": "Hakkımızda",
+    "description": "OstWind Group olarak, hayallerinizdeki uluslararası eğitime ulaşmanız için yanınızdayız.",
+    "ourStory": "Hikayemiz",
+    "ourStoryText": "2020 yılında kurulan OstWind Group, öğrencilere yurtdışında eğitim konusunda rehberlik etmek amacıyla yola çıktı. Bugüne kadar yüzlerce öğrencinin hayallerini gerçekleştirmesine yardımcı olduk.\n\nUzman kadromuzla, kabul sürecinden vizeye, konaklamadan oryantasyona kadar her adımda öğrencilerimizin yanındayız.",
+    "meetTeam": "Ekibimizle Tanışın",
+    "meetTeamSubtitle": "Başarınız için çalışan uzman kadromuz."
+  },
+  "Contact": {
+    "title": "İletişim",
+    "subtitle": "Sorularınız için bize yazın, en kısa sürede dönüş yapalım.",
+    "infoTitle": "İletişim bilgileri",
+    "formTitle": "Mesaj gönderin",
+    "addressLabel": "Adres",
+    "openMaps": "Haritada aç",
+    "phoneLabel": "Telefon",
+    "hoursLabel": "Çalışma saatleri",
+    "weekdays": "Pazartesi – Cuma",
+    "weekdaysHours": "09:00 – 18:00",
+    "saturday": "Cumartesi",
+    "saturdayHours": "10:00 – 13:00",
+    "sunday": "Pazar",
+    "sundayClosed": "Kapalı",
+    "whatsapp": "WhatsApp ile yazın",
+    "sendEmail": "E-posta gönderin",
+    "name": "Ad Soyad",
+    "email": "E-posta",
+    "subject": "Konu (isteğe bağlı)",
+    "message": "Mesajınız",
+    "send": "Gönder",
+    "sending": "Gönderiliyor...",
+    "success": "Mesajınız alındı. Teşekkürler!",
+    "error": "Gönderilemedi. Lütfen tekrar deneyin.",
+    "directionsVideoTitle": "Ofisimize nasıl gelinir",
+    "directionsVideoDesc": "Aşağıdaki kısa videoda adresimize giden yolu adım adım görebilirsiniz."
+  },
+  "Pricing": {
+    "title": "Fiyatlandırma",
+    "subtitle": "İhtiyacınıza uygun danışmanlık paketlerini inceleyin.",
+    "noPlans": "Henüz plan eklenmemiş.",
+    "popular": "Popüler",
+    "choosePlan": "Planı Seç"
+  },
+  "FAQ": {
+    "title": "Sıkça Sorulan Sorular",
+    "subtitle": "Merak ettiklerinizin yanıtları burada.",
+    "noItems": "Henüz soru eklenmemiş."
+  },
+  "Blog": {
+    "title": "Blog",
+    "subtitle": "Eğitim, vize ve üniversite hayatından güncel yazılar.",
+    "noPosts": "Henüz yayınlanmış yazı yok.",
+    "noImage": "Görsel Yok",
+    "readMore": "Devamını Oku",
+    "backToBlog": "Bloga Dön"
+  },
+  "Apply": {
+    "title": "Başvuru Formu",
+    "subtitle": "Ücretsiz danışmanlık için formu doldurun; uzmanlarımız sizinle iletişime geçsin.",
+    "studentName": "Ad Soyad",
+    "email": "E-posta",
+    "phone": "Telefon",
+    "university": "Tercih ettiğiniz üniversite",
+    "universityOptional": "Seçmek istemiyorum",
+    "message": "Ek not (isteğe bağlı)",
+    "submit": "Başvuruyu Gönder",
+    "sending": "Gönderiliyor...",
+    "success": "Başvurunuz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
+    "error": "Gönderilemedi. Lütfen tekrar deneyin."
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "Index": {
+    "title": "Your Path to International Education",
+    "description": "Apply to your dream university with OstWindGroup."
+  },
+  "Header": {
+    "home": "Home",
+    "universities": "Universities",
+    "services": "Services",
+    "about": "About Us",
+    "contact": "Contact",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "applyNow": "Apply Now"
+  },
+  "ScrollTop": {
+    "label": "Scroll to top"
+  },
+  "Footer": {
+    "description": "Your trusted partner in international education consulting.",
+    "quickLinks": "Quick Links",
+    "universities": "Universities",
+    "services": "Services",
+    "about": "About Us",
+    "contact": "Contact",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "contactUs": "Contact Us",
+    "followUs": "Follow Us",
+    "language": "Language",
+    "allRightsReserved": "All rights reserved.",
+    "brandLogoAlt": "OstWind Group logo",
+    "openLogo": "Open logo in full size",
+    "closeLogo": "Close"
+  },
+  "UniversityDetail": {
+    "backToUniversities": "Back to Universities",
+    "aboutUniversity": "About the University",
+    "applyNow": "Apply Now",
+    "applyDescription": "Start your application process for {name} with OstWind Group guarantee.",
+    "fillApplicationForm": "Fill Application Form",
+    "haveQuestions": "Have questions?",
+    "talkToAdvisor": "Talk to our Advisor"
+  },
+  "Home": {
+    "heroTitle1": "The Most Reliable Path to",
+    "heroTitleHighlight": "International Education",
+    "heroDescription": "Step into your dream university with OstWind Group. From admission to visa, accommodation to guidance, we are with you every step of the way.",
+    "heroApplyNow": "Apply Now",
+    "heroExplore": "Explore Universities",
+    "stats": {
+      "students": "Happy Students",
+      "universities": "Partner Universities",
+      "countries": "Country Options",
+      "acceptance": "Acceptance Rate"
+    },
+    "features": {
+      "title": "Why OstWind Group?",
+      "subtitle": "Don't leave your education to chance, take guaranteed steps with our expert team.",
+      "card1Title": "International Diploma",
+      "card1Desc": "Make a global start to your career with a blue diploma recognized worldwide.",
+      "card2Title": "Reliable Partners",
+      "card2Desc": "Exam-free admission opportunities at state and established private universities we represent.",
+      "card3Title": "End-to-End Service",
+      "card3Desc": "24/7 support from document translation to airport pickup and first-day registration."
+    },
+    "featured": {
+      "title": "Featured Universities",
+      "viewAll": "View All",
+      "viewDetails": "View Details",
+      "noUniversities": "No universities added yet. Please add them from the Admin panel."
+    },
+    "cta": {
+      "title": "Is Your Education Adventure Beginning?",
+      "desc": "Fill out the free consultation form and let our education experts draw the most suitable route for you.",
+      "button": "Get Free Consultation"
+    }
+  },
+  "UniversitiesList": {
+    "subtitle": "Seize the opportunity to study at the best universities in the world.",
+    "noImage": "No Image",
+    "noFeeInfo": "No Fee Info",
+    "viewDetails": "View Details"
+  },
+  "Services": {
+    "title": "Our Services",
+    "description": "Professional support at every stage of your study abroad journey.",
+    "intro": "At OstWind Group, we provide end-to-end solutions from document preparation to visa processing, accommodation and language training.",
+    "corporateSolutions": "Professional Services",
+    "viewDetails": "View Details",
+    "noServices": "No services added yet.",
+    "whyTitle": "Why OstWind Group?",
+    "whyDesc": "Reach your dream education step by step with a team trusted by thousands of students.",
+    "whyExpertTitle": "Expert team",
+    "whyExpertDesc": "We build a personalized strategy for each country and university and simplify the process for you.",
+    "whyTransparentTitle": "Transparent process",
+    "whyTransparentDesc": "We keep you informed at every step so you can clearly track your documents.",
+    "whySupportTitle": "Continuous support",
+    "whySupportDesc": "From admission to visa, accommodation to adaptation — we provide practical help, not just promises.",
+    "processTitle": "How we work",
+    "processDesc": "A simple, structured and results-driven 4-step process.",
+    "processStep1Title": "Free consultation",
+    "processStep1Desc": "We listen to your goals and choose suitable universities and programs together.",
+    "processStep2Title": "Document preparation",
+    "processStep2Desc": "We professionally prepare all documents required for application and admission.",
+    "processStep3Title": "Visa and accommodation",
+    "processStep3Desc": "We guide you through the visa process and help find and secure housing.",
+    "processStep4Title": "Pre-departure",
+    "processStep4Desc": "Final checks and practical advice before you travel abroad.",
+    "ctaTitle": "Let's Build Your Future Together",
+    "ctaDesc": "Contact us now to find out which of our services is best for you and get free consultation.",
+    "ctaButton": "Get Free Consultation",
+    "ctaContact": "Contact Us"
+  },
+  "ServiceDetail": {
+    "backToServices": "All Services",
+    "whatsIncluded": "What's Included in This Service?",
+    "feature1": "Personalized case analysis and roadmap",
+    "feature2": "Control and arrangement of all necessary documents",
+    "feature3": "Continuous expert support throughout the process",
+    "interested": "Are you interested in this service?",
+    "interestedDesc": "Apply now, and our experts will contact you.",
+    "applyNow": "Apply Now"
+  },
+  "About": {
+    "title": "About Us",
+    "description": "As OstWind Group, we are with you to achieve your dream international education.",
+    "ourStory": "Our Story",
+    "ourStoryText": "Founded in 2020, OstWind Group set out to guide students on studying abroad. To date, we have helped hundreds of students realize their dreams.\n\nWith our expert staff, we are with our students at every step from the acceptance process to the visa, from accommodation to orientation.",
+    "meetTeam": "Meet Our Team",
+    "meetTeamSubtitle": "Our expert staff working for your success."
+  },
+  "Contact": {
+    "title": "Contact",
+    "subtitle": "Send us your questions and we will get back to you soon.",
+    "infoTitle": "Contact information",
+    "formTitle": "Send a message",
+    "addressLabel": "Address",
+    "openMaps": "Open in Maps",
+    "phoneLabel": "Phone",
+    "hoursLabel": "Opening hours",
+    "weekdays": "Monday – Friday",
+    "weekdaysHours": "09:00 – 18:00",
+    "saturday": "Saturday",
+    "saturdayHours": "10:00 – 13:00",
+    "sunday": "Sunday",
+    "sundayClosed": "Closed",
+    "whatsapp": "Message on WhatsApp",
+    "sendEmail": "Send an email",
+    "name": "Full name",
+    "email": "Email",
+    "subject": "Subject (optional)",
+    "message": "Your message",
+    "send": "Send",
+    "sending": "Sending...",
+    "success": "Your message was received. Thank you!",
+    "error": "Could not send. Please try again.",
+    "directionsVideoTitle": "How to reach our office",
+    "directionsVideoDesc": "Watch the short video below for step-by-step directions to our address."
+  },
+  "Pricing": {
+    "title": "Pricing",
+    "subtitle": "Explore our consultancy packages.",
+    "noPlans": "No plans yet.",
+    "popular": "Popular",
+    "choosePlan": "Choose Plan"
+  },
+  "FAQ": {
+    "title": "FAQ",
+    "subtitle": "Answers to common questions.",
+    "noItems": "No questions have been added yet."
+  },
+  "Blog": {
+    "title": "Blog",
+    "subtitle": "News and guides on education abroad.",
+    "noPosts": "No published posts yet.",
+    "noImage": "No image",
+    "readMore": "Read more",
+    "backToBlog": "Back to blog"
+  },
+  "Apply": {
+    "title": "Application Form",
+    "subtitle": "Fill out the form for free consultation; our experts will contact you.",
+    "studentName": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "university": "Preferred university",
+    "universityOptional": "No preference",
+    "message": "Additional note (optional)",
+    "submit": "Submit application",
+    "sending": "Sending...",
+    "success": "Your application was received. We will contact you soon.",
+    "error": "Could not send. Please try again."
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "Index": {
+    "title": "Beynəlxalq Təhsilə Gedən Yolunuz",
+    "description": "OstWindGroup ilə xəyalınızdakı universitetə müraciət edin."
+  },
+  "Header": {
+    "home": "Ana Səhifə",
+    "universities": "Universitetlər",
+    "services": "Xidmətlər",
+    "pricing": "Qiymətlər",
+    "faq": "FAQ",
+    "blog": "Bloq",
+    "about": "Haqqımızda",
+    "contact": "Əlaqə",
+    "applyNow": "İndi Müraciət Et"
+  },
+  "ScrollTop": {
+    "label": "Yuxarı qalx"
+  },
+  "Footer": {
+    "description": "Beynəlxalq təhsil məsləhətində etibarlı tərəfdaşınız.",
+    "quickLinks": "Sürətli Keçidlər",
+    "universities": "Universitetlər",
+    "services": "Xidmətlər",
+    "pricing": "Qiymətlər",
+    "faq": "FAQ",
+    "blog": "Bloq",
+    "about": "Haqqımızda",
+    "contact": "Əlaqə",
+    "contactUs": "Bizimlə Əlaqə",
+    "followUs": "Bizi İzləyin",
+    "language": "Dil",
+    "allRightsReserved": "Bütün hüquqlar qorunur.",
+    "brandLogoAlt": "OstWind Group loqosu",
+    "openLogo": "Loqonu böyük aç",
+    "closeLogo": "Bağla"
+  },
+  "UniversityDetail": {
+    "backToUniversities": "Universitetlərə Qayıt",
+    "aboutUniversity": "Universitet Haqqında",
+    "applyNow": "İndi Müraciət Et",
+    "applyDescription": "OstWind Group zəmanəti ilə {name} üçün müraciət prosesinizə başlayın.",
+    "fillApplicationForm": "Müraciət Formasını Doldur",
+    "haveQuestions": "Suallarınız var?",
+    "talkToAdvisor": "Məsləhətçimizlə Danışın"
+  },
+  "Home": {
+    "heroTitle1": "Beynəlxalq Təhsilin",
+    "heroTitleHighlight": "Ən Etibarlı Yolu",
+    "heroDescription": "OstWind Group ilə xəyalınızdakı universitetə addım atın. Qəbuldan vizaya, yerləşdirmədən rəhbərliyə qədər bütün prosesdə yanınızdayıq.",
+    "heroApplyNow": "İndi Müraciət Et",
+    "heroExplore": "Universitetləri Kəşf Et",
+    "stats": {
+      "students": "Xoşbəxt Tələbə",
+      "universities": "Tərəfdaş Universitet",
+      "countries": "Ölkə Seçimi",
+      "acceptance": "Qəbul Nisbəti"
+    },
+    "features": {
+      "title": "Niyə OstWind Group?",
+      "subtitle": "Təhsil həyatınızı şansa buraxmayın, mütəxəssis komandamızla zəmanətli addımlar atın.",
+      "card1Title": "Beynəlxalq Diplom",
+      "card1Desc": "Bütün dünyada keçərli mavi diplom ilə karyeranıza qlobal bir başlanğıc edin.",
+      "card2Title": "Etibarlı Tərəfdaşlar",
+      "card2Desc": "Birbaşa təmsilçisi olduğumuz dövlət və köklü özəl universitetlərdə imtahansız qəbul şansı.",
+      "card3Title": "Ucdan Uca Xidmət",
+      "card3Desc": "Sənəd tərcüməsindən hava limanında qarşılanmaya, ilk gün qeydiyyatlarına qədər 7/24 dəstək."
+    },
+    "featured": {
+      "title": "Önə Çıxan Universitetlər",
+      "viewAll": "Hamısına Bax",
+      "viewDetails": "Ətraflı Bax",
+      "noUniversities": "Hələ universitet əlavə edilməyib. Lütfən, Admin panelindən əlavə edin."
+    },
+    "cta": {
+      "title": "Təhsil Macəranız Başlayırmı?",
+      "desc": "Ödənişsiz məsləhət formasını doldurun, təhsil mütəxəssislərimiz sizin üçün ən uyğun marşrutu cızsın.",
+      "button": "Ödənişsiz Məsləhət Al"
+    }
+  },
+  "UniversitiesList": {
+    "subtitle": "Dünyanın ən yaxşı universitetlərində təhsil almaq fürsətini qaçırmayın.",
+    "noImage": "Şəkil Yoxdur",
+    "noFeeInfo": "Ödəniş Məlumatı Yoxdur",
+    "viewDetails": "Ətraflı Bax"
+  },
+  "Services": {
+    "title": "Xidmətlərimiz",
+    "description": "Xaricdə təhsil yolculuğunuzun hər mərhələsində peşəkar dəstək.",
+    "intro": "OstWind Group olaraq sənəd hazırlığından viza prosesinə, yaşayış yerindən dil hazırlığına qədər tələbələrimizə tam həllər təqdim edirik.",
+    "corporateSolutions": "Peşəkar Xidmətlər",
+    "viewDetails": "Ətraflı Bax",
+    "noServices": "Hələlik xidmət əlavə edilməyib.",
+    "whyTitle": "Niyə OstWind Group?",
+    "whyDesc": "Minlərlə tələbənin etibar etdiyi komanda ilə siz də xəyalınızdakı təhsilə addım-addım çatın.",
+    "whyExpertTitle": "Mütəxəssis komanda",
+    "whyExpertDesc": "Hər ölkə və universitet üçün fərdi strategiya hazırlayır, prosesi sizin üçün sadələşdiririk.",
+    "whyTransparentTitle": "Şəffaf proses",
+    "whyTransparentDesc": "Hər addımda sizi məlumatlandırır, sənədlərin vəziyyətini aydın şəkildə izləyə bilərsiniz.",
+    "whySupportTitle": "Davamlı dəstək",
+    "whySupportDesc": "Qəbuldan vizaya, yerləşmədən adaptasiyaya qədər yalnız deyil, praktik yardım göstəririk.",
+    "processTitle": "Necə işləyirik?",
+    "processDesc": "Sadə, strukturlaşdırılmış və nəticəyə yönəlmiş 4 addımlı proses.",
+    "processStep1Title": "Pulsuz məsləhət",
+    "processStep1Desc": "Hədəflərinizi dinləyir, uyğun universitet və proqramları birlikdə seçirik.",
+    "processStep2Title": "Sənəd hazırlığı",
+    "processStep2Desc": "Müraciət və qəbul üçün lazım olan bütün sənədləri peşəkar şəkildə hazırlayırıq.",
+    "processStep3Title": "Viza və yerləşmə",
+    "processStep3Desc": "Viza prosesində müşayiət edirik, yaşayış yerini tapmağa və rəsmiləşdirməyə kömək edirik.",
+    "processStep4Title": "Yola salma",
+    "processStep4Desc": "Xaricə yola düşməzdən əvvəl son yoxlamalar və praktik tövsiyələrlə yanınızdayıq.",
+    "ctaTitle": "Gələcəyinizi Birlikdə İnşa Edək",
+    "ctaDesc": "Hansı xidmətimizin sizə ən uyğun olduğunu öyrənmək və pulsuz məsləhət almaq üçün indi bizimlə əlaqə saxlayın.",
+    "ctaButton": "Pulsuz Məsləhət Al",
+    "ctaContact": "Bizimlə Əlaqə"
+  },
+  "ServiceDetail": {
+    "backToServices": "Bütün Xidmətlər",
+    "whatsIncluded": "Bu Xidmətə Nələr Daxildir?",
+    "feature1": "Fərdi vəziyyət təhlili və yol xəritəsi",
+    "feature2": "Bütün zəruri sənədlərin yoxlanılması və tənzimlənməsi",
+    "feature3": "Proses boyu kəsilməz mütəxəssis dəstəyi",
+    "interested": "Bu xidmət marağınızı çəkdimi?",
+    "interestedDesc": "İndi müraciət edin, mütəxəssislərimiz sizlə əlaqə saxlasın.",
+    "applyNow": "İndi Müraciət Et"
+  },
+  "About": {
+    "title": "Haqqımızda",
+    "description": "OstWind Group olaraq, xəyallarınızdakı beynəlxalq təhsilə çatmağınız üçün yanınızdayıq.",
+    "ourStory": "Hekayəmiz",
+    "ourStoryText": "2020-ci ildə qurulan OstWind Group, tələbələrə xaricdə təhsil mövzusunda bələdçilik etmək məqsədilə yola çıxdı. Bu günə qədər yüzlərlə tələbənin xəyallarını reallaşdırmasına kömək etdik.\n\nMütəxəssis heyətimizlə, qəbul prosesindən vizaya, yerləşmədən oriyentasiyaya qədər hər addımda tələbələrimizin yanındayıq.",
+    "meetTeam": "Komandamızla Tanış Olun",
+    "meetTeamSubtitle": "Uğurunuz üçün çalışan mütəxəssis heyətimiz."
+  },
+  "Contact": {
+    "title": "Əlaqə",
+    "subtitle": "Suallarınızı bizə yazın, tezliklə cavab verək.",
+    "infoTitle": "Əlaqə məlumatları",
+    "formTitle": "Mesaj göndərin",
+    "addressLabel": "Ünvan",
+    "openMaps": "Xəritədə aç",
+    "phoneLabel": "Telefon",
+    "hoursLabel": "İş saatları",
+    "weekdays": "Bazar ertəsi – Cümə",
+    "weekdaysHours": "09:00 – 18:00",
+    "saturday": "Şənbə",
+    "saturdayHours": "10:00 – 13:00",
+    "sunday": "Bazar",
+    "sundayClosed": "Bağlı",
+    "whatsapp": "WhatsApp ilə yazın",
+    "sendEmail": "E-poçt göndərin",
+    "name": "Ad Soyad",
+    "email": "E-poçt",
+    "subject": "Mövzu (istəyə bağlı)",
+    "message": "Mesajınız",
+    "send": "Göndər",
+    "sending": "Göndərilir...",
+    "success": "Mesajınız qəbul edildi. Təşəkkür edirik!",
+    "error": "Göndərilmədi. Yenidən cəhd edin.",
+    "directionsVideoTitle": "Ofisimizə necə gəlmək olar",
+    "directionsVideoDesc": "Aşağıdakı qısa videoda ünvanımıza gediş yolunu addım-addım görə bilərsiniz."
+  },
+  "Pricing": {
+    "title": "Qiymətləndirmə",
+    "subtitle": "Ehtiyacınıza uyğun məsləhət paketlərinə baxın.",
+    "noPlans": "Hələ plan əlavə edilməyib.",
+    "popular": "Populyar",
+    "choosePlan": "Planı Seç"
+  },
+  "FAQ": {
+    "title": "Tez-tez Verilən Suallar",
+    "subtitle": "Maraq etdiyiniz sualların cavabları burada.",
+    "noItems": "Hələ sual əlavə edilməyib."
+  },
+  "Blog": {
+    "title": "Bloq",
+    "subtitle": "Təhsil, viza və universitet həyatından məqalələr.",
+    "noPosts": "Hələ dərc olunmuş yazı yoxdur.",
+    "noImage": "Şəkil Yoxdur",
+    "readMore": "Davamını Oxu",
+    "backToBlog": "Bloqa Qayıt"
+  },
+  "Apply": {
+    "title": "Müraciət Forması",
+    "subtitle": "Pulsuz məsləhət üçün formu doldurun; mütəxəssislərimiz sizinlə əlaqə saxlayacaq.",
+    "studentName": "Ad Soyad",
+    "email": "E-poçt",
+    "phone": "Telefon",
+    "university": "Seçdiyiniz universitet",
+    "universityOptional": "Seçmək istəmirəm",
+    "message": "Əlavə qeyd (istəyə bağlı)",
+    "submit": "Müraciəti Göndər",
+    "sending": "Göndərilir...",
+    "success": "Müraciətiniz qəbul edildi. Tezliklə sizinlə əlaqə saxlayacağıq.",
+    "error": "Göndərilmədi. Yenidən cəhd edin."
+  }
+}

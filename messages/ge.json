@@ -1,0 +1,197 @@
+{
+  "Index": {
+    "title": "თქვენი გზა საერთაშორისო განათლებისკენ",
+    "description": "მიმართეთ თქვენი ოცნების უნივერსიტეტს OstWindGroup-თან ერთად."
+  },
+  "Header": {
+    "home": "მთავარი",
+    "universities": "უნივერსიტეტები",
+    "services": "სერვისები",
+    "pricing": "ფასები",
+    "faq": "FAQ",
+    "blog": "ბლოგი",
+    "about": "ჩვენს შესახებ",
+    "contact": "კონტაქტი",
+    "applyNow": "განაცხადის შეტანა"
+  },
+  "ScrollTop": {
+    "label": "ზევით ასვლა"
+  },
+  "Footer": {
+    "description": "თქვენი სანდო პარტნიორი საერთაშორისო საგანმანათლებლო კონსულტაციებში.",
+    "quickLinks": "სწრაფი ბმულები",
+    "universities": "უნივერსიტეტები",
+    "services": "სერვისები",
+    "pricing": "ფასები",
+    "faq": "FAQ",
+    "blog": "ბლოგი",
+    "about": "ჩვენს შესახებ",
+    "contact": "კონტაქტი",
+    "contactUs": "დაგვიკავშირდით",
+    "followUs": "გამოგვყევით",
+    "language": "ენა",
+    "allRightsReserved": "ყველა უფლება დაცულია.",
+    "brandLogoAlt": "OstWind Group ლოგო",
+    "openLogo": "ლოგოს გახსნა",
+    "closeLogo": "დახურვა"
+  },
+  "UniversityDetail": {
+    "backToUniversities": "უნივერსიტეტებში დაბრუნება",
+    "aboutUniversity": "უნივერსიტეტის შესახებ",
+    "applyNow": "განაცხადის შეტანა",
+    "applyDescription": "დაიწყეთ თქვენი განაცხადის პროცესი {name}-ში OstWind Group-ის გარანტიით.",
+    "fillApplicationForm": "განაცხადის ფორმის შევსება",
+    "haveQuestions": "გაქვთ კითხვები?",
+    "talkToAdvisor": "ესაუბრეთ კონსულტანტს"
+  },
+  "Home": {
+    "heroTitle1": "საერთაშორისო განათლების",
+    "heroTitleHighlight": "ყველაზე სანდო გზა",
+    "heroDescription": "შეუდექით თქვენი ოცნების უნივერსიტეტს OstWind Group-თან ერთად. მიღებიდან ვიზამდე, ჩვენ თქვენთან ვართ.",
+    "heroApplyNow": "განაცხადის შეტანა",
+    "heroExplore": "უნივერსიტეტების აღმოჩენა",
+    "stats": {
+      "students": "ბედნიერი სტუდენტი",
+      "universities": "პარტნიორი უნივერსიტეტი",
+      "countries": "ქვეყნის არჩევანი",
+      "acceptance": "მიღების მაჩვენებელი"
+    },
+    "features": {
+      "title": "რატომ OstWind Group?",
+      "subtitle": "ნუ მიანდობთ თქვენს განათლებას შემთხვევას, გადადგით გარანტირებული ნაბიჯები.",
+      "card1Title": "საერთაშორისო დიპლომი",
+      "card1Desc": "დაიწყეთ თქვენი კარიერა გლობალურად მსოფლიოში აღიარებული დიპლომით.",
+      "card2Title": "სანდო პარტნიორები",
+      "card2Desc": "გამოცდების გარეშე მიღების შესაძლებლობა სახელმწიფო და კერძო უნივერსიტეტებში.",
+      "card3Title": "სრული მომსახურება",
+      "card3Desc": "24/7 მხარდაჭერა დოკუმენტების თარგმნიდან აეროპორტში დახვედრამდე."
+    },
+    "featured": {
+      "title": "რჩეული უნივერსიტეტები",
+      "viewAll": "ყველას ნახვა",
+      "viewDetails": "დეტალების ნახვა",
+      "noUniversities": "ჯერ არ არის დამატებული უნივერსიტეტები. გთხოვთ, დაამატოთ ისინი ადმინ პანელიდან."
+    },
+    "cta": {
+      "title": "იწყება თქვენი საგანმანათლებლო თავგადასავალი?",
+      "desc": "შეავსეთ უფასო კონსულტაციის ფორმა და ჩვენი განათლების ექსპერტები შეგირჩევენ თქვენთვის საუკეთესო მარშრუტს.",
+      "button": "მიიღეთ უფასო კონსულტაცია"
+    }
+  },
+  "UniversitiesList": {
+    "subtitle": "გამოიყენეთ შესაძლებლობა ისწავლოთ მსოფლიოს საუკეთესო უნივერსიტეტებში.",
+    "noImage": "სურათი არ არის",
+    "noFeeInfo": "გადასახადის ინფორმაცია არ არის",
+    "viewDetails": "დეტალების ნახვა"
+  },
+  "Services": {
+    "title": "ჩვენი სერვისები",
+    "description": "პროფესიონალური მხარდაჭერა საზღვარგარეთ სწავლის ყველა etapზე.",
+    "intro": "OstWind Group გთავაზობთ სრულ გადაწყვეტილებებს დოკუმენტებიდან ვიზამდე, საცხოვრებლამდე და ენის მომზადებამდე.",
+    "corporateSolutions": "პროფესიონალური სერვისები",
+    "viewDetails": "დეტალურად",
+    "noServices": "სერვისები ჯერ არ არის დამატებული.",
+    "whyTitle": "რატომ OstWind Group?",
+    "whyDesc": "ათასობით სტუდენტის სანდო გუნდთან ერთად მიაღწიეთ ოცნების განათლებას.",
+    "whyExpertTitle": "ექსპერტთა გუნდი",
+    "whyExpertDesc": "თითოეული ქვეყნისა და უნივერსიტეტისთვის ინდივიდუალურ სტრატეგიას ვქმნით.",
+    "whyTransparentTitle": "გამჭვირვალე პროცესი",
+    "whyTransparentDesc": "ყოველ etapზე გიყოფთ ინფორმაციას და დოკუმენტების სტატუსს ნახავთ.",
+    "whySupportTitle": "მუდმივი მხარდაჭერა",
+    "whySupportDesc": "მიღებიდან ვიზამდე და ადაპტაციამდე — პრაქტიკული დახმარება.",
+    "processTitle": "როგორ ვმუშაობთ",
+    "processDesc": "მარტივი, სტრუქტურირებული 4 ნაბიჯიანი პროცესი.",
+    "processStep1Title": "უფასო კონსultatsiis",
+    "processStep1Desc": "გისმენებთ მიზნებს და ერთად ვირჩევთ პროგრამებს.",
+    "processStep2Title": "დოკუმენტების მომზადება",
+    "processStep2Desc": "პროფესიონალურად ვამზადებთ ყველა საჭირო დოკუმენტს.",
+    "processStep3Title": "ვიზა და საცხოვრებელი",
+    "processStep3Desc": "ვიზის პროცესში გეხმარებით და საცხოვრებელს ვპოულობთ.",
+    "processStep4Title": "გამგზავრება",
+    "processStep4Desc": "გამგზავრებამდე საბოლოო შემოწმება და რჩევები.",
+    "ctaTitle": "მოდით, ერთად ავაშენოთ მომავალი",
+    "ctaDesc": "დაგვიკავშირდით უფასო კონსultatsiis-ისთვის.",
+    "ctaButton": "უფასო კონსultatsiis",
+    "ctaContact": "კონტაქტი"
+  },
+  "ServiceDetail": {
+    "backToServices": "ყველა სერვისი",
+    "whatsIncluded": "რა შედის ამ სერვისში?",
+    "feature1": "ინდივიდუალური ანალიზი და გეგმა",
+    "feature2": "ყველა საჭირო დოკუმენტის შემოწმება და მომზადება",
+    "feature3": "მუდმივი ექსპერტის მხარდაჭერა მთელი პროცესის განმავლობაში",
+    "interested": "გინტერესებთ ეს სერვისი?",
+    "interestedDesc": "განაცხადის გაგზავნის შემდეგ ჩვენი სპეციალისტი დაგიკავშირდებათ.",
+    "applyNow": "განაცხადის გაგზავნა"
+  },
+  "About": {
+    "title": "About Us",
+    "description": "As OstWind Group, we are with you to achieve your dream international education.",
+    "ourStory": "Our Story",
+    "ourStoryText": "Founded in 2020, OstWind Group set out to guide students on studying abroad. To date, we have helped hundreds of students realize their dreams.\n\nWith our expert staff, we are with our students at every step from the acceptance process to the visa, from accommodation to orientation.",
+    "meetTeam": "Meet Our Team",
+    "meetTeamSubtitle": "Our expert staff working for your success."
+  },
+  "Contact": {
+    "title": "კონტაქტი",
+    "subtitle": "დაგვიკავშირდით და მალე გიპასუხებთ.",
+    "infoTitle": "საკონტაქტო ინფორმაცია",
+    "formTitle": "შეტყობინების გაგზავნა",
+    "addressLabel": "მისამართი",
+    "openMaps": "რუკაზე გახსნა",
+    "phoneLabel": "ტელეფონი",
+    "hoursLabel": "სამუშაო საათები",
+    "weekdays": "ორშაბათი – პარასკევი",
+    "weekdaysHours": "09:00 – 18:00",
+    "saturday": "შაბათი",
+    "saturdayHours": "10:00 – 13:00",
+    "sunday": "კვირა",
+    "sundayClosed": "დაკეტილია",
+    "whatsapp": "WhatsApp-ზე დაწერა",
+    "sendEmail": "ელფოსტის გაგზავნა",
+    "name": "სახელი გვარი",
+    "email": "ელფოსტა",
+    "subject": "თემა (არასავალდებულო)",
+    "message": "შეტყობინება",
+    "send": "გაგზავნა",
+    "sending": "იგზავნება...",
+    "success": "შეტყობინება მიღებულია. გმადლობთ!",
+    "error": "გაგზავნა ვერ მოხერხდა. სცადეთ თავიდან.",
+    "directionsVideoTitle": "როგორ მოვიდეთ ჩვენს ოფისში",
+    "directionsVideoDesc": "ქვემოთ მოცემულ მოკლე ვიდეოში ნახავთ ჩვენს მისამართამდე ნაბიჯ-ნაბიჯ გზას."
+  },
+  "Pricing": {
+    "title": "ფასები",
+    "subtitle": "გაეცანით ჩვენს საკონსულტაციო პაკეტებს.",
+    "noPlans": "გეგმები ჯერ არ არის დამატებული.",
+    "popular": "პოპულარული",
+    "choosePlan": "აირჩიეთ გეგმა"
+  },
+  "FAQ": {
+    "title": "ხშირად დასმული კითხვები",
+    "subtitle": "პასუხები ხშირ კითხვებზე.",
+    "noItems": "კითხვები ჯერ არ არის დამატებული."
+  },
+  "Blog": {
+    "title": "ბლოგი",
+    "subtitle": "სტატიები საზღვარგარეთ სწავლის, ვიზისა და უნივერსიტეტის შესახებ.",
+    "noPosts": "გამოქვეყნებული პოსტები ჯერ არ არის.",
+    "noImage": "სურათი არ არის",
+    "readMore": "წაიკითხეთ მეტი",
+    "backToBlog": "ბლოგზე დაბრუნება"
+  },
+  "Apply": {
+    "title": "განაცხადის ფორმა",
+    "subtitle": "შეავსეთ ფორმა უფასო კონსულტაციისთვის.",
+    "studentName": "სახელი გვარი",
+    "email": "ელფოსტა",
+    "phone": "ტელეფონი",
+    "university": "სასურველი უნივერსიტეტი",
+    "universityOptional": "არ ვირჩევ",
+    "message": "დამატებით (არასავალდებულო)",
+    "submit": "განაცხადის გაგზავნა",
+    "sending": "იგზავნება...",
+    "success": "განაცხადი მიღებულია. მალე დაგიკავშირდებით.",
+    "error": "გაგზავნა ვერ მოხერხდა. სცადეთ თავიდან."
+  }
+}
