@@ -12,7 +12,10 @@
     "blog": "Blog",
     "about": "Hakkımızda",
     "contact": "İletişim",
-    "applyNow": "Hemen Başvur"
+    "applyNow": "Hemen Başvur",
+    "login": "Giriş",
+    "register": "Kayıt",
+    "onlineAdmission": "Online Kabul"
   },
   "ScrollTop": {
     "label": "Yukarı çık"
@@ -193,5 +196,88 @@
     "sending": "Gönderiliyor...",
     "success": "Başvurunuz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
     "error": "Gönderilemedi. Lütfen tekrar deneyin."
+  },
+  "StudentAuth": {
+    "loginTitle": "Giriş",
+    "registerTitle": "Kayıt Ol",
+    "subtitle": "Kayıt olduktan sonra online kabul formunu doldurabilirsiniz.",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "email": "E-posta",
+    "password": "Şifre",
+    "loginButton": "Giriş Yap",
+    "registerButton": "Kayıt Ol",
+    "loading": "Bekleyin...",
+    "noAccount": "Hesabınız yok mu?",
+    "hasAccount": "Zaten hesabınız var mı?",
+    "goRegister": "Kayıt Ol",
+    "goLogin": "Giriş Yap",
+    "backHome": "Ana sayfa",
+    "logout": "Çıkış",
+    "errors": {
+      "missing": "Tüm alanları doldurun.",
+      "emailExists": "Bu e-posta zaten kayıtlı.",
+      "invalidCredentials": "E-posta veya şifre hatalı.",
+      "weakPassword": "Şifre en az 6 karakter olmalıdır.",
+      "server": "Bir hata oluştu. Tekrar deneyin."
+    }
+  },
+  "OnlineAdmission": {
+    "title": "Online Kabul",
+    "intro": "Kimlik kartınızın arkasındaki kayıt adresini ve belgelerinizi girin.",
+    "sectionPersonal": "Kişisel bilgiler",
+    "sectionPassport": "Yabancı pasaport",
+    "sectionUniversity": "Üniversite ve eğitim",
+    "sectionDocuments": "Belge yükleme",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "birthDate": "Doğum tarihi",
+    "email": "E-posta",
+    "phone": "Telefon",
+    "registrationAddress": "Kayıt adresi",
+    "registrationAddressHint": "AZ kimlik kartı arkasındaki kayıt adresi",
+    "foreignPassportNumber": "Yabancı pasaport numarası",
+    "foreignPassportIssueDate": "Veriliş tarihi",
+    "foreignPassportExpiryDate": "Son geçerlilik tarihi",
+    "university": "Üniversite",
+    "selectUniversity": "Üniversite seçin",
+    "studyType": "Eğitim türü",
+    "studyTypeFull": "Örgün eğitim",
+    "studyTypePart": "Uzaktan / ikinci öğretim",
+    "studyLanguage": "Eğitim dili",
+    "langEn": "İngilizce",
+    "langUk": "Ukraynaca",
+    "langRu": "Rusça",
+    "tuitionFee": "Eğitim ücreti",
+    "attestat": "Attestat (apostilli, PDF)",
+    "attestatHint": "Sadece PDF, maks. 15 MB",
+    "passportDoc": "Yabancı pasaport (PDF)",
+    "passportHint": "Sadece PDF, maks. 15 MB",
+    "photo": "3/4 vesikalık foto",
+    "photoHint": "JPG, PNG veya PDF, maks. 8 MB",
+    "submit": "Formu gönder",
+    "submitting": "Gönderiliyor...",
+    "successTitle": "Başvurunuz alındı",
+    "successDesc": "Belgeleriniz ve PDF özeti admin panele iletildi. En kısa sürede sizinle iletişime geçeceğiz.",
+    "errors": {
+      "missing": "Tüm alanları ve belgeleri doldurun.",
+      "alreadySubmitted": "Zaten bir başvuru gönderdiniz.",
+      "invalidPdf": "Attestat ve pasaport sadece PDF olmalıdır.",
+      "invalidPhoto": "Foto JPG, PNG veya PDF formatında olmalıdır.",
+      "fileTooLarge": "Dosya çok büyük.",
+      "unauthorized": "Lütfen tekrar giriş yapın.",
+      "server": "Gönderilemedi. Tekrar deneyin."
+    }
+  },
+  "Portal": {
+    "submittedTitle": "Başvurunuz kaydedildi",
+    "statusLabel": "Durum",
+    "submittedAt": "Gönderim tarihi"
+  },
+  "ApplicationStatus": {
+    "PENDING": "Beklemede",
+    "REVIEWING": "İnceleniyor",
+    "APPROVED": "Onaylandı",
+    "REJECTED": "Reddedildi"
   }
 }

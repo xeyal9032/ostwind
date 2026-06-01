@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { getContentLocaleTabs } from '@/lib/admin-content-locales';
 import { DEFAULT_CONTACT } from '@/lib/contact-defaults';
 import { mergeLocaleJson } from '@/lib/about-defaults';
 
@@ -21,15 +23,6 @@ type FormData = {
   pageSubtitle: LocaleRecord;
 };
 
-const LOCALES = [
-  { code: 'tr', name: 'Türkçe' },
-  { code: 'en', name: 'English' },
-  { code: 'az', name: 'Azərbaycanca' },
-  { code: 'ru', name: 'Русский' },
-  { code: 'uk', name: 'Українська' },
-  { code: 'ge', name: 'ქართული' },
-];
-
 function defaultFormData(): FormData {
   return {
     address: DEFAULT_CONTACT.address,
@@ -48,6 +41,11 @@ function defaultFormData(): FormData {
 }
 
 export default function AdminContactPage() {
+  const t = useTranslations('contact');
+  const tCommon = useTranslations('common');
+  const tLocales = useTranslations('contentLocales');
+  const LOCALES = getContentLocaleTabs(tLocales);
+
   const [activeTab, setActiveTab] = useState('tr');
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
@@ -62,11 +60,11 @@ export default function AdminContactPage() {
         try {
           data = await res.json();
         } catch {
-          setError('Sunucu yanıtı okunamadı. Dev sunucusunu yeniden başlatın.');
+          setError(t('serverResponseError'));
           return;
         }
         if (!res.ok) {
-          setError(String(data.error || 'Yüklenemedi'));
+          setError(String(data.error || tCommon('loadFailed')));
           return;
         }
         setFormData({
@@ -84,9 +82,9 @@ export default function AdminContactPage() {
           pageSubtitle: mergeLocaleJson(data.pageSubtitle),
         });
       })
-      .catch(() => setError('Bağlantı hatası'))
+      .catch(() => setError(tCommon('connectionError')))
       .finally(() => setPageLoading(false));
-  }, []);
+  }, [t, tCommon]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,19 +103,19 @@ export default function AdminContactPage() {
       try {
         data = await res.json();
       } catch {
-        throw new Error('Sunucu yanıtı okunamadı. `npm run dev` yeniden başlatın.');
+        throw new Error(t('serverResponseError'));
       }
-      if (!res.ok) throw new Error(data.error || 'Kaydedilemedi');
-      setSuccess('Əlaqə məlumatları yadda saxlanıldı.');
+      if (!res.ok) throw new Error(data.error || tCommon('saveFailed'));
+      setSuccess(t('saved'));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Kaydedilemedi');
+      setError(err instanceof Error ? err.message : tCommon('saveFailed'));
     } finally {
       setLoading(false);
     }
   };
 
   const handleReset = async () => {
-    if (!confirm('Bütün əlaqə məlumatları varsayılan dəyərlərə qaytarılsın?')) return;
+    if (!confirm(t('resetConfirm'))) return;
     setLoading(true);
     setError('');
     setSuccess('');
@@ -128,7 +126,7 @@ export default function AdminContactPage() {
         credentials: 'same-origin',
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Sıfırlanamadı');
+      if (!res.ok) throw new Error(data.error || t('resetFailed'));
       setFormData({
         address: data.address,
         phone: data.phone,
@@ -143,9 +141,9 @@ export default function AdminContactPage() {
         tiktokUrl: data.tiktokUrl ?? '',
         pageSubtitle: mergeLocaleJson(data.pageSubtitle),
       });
-      setSuccess('Varsayılan məlumatlar bərpa edildi.');
+      setSuccess(t('resetSuccess'));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sıfırlanamadı');
+      setError(err instanceof Error ? err.message : t('resetFailed'));
     } finally {
       setLoading(false);
     }
@@ -155,17 +153,15 @@ export default function AdminContactPage() {
     'w-full rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-gray-900 dark:text-white';
 
   if (pageLoading) {
-    return <p className="text-gray-500">Yüklənir...</p>;
+    return <p className="text-gray-500">{tCommon('loading')}</p>;
   }
 
   return (
     <div className="max-w-3xl">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Əlaqə / İletişim</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Əlaqə səhifəsi, footer və WhatsApp düymələrində göstərilən məlumatlar.
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('title')}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('introExtended')}</p>
         </div>
         <button
           type="button"
@@ -173,7 +169,7 @@ export default function AdminContactPage() {
           disabled={loading}
           className="px-4 py-2 text-sm font-medium text-red-600 border border-red-300 dark:border-red-800 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 disabled:opacity-60"
         >
-          Varsayılana sıfırla
+          {t('resetButton')}
         </button>
       </div>
 
@@ -190,59 +186,86 @@ export default function AdminContactPage() {
 
       <form onSubmit={handleSave} className="space-y-8">
         <section className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Ünvan və əlaqə</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('sectionAddress')}</h2>
 
           <div>
             <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Ünvan
+              {t('address')}
             </label>
-            <textarea id="address" rows={3} className={inputClass} value={formData.address}
-              onChange={(e) => setFormData((p) => ({ ...p, address: e.target.value }))} />
+            <textarea
+              id="address"
+              rows={3}
+              className={inputClass}
+              value={formData.address}
+              onChange={(e) => setFormData((p) => ({ ...p, address: e.target.value }))}
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Telefon / WhatsApp
+                {t('phoneWhatsApp')}
               </label>
-              <input id="phone" className={inputClass} value={formData.phone}
-                onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))} />
+              <input
+                id="phone"
+                className={inputClass}
+                value={formData.phone}
+                onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+              />
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                E-poçt
+                {tCommon('emailCol')}
               </label>
-              <input id="email" type="email" className={inputClass} value={formData.email}
-                onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))} />
+              <input
+                id="email"
+                type="email"
+                className={inputClass}
+                value={formData.email}
+                onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
+              />
             </div>
           </div>
 
           <div>
             <label htmlFor="mapsUrl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Google Maps linki
+              {t('mapsUrl')}
             </label>
-            <input id="mapsUrl" type="url" className={inputClass} value={formData.mapsUrl}
-              onChange={(e) => setFormData((p) => ({ ...p, mapsUrl: e.target.value }))} />
+            <input
+              id="mapsUrl"
+              type="url"
+              className={inputClass}
+              value={formData.mapsUrl}
+              onChange={(e) => setFormData((p) => ({ ...p, mapsUrl: e.target.value }))}
+            />
           </div>
         </section>
 
         <section className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">İş saatları</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('sectionHours')}</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="hoursWeekdays" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Bazar ertəsi – Cümə
+                {t('hoursWeekdays')}
               </label>
-              <input id="hoursWeekdays" className={inputClass} value={formData.hoursWeekdays}
-                onChange={(e) => setFormData((p) => ({ ...p, hoursWeekdays: e.target.value }))} />
+              <input
+                id="hoursWeekdays"
+                className={inputClass}
+                value={formData.hoursWeekdays}
+                onChange={(e) => setFormData((p) => ({ ...p, hoursWeekdays: e.target.value }))}
+              />
             </div>
             <div>
               <label htmlFor="hoursSaturday" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Şənbə
+                {t('hoursSaturday')}
               </label>
-              <input id="hoursSaturday" className={inputClass} value={formData.hoursSaturday}
-                onChange={(e) => setFormData((p) => ({ ...p, hoursSaturday: e.target.value }))} />
+              <input
+                id="hoursSaturday"
+                className={inputClass}
+                value={formData.hoursSaturday}
+                onChange={(e) => setFormData((p) => ({ ...p, hoursSaturday: e.target.value }))}
+              />
             </div>
           </div>
 
@@ -253,48 +276,67 @@ export default function AdminContactPage() {
               onChange={(e) => setFormData((p) => ({ ...p, sundayClosed: e.target.checked }))}
               className="rounded border-gray-300"
             />
-            Bazar günü bağlı
+            {t('closedSunday')}
           </label>
 
           {!formData.sundayClosed && (
             <div>
               <label htmlFor="hoursSunday" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Bazar saatları
+                {t('hoursSunday')}
               </label>
-              <input id="hoursSunday" className={inputClass} value={formData.hoursSunday}
-                onChange={(e) => setFormData((p) => ({ ...p, hoursSunday: e.target.value }))} />
+              <input
+                id="hoursSunday"
+                className={inputClass}
+                value={formData.hoursSunday}
+                onChange={(e) => setFormData((p) => ({ ...p, hoursSunday: e.target.value }))}
+              />
             </div>
           )}
         </section>
 
         <section className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Sosial şəbəkələr</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('sectionSocial')}</h2>
 
           <div>
             <label htmlFor="facebookUrl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Facebook
+              {t('facebook')}
             </label>
-            <input id="facebookUrl" type="url" className={inputClass} value={formData.facebookUrl}
-              onChange={(e) => setFormData((p) => ({ ...p, facebookUrl: e.target.value }))} />
+            <input
+              id="facebookUrl"
+              type="url"
+              className={inputClass}
+              value={formData.facebookUrl}
+              onChange={(e) => setFormData((p) => ({ ...p, facebookUrl: e.target.value }))}
+            />
           </div>
           <div>
             <label htmlFor="instagramUrl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Instagram
+              {t('instagram')}
             </label>
-            <input id="instagramUrl" type="url" className={inputClass} value={formData.instagramUrl}
-              onChange={(e) => setFormData((p) => ({ ...p, instagramUrl: e.target.value }))} />
+            <input
+              id="instagramUrl"
+              type="url"
+              className={inputClass}
+              value={formData.instagramUrl}
+              onChange={(e) => setFormData((p) => ({ ...p, instagramUrl: e.target.value }))}
+            />
           </div>
           <div>
             <label htmlFor="tiktokUrl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              TikTok
+              {t('tiktok')}
             </label>
-            <input id="tiktokUrl" type="url" className={inputClass} value={formData.tiktokUrl}
-              onChange={(e) => setFormData((p) => ({ ...p, tiktokUrl: e.target.value }))} />
+            <input
+              id="tiktokUrl"
+              type="url"
+              className={inputClass}
+              value={formData.tiktokUrl}
+              onChange={(e) => setFormData((p) => ({ ...p, tiktokUrl: e.target.value }))}
+            />
           </div>
         </section>
 
         <section className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Səhifə mətni (alt başlıq)</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('sectionSubtitle')}</h2>
 
           <div className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-zinc-700 pb-2">
             {LOCALES.map((loc) => (
@@ -315,7 +357,7 @@ export default function AdminContactPage() {
 
           <div>
             <label htmlFor="pageSubtitle" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Alt başlıq ({activeTab})
+              {t('subtitleLabel', { locale: activeTab })}
             </label>
             <textarea
               id="pageSubtitle"
@@ -337,7 +379,7 @@ export default function AdminContactPage() {
           disabled={loading}
           className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:opacity-60"
         >
-          {loading ? 'Yadda saxlanılır...' : 'Yadda saxla'}
+          {loading ? tCommon('saving') : tCommon('save')}
         </button>
       </form>
     </div>

@@ -37,7 +37,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await req.json();
-    const { slug, name, description, country, city, image, tuitionFee } = body;
+    const { slug, name, description, country, city, image, tuitionFee, tuitionFeePartTime } = body;
 
     const university = await prisma.university.update({
       where: { id: parseInt(id, 10) },
@@ -49,6 +49,7 @@ export async function PUT(
         city,
         image,
         tuitionFee,
+        tuitionFeePartTime: tuitionFeePartTime ?? null,
       },
     });
 

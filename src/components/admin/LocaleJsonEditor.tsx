@@ -1,15 +1,8 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { EMPTY_LOCALES } from '@/lib/locale-content';
-
-const LOCALES = [
-  { code: 'tr', name: 'Türkçe' },
-  { code: 'en', name: 'English' },
-  { code: 'az', name: 'Azərbaycanca' },
-  { code: 'ru', name: 'Русский' },
-  { code: 'uk', name: 'Українська' },
-  { code: 'ge', name: 'ქართული' },
-];
+import { getContentLocaleTabs } from '@/lib/admin-content-locales';
 
 type FieldConfig = {
   key: string;
@@ -26,7 +19,7 @@ type LocaleJsonEditorProps = {
   fields: FieldConfig[];
 };
 
-export { LOCALES, EMPTY_LOCALES };
+export { EMPTY_LOCALES };
 
 export default function LocaleJsonEditor({
   activeTab,
@@ -35,13 +28,15 @@ export default function LocaleJsonEditor({
   onChange,
   fields,
 }: LocaleJsonEditorProps) {
+  const tLocales = useTranslations('contentLocales');
+  const locales = getContentLocaleTabs(tLocales);
   const inputClass =
     'w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500';
 
   return (
     <div>
       <div className="flex border-b border-gray-200 dark:border-zinc-800 space-x-1 overflow-x-auto mb-6">
-        {LOCALES.map((lang) => (
+        {locales.map((lang) => (
           <button
             key={lang.code}
             type="button"

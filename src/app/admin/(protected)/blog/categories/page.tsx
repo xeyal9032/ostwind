@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { getLocaleText } from '@/lib/locale-content';
 
 type CategoryRow = {
@@ -12,6 +13,8 @@ type CategoryRow = {
 };
 
 export default function BlogCategoriesPage() {
+  const t = useTranslations('blog');
+  const tCommon = useTranslations('common');
   const [items, setItems] = useState<CategoryRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -24,22 +27,22 @@ export default function BlogCategoriesPage() {
           setItems(data);
           setError('');
         } else {
-          setError(String(data.error || 'Yüklənə bilmədi'));
+          setError(String(data.error || tCommon('loadFailed')));
         }
       })
-      .catch(() => setError('Bağlantı xətası'))
+      .catch(() => setError(tCommon('connectionError')))
       .finally(() => setLoading(false));
-  }, []);
+  }, [tCommon]);
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Bu kateqoriyanı silmək istəyirsiniz? Yazılarda kateqoriya boş qalacaq.')) return;
+    if (!confirm(t('confirmDeleteCategoryDetail'))) return;
 
     const res = await fetch(`/api/admin/categories/${id}`, { method: 'DELETE' });
     if (res.ok) {
       setItems((prev) => prev.filter((item) => item.id !== id));
     } else {
       const data = await res.json();
-      alert(data.error || 'Silinə bilmədi');
+      alert(data.error || tCommon('deleteFailed'));
     }
   };
 
@@ -51,15 +54,15 @@ export default function BlogCategoriesPage() {
             href="/admin/blog"
             className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 mb-2 inline-block"
           >
-            ← Blog
+            {t('backToBlog')}
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Blog Kateqoriyaları</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('categoriesSection')}</h1>
         </div>
         <Link
           href="/admin/blog/categories/new"
           className="inline-flex justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium"
         >
-          + Yeni Kateqoriya
+          {t('addCategory')}
         </Link>
       </div>
 
@@ -73,23 +76,23 @@ export default function BlogCategoriesPage() {
         <table className="w-full text-left text-sm">
           <thead className="bg-gray-50 dark:bg-zinc-800/50">
             <tr>
-              <th className="px-6 py-3">Ad (AZ)</th>
-              <th className="px-6 py-3">Slug</th>
-              <th className="px-6 py-3">Yazı sayı</th>
-              <th className="px-6 py-3 text-right">Əməliyyat</th>
+              <th className="px-6 py-3">{t('colTitleTr')}</th>
+              <th className="px-6 py-3">{t('colSlug')}</th>
+              <th className="px-6 py-3">{t('postCountCol')}</th>
+              <th className="px-6 py-3 text-right">{tCommon('actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
             {loading ? (
               <tr>
                 <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
-                  Yüklənir...
+                  {tCommon('loading')}
                 </td>
               </tr>
             ) : items.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
-                  Kateqoriya yoxdur.
+                  {t('noCategory')}
                 </td>
               </tr>
             ) : (
@@ -105,14 +108,14 @@ export default function BlogCategoriesPage() {
                       href={`/admin/blog/categories/${item.id}/edit`}
                       className="text-blue-600 hover:underline"
                     >
-                      Redaktə
+                      {tCommon('edit')}
                     </Link>
                     <button
                       type="button"
                       onClick={() => handleDelete(item.id)}
                       className="text-red-600 hover:underline"
                     >
-                      Sil
+                      {tCommon('delete')}
                     </button>
                   </td>
                 </tr>

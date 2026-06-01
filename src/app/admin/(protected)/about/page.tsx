@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import ImageUploadField from '@/components/admin/ImageUploadField';
+import { getContentLocaleTabs } from '@/lib/admin-content-locales';
 import {
   DEFAULT_ABOUT_STORY,
   DEFAULT_COMPANY_SECTION,
@@ -39,37 +41,14 @@ function defaultFormData(): FormData {
   };
 }
 
-const LOCALES = [
-  { code: 'tr', name: 'Türkçe' },
-  { code: 'en', name: 'English' },
-  { code: 'az', name: 'Azərbaycanca' },
-  { code: 'ru', name: 'Русский' },
-  { code: 'uk', name: 'Українська' },
-  { code: 'ge', name: 'ქართული' },
-];
-
 type LocaleField = keyof Omit<FormData, 'storyImage'>;
 
-const STORY_FIELDS: { key: LocaleField; label: string; multiline?: boolean }[] = [
-  { key: 'storyTitle', label: 'Hikaye başlığı' },
-  { key: 'storyText', label: 'Hikaye metni', multiline: true },
-];
-
-const COMPANY_FIELDS: { key: LocaleField; label: string; multiline?: boolean; hint?: string }[] = [
-  { key: 'companyTitle', label: 'Bölüm başlığı (üst)' },
-  { key: 'missionTitle', label: 'Kutu 1 — başlık' },
-  { key: 'missionText', label: 'Kutu 1 — metin', multiline: true },
-  { key: 'valuesTitle', label: 'Kutu 2 — başlık' },
-  { key: 'valuesText', label: 'Kutu 2 — metin', multiline: true },
-  {
-    key: 'teamTitle',
-    label: 'Kutu 3 — başlık (isteğe bağlı)',
-    hint: 'Boş bırakırsanız sadece numara ve metin gösterilir.',
-  },
-  { key: 'teamText', label: 'Kutu 3 — metin', multiline: true },
-];
-
 export default function AdminAboutPage() {
+  const t = useTranslations('about');
+  const tCommon = useTranslations('common');
+  const tLocales = useTranslations('contentLocales');
+  const LOCALES = getContentLocaleTabs(tLocales);
+
   const [activeTab, setActiveTab] = useState('tr');
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
@@ -77,19 +56,44 @@ export default function AdminAboutPage() {
   const [success, setSuccess] = useState('');
   const [formData, setFormData] = useState<FormData>(defaultFormData);
 
+  const STORY_FIELDS = useMemo(
+    () =>
+      [
+        { key: 'storyTitle' as LocaleField, label: t('storyTitle') },
+        { key: 'storyText' as LocaleField, label: t('storyText'), multiline: true },
+      ],
+    [t],
+  );
+
+  const COMPANY_FIELDS = useMemo(
+    () =>
+      [
+        { key: 'companyTitle' as LocaleField, label: t('companyTitle') },
+        { key: 'missionTitle' as LocaleField, label: t('missionBox1Title') },
+        { key: 'missionText' as LocaleField, label: t('missionBox1Text'), multiline: true },
+        { key: 'valuesTitle' as LocaleField, label: t('valuesBox2Title') },
+        { key: 'valuesText' as LocaleField, label: t('valuesBox2Text'), multiline: true },
+        {
+          key: 'teamTitle' as LocaleField,
+          label: t('teamBox3Title'),
+          hint: t('storyImageHint'),
+        },
+        { key: 'teamText' as LocaleField, label: t('teamBox3Text'), multiline: true },
+      ],
+    [t],
+  );
+
   useEffect(() => {
     fetch('/api/admin/about')
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) {
           if (res.status === 401) {
-            setError('Oturum süresi dolmuş olabilir. Tekrar giriş yapın.');
+            setError(tCommon('sessionExpired'));
             return;
           }
           setFormData(defaultFormData());
-          setError(
-            'Kayıtlı içerik yüklenemedi. Varsayılan metinler gösteriliyor — Kaydet ile veritabanına yazabilirsiniz.'
-          );
+          setError(t('loadFallback'));
           return;
         }
         const base = defaultFormData();
@@ -108,10 +112,10 @@ export default function AdminAboutPage() {
       })
       .catch(() => {
         setFormData(defaultFormData());
-        setError('Bağlantı hatası. Varsayılan metinler yüklendi.');
+        setError(tCommon('connectionFallback'));
       })
       .finally(() => setPageLoading(false));
-  }, []);
+  }, [t, tCommon]);
 
   const handleLangChange = (field: LocaleField, lang: string, value: string) => {
     setFormData((prev) => ({
@@ -137,7 +141,7 @@ export default function AdminAboutPage() {
       const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        setSuccess('Hakkımızda içeriği kaydedildi.');
+        setSuccess(t('saved'));
         const base = defaultFormData();
         setFormData({
           storyImage: data.storyImage || formData.storyImage,
@@ -152,17 +156,17 @@ export default function AdminAboutPage() {
           teamText: mergeLocaleJson(data.teamText ?? base.teamText),
         });
       } else {
-        setError(typeof data.error === 'string' ? data.error : `Kayıt başarısız (${res.status})`);
+        setError(typeof data.error === 'string' ? data.error : tCommon('saveRecordFailed', { status: res.status }));
       }
     } catch {
-      setError('Bağlantı hatası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
   };
 
   const renderLocaleFields = (
-    fields: { key: LocaleField; label: string; multiline?: boolean; hint?: string }[]
+    fields: { key: LocaleField; label: string; multiline?: boolean; hint?: string }[],
   ) => (
     <div className="space-y-6">
       {fields.map((field) => {
@@ -202,24 +206,24 @@ export default function AdminAboutPage() {
   );
 
   if (pageLoading) {
-    return <div className="text-center py-12 text-gray-500 dark:text-gray-400">Yükleniyor...</div>;
+    return (
+      <div className="text-center py-12 text-gray-500 dark:text-gray-400">{tCommon('loading')}</div>
+    );
   }
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Hakkımızda</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Hikayemiz ve şirket bölümü (3 kutu) — tüm diller.
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('title')}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('intro')}</p>
         </div>
         <Link
           href="/az/about"
           target="_blank"
           className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
         >
-          Sayfayı önizle →
+          {t('previewPage')}
         </Link>
       </div>
 
@@ -239,27 +243,38 @@ export default function AdminAboutPage() {
         className="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-gray-200 dark:border-zinc-800 p-6 space-y-10"
       >
         <ImageUploadField
-          label="Hikaye görseli"
+          label={t('storyImage')}
           value={formData.storyImage}
           onChange={(storyImage) => setFormData((prev) => ({ ...prev, storyImage }))}
-          placeholder="/uploads/... veya harici URL"
+          placeholder={t('storyImagePlaceholder')}
         />
 
-        <LocaleTabs activeTab={activeTab} onTabChange={setActiveTab} />
+        <div className="flex border-b border-gray-200 dark:border-zinc-800 space-x-1 overflow-x-auto">
+          {LOCALES.map((lang) => (
+            <button
+              key={lang.code}
+              type="button"
+              onClick={() => setActiveTab(lang.code)}
+              className={`py-2 px-4 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
+                activeTab === lang.code
+                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
+              }`}
+            >
+              {lang.name}
+            </button>
+          ))}
+        </div>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Hikayemiz</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('storySection')}</h2>
           {renderLocaleFields(STORY_FIELDS)}
-          <p className="mt-2 text-xs text-gray-500">İki paragraf için araya boş satır ekleyin.</p>
+          <p className="mt-2 text-xs text-gray-500">{t('storyParagraphHint')}</p>
         </section>
 
         <section className="pt-8 border-t border-gray-200 dark:border-zinc-800">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-            Şirket hakkında (3 kutu)
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-            Koyu arka planlı bölüm: misyon, değerler ve ekip metni.
-          </p>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{t('companySection')}</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('companySectionHint')}</p>
           {renderLocaleFields(COMPANY_FIELDS)}
         </section>
 
@@ -269,37 +284,10 @@ export default function AdminAboutPage() {
             disabled={loading}
             className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {loading ? 'Kaydediliyor...' : 'Kaydet'}
+            {loading ? tCommon('saving') : tCommon('save')}
           </button>
         </div>
       </form>
-    </div>
-  );
-}
-
-function LocaleTabs({
-  activeTab,
-  onTabChange,
-}: {
-  activeTab: string;
-  onTabChange: (code: string) => void;
-}) {
-  return (
-    <div className="flex border-b border-gray-200 dark:border-zinc-800 space-x-1 overflow-x-auto">
-      {LOCALES.map((lang) => (
-        <button
-          key={lang.code}
-          type="button"
-          onClick={() => onTabChange(lang.code)}
-          className={`py-2 px-4 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
-            activeTab === lang.code
-              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
-          }`}
-        >
-          {lang.name}
-        </button>
-      ))}
     </div>
   );
 }

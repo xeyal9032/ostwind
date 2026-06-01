@@ -1,9 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import MessageReplyBox, { type MessageWithReply } from '@/components/admin/MessageReplyBox';
 
 export default function MessagesPage() {
+  const t = useTranslations('messages');
+  const tCommon = useTranslations('common');
   const [items, setItems] = useState<MessageWithReply[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,12 +24,12 @@ export default function MessagesPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Bu mesajı silmek istediğinize emin misiniz?')) return;
+    if (!confirm(t('confirmDeleteMessage'))) return;
     const res = await fetch(`/api/admin/messages/${id}`, { method: 'DELETE' });
     if (res.ok) {
       setItems((prev) => prev.filter((m) => m.id !== id));
     } else {
-      alert('Silme işlemi başarısız oldu.');
+      alert(tCommon('deleteFailed'));
     }
   };
 
@@ -35,18 +38,18 @@ export default function MessagesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Mesajlar</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('title')}</h1>
         {unanswered > 0 && (
           <p className="text-sm text-amber-600 dark:text-amber-400 mt-1">
-            {unanswered} mesaj henüz yanıtlanmadı.
+            {t('unansweredCount', { count: unanswered })}
           </p>
         )}
       </div>
 
       {loading ? (
-        <p className="text-gray-500">Yükleniyor...</p>
+        <p className="text-gray-500">{tCommon('loading')}</p>
       ) : items.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">Henüz mesaj yok.</p>
+        <p className="text-gray-500 dark:text-gray-400">{t('empty')}</p>
       ) : (
         <div className="space-y-4">
           {items.map((m) => (
@@ -66,18 +69,16 @@ export default function MessagesPage() {
                 <div className="flex items-center gap-3 shrink-0">
                   {!m.adminReply && (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200">
-                      Yanıt bekliyor
+                      {t('awaitingReply')}
                     </span>
                   )}
-                  <span className="text-xs text-gray-400">
-                    {new Date(m.createdAt).toLocaleDateString('tr-TR')}
-                  </span>
+                  <span className="text-xs text-gray-400">{new Date(m.createdAt).toLocaleDateString()}</span>
                   <button
                     type="button"
                     onClick={() => handleDelete(m.id)}
                     className="text-red-600 hover:text-red-800 dark:text-red-400 text-sm font-medium"
                   >
-                    Sil
+                    {tCommon('delete')}
                   </button>
                 </div>
               </div>

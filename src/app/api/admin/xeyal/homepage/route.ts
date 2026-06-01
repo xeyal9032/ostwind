@@ -1,52 +1,60 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/prisma';
 import { requireSuperAdmin } from '@/lib/auth';
 import { logAudit, getRequestMeta } from '@/lib/audit-log';
-
-const DEFAULT_HOME_KEYS = [
-  'heroTitle1',
-  'heroTitleHighlight',
-  'heroDescription',
-  'heroApplyNow',
-  'heroExplore',
-] as const;
+import {
+  buildDefaultSiteContent,
+  getSiteContent,
+  normalizeSiteContent,
+  saveSiteContent,
+  HERO_TEXT_KEYS,
+  HEADER_KEYS,
+  FOOTER_KEYS,
+  type SiteContentV2,
+} from '@/lib/site-content';
 
 export async function GET() {
   const { error } = await requireSuperAdmin();
   if (error) return error;
 
-  let row = await prisma.homePageContent.findUnique({ where: { id: 1 } });
-  if (!row) {
-    row = await prisma.homePageContent.create({
-      data: { id: 1, content: {} },
-    });
-  }
+  const content = await getSiteContent();
 
-  return NextResponse.json({ content: row.content, keys: DEFAULT_HOME_KEYS });
+  return NextResponse.json({
+    content,
+    heroTextKeys: HERO_TEXT_KEYS,
+    headerKeys: HEADER_KEYS,
+    footerKeys: FOOTER_KEYS,
+  });
 }
 
 export async function PUT(req: Request) {
   const { session, error } = await requireSuperAdmin();
   if (error) return error;
 
-  const { content } = await req.json();
-  if (!content || typeof content !== 'object') {
+  const body = await req.json();
+  const raw = body.content;
+  if (!raw || typeof raw !== 'object') {
     return NextResponse.json({ error: 'Etibarsız məzmun' }, { status: 400 });
   }
 
-  const row = await prisma.homePageContent.upsert({
-    where: { id: 1 },
-    create: { id: 1, content },
-    update: { content },
-  });
+  const content = normalizeSiteContent(raw);
+  content.v = 2;
+
+  content.heroSlides = (content.heroSlides || [])
+    .map((s) => (typeof s === 'string' ? s.trim() : ''))
+    .filter(Boolean);
+  if (content.heroSlides.length === 0) {
+    content.heroSlides = buildDefaultSiteContent().heroSlides;
+  }
+
+  const row = await saveSiteContent(content);
 
   await logAudit({
     session,
     action: 'UPDATE',
     entity: 'homepage',
-    summary: 'Ana səhifə mətnləri yeniləndi',
+    summary: 'Sayt məzmunu (ana səhifə, menyu, footer) yeniləndi',
     ...getRequestMeta(req),
   });
 
-  return NextResponse.json(row);
+  return NextResponse.json({ content: row.content as SiteContentV2 });
 }

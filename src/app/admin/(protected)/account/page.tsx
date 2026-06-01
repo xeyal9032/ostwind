@@ -2,9 +2,13 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { ADMIN_ROLE_LABELS, type AdminRole } from '@/lib/admin-roles';
 
 export default function AdminAccountPage() {
+  const t = useTranslations('account');
+  const tCommon = useTranslations('common');
+  const tForms = useTranslations('forms');
   const { data: session } = useSession();
   const role = session?.user?.role as AdminRole | undefined;
 
@@ -32,13 +36,13 @@ export default function AdminAccountPage() {
       const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        setSuccess('Şifrəniz uğurla dəyişdirildi.');
+        setSuccess(t('passwordChanged'));
         setForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
       } else {
-        setError(data.error || 'Şifrə dəyişdirilə bilmədi');
+        setError(data.error || t('passwordChangeFailed'));
       }
     } catch {
-      setError('Bağlantı xətası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
@@ -46,31 +50,25 @@ export default function AdminAccountPage() {
 
   return (
     <div className="max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Hesabım</h1>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
-        Öz şifrənizi buradan təhlükəsiz şəkildə dəyişə bilərsiniz.
-      </p>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('title')}</h1>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">{t('intro')}</p>
 
       <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 mb-8">
         <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-          Profil
+          {t('profile')}
         </h2>
         <dl className="space-y-3 text-sm">
           <div className="flex justify-between gap-4">
-            <dt className="text-gray-500">Ad</dt>
-            <dd className="text-gray-900 dark:text-white font-medium">
-              {session?.user?.name || '—'}
-            </dd>
+            <dt className="text-gray-500">{tCommon('name')}</dt>
+            <dd className="text-gray-900 dark:text-white font-medium">{session?.user?.name || '—'}</dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="text-gray-500">E-posta</dt>
+            <dt className="text-gray-500">{tForms('email')}</dt>
             <dd className="text-gray-900 dark:text-white font-medium">{session?.user?.email}</dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="text-gray-500">Rol</dt>
-            <dd className="text-gray-900 dark:text-white font-medium">
-              {role ? ADMIN_ROLE_LABELS[role] : '—'}
-            </dd>
+            <dt className="text-gray-500">{t('roleLabel')}</dt>
+            <dd className="text-gray-900 dark:text-white font-medium">{role ? ADMIN_ROLE_LABELS[role] : '—'}</dd>
           </div>
         </dl>
       </div>
@@ -79,7 +77,7 @@ export default function AdminAccountPage() {
         onSubmit={handleSubmit}
         className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 space-y-5"
       >
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Şifrəni dəyiş</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('changePassword')}</h2>
 
         {error && (
           <div role="alert" className="bg-red-50 dark:bg-red-900/30 text-red-600 p-4 rounded-lg text-sm">
@@ -93,11 +91,8 @@ export default function AdminAccountPage() {
         )}
 
         <div>
-          <label
-            htmlFor="current-password"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
-            Cari şifrə <span className="text-red-500">*</span>
+          <label htmlFor="current-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {t('currentPassword')} <span className="text-red-500">*</span>
           </label>
           <input
             id="current-password"
@@ -112,11 +107,8 @@ export default function AdminAccountPage() {
         </div>
 
         <div>
-          <label
-            htmlFor="new-password"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
-            Yeni şifrə <span className="text-red-500">*</span>
+          <label htmlFor="new-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {tForms('newPassword')} <span className="text-red-500">*</span>
           </label>
           <input
             id="new-password"
@@ -131,16 +123,13 @@ export default function AdminAccountPage() {
             onChange={(e) => setForm({ ...form, newPassword: e.target.value })}
           />
           <p id="new-password-hint" className="text-xs text-gray-500 mt-1">
-            Ən azı 6 simvol
+            {t('passwordMinHint')}
           </p>
         </div>
 
         <div>
-          <label
-            htmlFor="confirm-password"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
-            Yeni şifrə (təsdiq) <span className="text-red-500">*</span>
+          <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {tForms('confirmPassword')} <span className="text-red-500">*</span>
           </label>
           <input
             id="confirm-password"
@@ -160,7 +149,7 @@ export default function AdminAccountPage() {
           disabled={loading}
           className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium disabled:opacity-50"
         >
-          {loading ? 'Saxlanılır...' : 'Şifrəni dəyiş'}
+          {loading ? tCommon('saving') : t('changePasswordButton')}
         </button>
       </form>
     </div>

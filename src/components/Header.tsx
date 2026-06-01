@@ -1,56 +1,77 @@
 'use client';
 
-// Header bileşeni - Çok dilli ve Glassmorphism tasarımı
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { useState } from 'react';
 import AnimatedBrandLogo from '@/components/AnimatedBrandLogo';
+import StudentAuthLinks from '@/components/StudentAuthLinks';
+import { useSiteText } from '@/components/SiteContentProvider';
+
+const NAV_KEYS = [
+  { key: 'home', href: '/' },
+  { key: 'universities', href: '/universities' },
+  { key: 'services', href: '/services' },
+  { key: 'pricing', href: '/pricing' },
+  { key: 'faq', href: '/faq' },
+  { key: 'blog', href: '/blog' },
+  { key: 'about', href: '/about' },
+  { key: 'contact', href: '/contact' },
+] as const;
 
 export default function Header() {
   const t = useTranslations('Header');
+  const locale = useLocale();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navItems = [
-    { name: t('home'), href: '/' },
-    { name: t('universities'), href: '/universities' },
-    { name: t('services'), href: '/services' },
-    { name: t('pricing'), href: '/pricing' },
-    { name: t('faq'), href: '/faq' },
-    { name: t('blog'), href: '/blog' },
-    { name: t('about'), href: '/about' },
-    { name: t('contact'), href: '/contact' },
-  ];
+  const navLabels = {
+    home: useSiteText('header', 'home', locale, t('home')),
+    universities: useSiteText('header', 'universities', locale, t('universities')),
+    services: useSiteText('header', 'services', locale, t('services')),
+    pricing: useSiteText('header', 'pricing', locale, t('pricing')),
+    faq: useSiteText('header', 'faq', locale, t('faq')),
+    blog: useSiteText('header', 'blog', locale, t('blog')),
+    about: useSiteText('header', 'about', locale, t('about')),
+    contact: useSiteText('header', 'contact', locale, t('contact')),
+  };
+
+  const applyNowLabel = useSiteText('header', 'applyNow', locale, t('applyNow'));
+
+  const navItems = NAV_KEYS.map((item) => ({
+    name: navLabels[item.key],
+    href: item.href,
+  }));
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-black/70 backdrop-blur-md shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="grid grid-cols-[auto_1fr_auto] items-center h-16 w-full gap-x-2 lg:gap-x-4">
           <div className="flex shrink-0 items-center -ml-2 sm:-ml-3 lg:-ml-4 py-1 pr-1">
             <AnimatedBrandLogo variant="header" priority />
           </div>
 
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex justify-center items-center gap-x-3 lg:gap-x-5 min-w-0 px-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-gray-700 hover:text-primary dark:text-gray-300 dark:hover:text-white px-3 py-2 text-sm font-medium transition-colors"
+                className="text-gray-700 hover:text-primary dark:text-gray-300 dark:hover:text-white px-1.5 py-2 text-sm font-medium transition-colors whitespace-nowrap"
               >
                 {item.name}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center justify-end gap-2 shrink-0">
             <Link
               href="/apply"
-              className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors"
+              className="inline-flex items-center justify-center px-3.5 py-1.5 border border-transparent text-xs sm:text-sm font-semibold rounded-full text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors whitespace-nowrap"
             >
-              {t('applyNow')}
+              {applyNowLabel}
             </Link>
+            <StudentAuthLinks />
           </div>
 
-          <div className="flex md:hidden">
+          <div className="flex md:hidden col-start-3 justify-self-end">
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -78,21 +99,22 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-zinc-800"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-zinc-800"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
-          </div>
-          <div className="pt-4 pb-3 border-t border-gray-200 dark:border-zinc-800 px-5">
             <Link
               href="/apply"
-              className="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-full text-white bg-primary hover:bg-primary/90 shadow-sm"
+              className="block px-3 py-2 rounded-md text-base font-medium text-primary"
               onClick={() => setIsMenuOpen(false)}
             >
-              {t('applyNow')}
+              {applyNowLabel}
             </Link>
+            <div className="px-3 py-2">
+              <StudentAuthLinks />
+            </div>
           </div>
         </div>
       )}

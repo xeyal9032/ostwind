@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Yüklənən fayllar (şəxsi müraciət sənədləri)
+/public/uploads/
+
+# Yerli test faylları
+test-latin*.pdf

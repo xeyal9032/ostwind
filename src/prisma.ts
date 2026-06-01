@@ -9,7 +9,11 @@ function createPrismaClient() {
 /** Dev-də schema dəyişəndən sonra köhnə keşlənmiş client-i atır */
 function getPrismaClient() {
   const cached = globalForPrisma.prisma;
-  if (cached && typeof cached.contactContent !== 'undefined') {
+  if (
+    cached &&
+    typeof cached.contactContent !== 'undefined' &&
+    typeof cached.studentUser !== 'undefined'
+  ) {
     return cached;
   }
   const client = createPrismaClient();

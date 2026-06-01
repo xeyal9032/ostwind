@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { ADMIN_ROLE_LABELS, type AdminRole } from '@/lib/admin-roles';
 
 interface AdminUser {
@@ -26,6 +27,9 @@ interface UsersResponse {
 }
 
 export default function AdminUsersPage() {
+  const t = useTranslations('users');
+  const tCommon = useTranslations('common');
+  const tx = useTranslations('xeyal');
   const { data: session } = useSession();
   const currentUserId = session?.user?.id ? parseInt(session.user.id, 10) : null;
 
@@ -45,14 +49,14 @@ export default function AdminUsersPage() {
         setError('');
       } else {
         const data = await res.json().catch(() => ({}));
-        setError(data.error || 'İstifadəçilər yüklənə bilmədi');
+        setError(data.error || t('loadFailed'));
       }
     } catch {
-      setError('Bağlantı xətası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t, tCommon]);
 
   useEffect(() => {
     fetchUsers();
@@ -62,13 +66,11 @@ export default function AdminUsersPage() {
 
   const handleDelete = async (user: AdminUser) => {
     if (user.id === currentUserId) {
-      alert('Öz hesabınızı silə bilməzsiniz.');
+      alert(t('cannotDeleteSelf'));
       return;
     }
 
-    const confirmed = confirm(
-      `"${user.email}" admin hesabını silmək istəyirsiniz?\n\nBu əməliyyat geri alına bilməz.`,
-    );
+    const confirmed = confirm(t('confirmDeleteDetail', { email: user.email }));
     if (!confirmed) return;
 
     setDeletingId(user.id);
@@ -78,10 +80,10 @@ export default function AdminUsersPage() {
       if (res.ok) {
         await fetchUsers();
       } else {
-        alert(data.error || 'Silinə bilmədi');
+        alert(data.error || tCommon('deleteFailed'));
       }
     } catch {
-      alert('Bağlantı xətası');
+      alert(tCommon('connectionError'));
     } finally {
       setDeletingId(null);
     }
@@ -91,35 +93,29 @@ export default function AdminUsersPage() {
     <div className="max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Admin İstifadəçilər
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Onlayn status və son aktivlik. Adminlər paneldə tam redaktə hüququna malikdir.
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('title')}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('intro')}</p>
         </div>
         <Link
           href="/admin/users/new"
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
         >
-          Yeni Admin Əlavə Et
+          {t('add')}
         </Link>
       </div>
 
       {!loading && !error && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4">
-            <p className="text-sm text-gray-500">Toplam admin</p>
+            <p className="text-sm text-gray-500">{tx('totalAdmins')}</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
           </div>
           <div className="bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-100 dark:border-green-900/40 p-4">
-            <p className="text-sm text-green-700 dark:text-green-400">İndi onlayn</p>
-            <p className="text-2xl font-bold text-green-700 dark:text-green-300">
-              {stats.online}
-            </p>
+            <p className="text-sm text-green-700 dark:text-green-400">{tx('onlineNow')}</p>
+            <p className="text-2xl font-bold text-green-700 dark:text-green-300">{stats.online}</p>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4">
-            <p className="text-sm text-gray-500">Oflayn</p>
+            <p className="text-sm text-gray-500">{tx('offlineCount')}</p>
             <p className="text-2xl font-bold text-gray-700 dark:text-gray-300">{stats.offline}</p>
           </div>
         </div>
@@ -132,12 +128,12 @@ export default function AdminUsersPage() {
       )}
 
       {loading ? (
-        <div className="text-center py-12 text-gray-500">Yüklənir...</div>
+        <div className="text-center py-12 text-gray-500">{tCommon('loading')}</div>
       ) : users.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
-          Hələ admin yoxdur.{' '}
+          {t('noUsersYet')}{' '}
           <Link href="/admin/users/new" className="text-blue-600 hover:underline">
-            İlk admini əlavə edin
+            {t('addFirstAdmin')}
           </Link>
         </div>
       ) : (
@@ -145,21 +141,11 @@ export default function AdminUsersPage() {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-800">
             <thead className="bg-gray-50 dark:bg-zinc-800">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Admin
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Rol
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Son onlayn
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                  Əməliyyat
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('colAdmin')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('role')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('colStatus')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('colLastSeen')}</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{tCommon('actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
@@ -169,7 +155,7 @@ export default function AdminUsersPage() {
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
                       {user.name || '—'}
                       {user.id === currentUserId && (
-                        <span className="ml-2 text-xs text-blue-600">(siz)</span>
+                        <span className="ml-2 text-xs text-blue-600">{t('youLabel')}</span>
                       )}
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
@@ -194,26 +180,19 @@ export default function AdminUsersPage() {
                       }`}
                     >
                       <span
-                        className={`w-2 h-2 rounded-full ${
-                          user.isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
-                        }`}
+                        className={`w-2 h-2 rounded-full ${user.isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}
                         aria-hidden
                       />
-                      {user.isOnline ? 'Onlayn' : 'Oflayn'}
+                      {user.isOnline ? tx('online') : tx('offline')}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">
-                    {user.lastSeenLabel}
-                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{user.lastSeenLabel}</td>
                   <td className="px-6 py-4 text-right text-sm space-x-3 whitespace-nowrap">
-                    <Link
-                      href={`/admin/users/${user.id}/edit`}
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      Düzəlt
+                    <Link href={`/admin/users/${user.id}/edit`} className="text-blue-600 hover:text-blue-800">
+                      {tCommon('edit')}
                     </Link>
                     {user.id === currentUserId ? (
-                      <span className="text-gray-400 text-xs">Silinmir</span>
+                      <span className="text-gray-400 text-xs">{tCommon('cannotDelete')}</span>
                     ) : (
                       <button
                         type="button"
@@ -221,7 +200,7 @@ export default function AdminUsersPage() {
                         onClick={() => handleDelete(user)}
                         className="text-red-600 hover:text-red-800 disabled:opacity-50"
                       >
-                        {deletingId === user.id ? 'Silinir...' : 'Sil'}
+                        {deletingId === user.id ? tCommon('deleting') : tCommon('delete')}
                       </button>
                     )}
                   </td>
@@ -229,9 +208,7 @@ export default function AdminUsersPage() {
               ))}
             </tbody>
           </table>
-          <p className="px-6 py-3 text-xs text-gray-400 border-t border-gray-100 dark:border-zinc-800">
-            Onlayn = son 5 dəqiqədə panel aktivliyi. Siyahı hər 30 saniyədə yenilənir.
-          </p>
+          <p className="px-6 py-3 text-xs text-gray-400 border-t border-gray-100 dark:border-zinc-800">{t('presenceHint')}</p>
         </div>
       )}
     </div>

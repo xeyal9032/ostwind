@@ -3,8 +3,11 @@
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import AdminLocaleSwitcher from '@/components/admin/AdminLocaleSwitcher';
 
 export default function AdminLogin() {
+  const t = useTranslations('login');
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,25 +35,23 @@ export default function AdminLogin() {
         const err = res.error;
         if (err.includes('2FA') || err === '2FA_REQUIRED') {
           setShowOtp(true);
-          setError('2FA aktif — Authenticator uygulamasındaki 6 haneli kodu girin');
+          setError(t('error2fa'));
         } else if (err === 'INVALID_2FA_CODE') {
           setShowOtp(true);
-          setError('2FA kodu yanlış veya geçersiz. Yalnızca 6 haneli güncel kodu girin.');
+          setError(t('error2faInvalid'));
         } else if (err === 'CredentialsSignin') {
-          setError(
-            'E-posta veya şifre yanlış. Yeni admin oluşturduysanız şifreyi tam yazdığınızdan emin olun; super admin panelden şifreyi sıfırlayabilir.',
-          );
+          setError(t('errorCredentials'));
         } else {
-          setError(`Giriş başarısız (${err})`);
+          setError(t('errorGeneric'));
         }
       } else if (res?.ok) {
         router.push('/admin/dashboard');
         router.refresh();
       } else {
-        setError('Giriş başarısız. Lütfen tekrar deneyin.');
+        setError(t('errorGeneric'));
       }
     } catch {
-      setError('Bir hata oluştu. Lütfen tekrar deneyin.');
+      setError(t('errorServer'));
     } finally {
       setLoading(false);
     }
@@ -58,13 +59,16 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-950 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="absolute top-4 right-4">
+        <AdminLocaleSwitcher />
+      </div>
       <div className="max-w-md w-full space-y-8 bg-white dark:bg-zinc-900 p-10 rounded-2xl shadow-xl">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-            OstWind Yönetim Paneli
+            {t('title')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-            Lütfen yetkili bilgilerinizle giriş yapın
+            {t('subtitle')}
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -74,7 +78,7 @@ export default function AdminLogin() {
                 htmlFor="login-email"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               >
-                E-posta Adresi
+                {t('email')}
               </label>
               <input
                 id="login-email"
@@ -91,7 +95,7 @@ export default function AdminLogin() {
                 htmlFor="login-password"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               >
-                Şifre
+                {t('password')}
               </label>
               <input
                 id="login-password"
@@ -109,14 +113,14 @@ export default function AdminLogin() {
                   htmlFor="login-otp"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
-                  2FA Kodu
+                  {t('otp')}
                 </label>
                 <input
                   id="login-otp"
                   type="text"
                   inputMode="numeric"
                   autoComplete="one-time-code"
-                  placeholder="000000"
+                  placeholder={t('otpPlaceholder')}
                   maxLength={6}
                   pattern="[0-9]{6}"
                   className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 dark:bg-zinc-800 rounded-md dark:text-white tracking-widest text-center text-lg"
@@ -141,7 +145,7 @@ export default function AdminLogin() {
             disabled={loading}
             className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium disabled:opacity-50"
           >
-            {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+            {loading ? t('submitting') : t('submit')}
           </button>
         </form>
       </div>

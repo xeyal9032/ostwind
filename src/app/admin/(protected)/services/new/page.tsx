@@ -3,19 +3,16 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { getContentLocaleTabs } from '@/lib/admin-content-locales';
 import ServiceIconSelect from '@/components/admin/ServiceIconSelect';
 import type { ServiceIconKey } from '@/lib/services-defaults';
 
-const LOCALES = [
-  { code: 'tr', name: 'Türkçe' },
-  { code: 'en', name: 'English' },
-  { code: 'az', name: 'Azərbaycanca' },
-  { code: 'ru', name: 'Русский' },
-  { code: 'uk', name: 'Українська' },
-  { code: 'ge', name: 'ქართული' },
-];
-
 export default function NewServicePage() {
+  const t = useTranslations('services');
+  const tCommon = useTranslations('common');
+  const tLocales = useTranslations('contentLocales');
+  const LOCALES = getContentLocaleTabs(tLocales);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('az'); // Default to AZ since user enters content in AZ
   const [loading, setLoading] = useState(false);
@@ -48,7 +45,7 @@ export default function NewServicePage() {
     };
 
     if (!sourceData.title && !sourceData.description) {
-      alert('Lütfen önce mevcut dilde (aktif sekmede) içerik girin.');
+      alert(tCommon('fillActiveLocale'));
       return;
     }
 
@@ -90,10 +87,10 @@ export default function NewServicePage() {
           return newState;
         });
       }
-      alert('Çeviriler tamamlandı!');
+      alert(tCommon('translateComplete'));
     } catch (err) {
       console.error(err);
-      alert('Çeviri sırasında bir hata oluştu.');
+      alert(tCommon('translateFailed'));
     } finally {
       setTranslating(false);
     }
@@ -148,10 +145,10 @@ export default function NewServicePage() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error || 'Bir hata oluştu');
+        setError(data.error || tCommon('error'));
       }
     } catch {
-      setError('Bağlantı hatası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
@@ -160,12 +157,12 @@ export default function NewServicePage() {
   return (
     <div className="max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Yeni Hizmet Ekle</h1>
-        <Link 
-          href="/admin/services" 
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('add')}</h1>
+        <Link
+          href="/admin/services"
           className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          &larr; Geri Dön
+          {tCommon('backToList')}
         </Link>
       </div>
 
@@ -180,7 +177,7 @@ export default function NewServicePage() {
         <div className="mb-8 pb-8 border-b border-gray-200 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="slug" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              URL Slug <span className="text-red-500">*</span>
+              {t('slugField')} <span className="text-red-500">*</span>
             </label>
             <input
               id="slug"
@@ -201,7 +198,7 @@ export default function NewServicePage() {
         {/* Translation Tabs */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">Çoklu Dil İçerikleri</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">{t('multiLocaleContent')}</h2>
             <div className="flex border-b border-gray-200 dark:border-zinc-800 space-x-1 overflow-x-auto">
               {LOCALES.map(lang => (
                 <button
@@ -225,7 +222,7 @@ export default function NewServicePage() {
             disabled={translating}
             className={`px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors flex items-center justify-center ${translating ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {translating ? 'Çevriliyor...' : `Bu Dilden (${activeTab.toUpperCase()}) Tüm Dillere Çevir`}
+            {translating ? tCommon('translating') : tCommon('translateButton', { locale: activeTab.toUpperCase() })}
           </button>
         </div>
 
@@ -233,7 +230,7 @@ export default function NewServicePage() {
         <div className="space-y-6">
           <div>
             <label htmlFor="titleInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Hizmet Adı ({activeTab.toUpperCase()})
+              {t('titleLabel')} ({activeTab.toUpperCase()})
             </label>
             <input
               id="titleInput"
@@ -246,7 +243,7 @@ export default function NewServicePage() {
           
           <div>
             <label htmlFor="descInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Detaylı Açıklama ({activeTab.toUpperCase()})
+              {tCommon('description')} ({activeTab.toUpperCase()})
             </label>
             <textarea
               id="descInput"
@@ -259,7 +256,7 @@ export default function NewServicePage() {
 
           <div>
             <label htmlFor="featuresInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Özellikler (Satır başına bir tane) ({activeTab.toUpperCase()})
+              {t('featuresLabel')} ({activeTab.toUpperCase()})
             </label>
             <textarea
               id="featuresInput"
@@ -278,7 +275,7 @@ export default function NewServicePage() {
             disabled={loading}
             className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {loading ? 'Kaydediliyor...' : 'Hizmeti Kaydet'}
+            {loading ? tCommon('saving') : t('save')}
           </button>
         </div>
       </form>

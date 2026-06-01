@@ -1,19 +1,26 @@
-import "../globals.css"; // Ensure global css is imported
-import { Providers } from "@/components/Providers";
+import '../globals.css';
+import { Providers } from '@/components/Providers';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 
 export const metadata = {
-  title: "OstWind Admin Panel",
-  description: "OstWindGroup CMS",
+  title: 'OstWind Admin Panel',
+  description: 'OstWindGroup CMS',
 };
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
     <Providers>
-      {children}
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        {children}
+      </NextIntlClientProvider>
     </Providers>
   );
 }

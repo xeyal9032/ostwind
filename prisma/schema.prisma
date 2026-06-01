@@ -58,20 +58,65 @@ model AdminSession {
 }
 
 model University {
-  id              Int       @id @default(autoincrement())
-  slug            String    @unique
-  name            Json
-  description     Json
-  country         Json
-  city            Json
-  image           String?
-  tuitionFee      String?
-  metaTitle       Json?
-  metaDescription Json?
-  ogImage         String?
-  deletedAt       DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                 Int                @id @default(autoincrement())
+  slug               String             @unique
+  name               Json
+  description        Json
+  country            Json
+  city               Json
+  image              String?
+  tuitionFee         String?
+  tuitionFeePartTime String?
+  metaTitle          Json?
+  metaDescription    Json?
+  ogImage            String?
+  deletedAt          DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  onlineAdmissions   OnlineAdmission[]
+}
+
+model StudentUser {
+  id           Int                @id @default(autoincrement())
+  email        String             @unique
+  password     String
+  firstName    String
+  lastName     String
+  isActive     Boolean            @default(true)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  admissions   OnlineAdmission[]
+}
+
+model OnlineAdmission {
+  id                         Int          @id @default(autoincrement())
+  studentUserId              Int
+  firstName                  String
+  lastName                   String
+  birthDate                  DateTime
+  email                      String
+  phone                      String
+  registrationAddress        String       @db.Text
+  foreignPassportNumber      String
+  foreignPassportIssueDate   DateTime
+  foreignPassportExpiryDate  DateTime
+  universityId               Int
+  studyType                  String
+  studyLanguage              String
+  attestatFile               String
+  passportFile               String
+  photoFile                  String
+  summaryPdf                 String?
+  status                     String       @default("PENDING")
+  readAt                     DateTime?
+  createdAt                  DateTime     @default(now())
+  updatedAt                  DateTime     @updatedAt
+  studentUser                StudentUser  @relation(fields: [studentUserId], references: [id], onDelete: Cascade)
+  university                 University   @relation(fields: [universityId], references: [id])
+
+  @@index([studentUserId])
+  @@index([universityId])
+  @@index([status])
 }
 
 model Service {

@@ -3,9 +3,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { ADMIN_ROLE_LABELS, type AdminRole } from '@/lib/admin-roles';
 
 export default function NewAdminUserPage() {
+  const t = useTranslations('users');
+  const tCommon = useTranslations('common');
+  const tForms = useTranslations('forms');
+  const tAccount = useTranslations('account');
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -33,10 +38,10 @@ export default function NewAdminUserPage() {
         router.push('/admin/users');
         router.refresh();
       } else {
-        setError(data.error || 'Xəta baş verdi');
+        setError(data.error || tCommon('error'));
       }
     } catch {
-      setError('Bağlantı xətası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
@@ -45,9 +50,9 @@ export default function NewAdminUserPage() {
   return (
     <div className="max-w-xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Yeni Admin</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('new')}</h1>
         <Link href="/admin/users" className="text-gray-500 hover:text-gray-700 dark:text-gray-400">
-          &larr; Geri
+          {tCommon('back')}
         </Link>
       </div>
 
@@ -62,11 +67,8 @@ export default function NewAdminUserPage() {
         className="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-gray-200 dark:border-zinc-800 p-6 space-y-5"
       >
         <div>
-          <label
-            htmlFor="new-admin-name"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
-            Ad (isteğe bağlı)
+          <label htmlFor="new-admin-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {t('nameOptional')}
           </label>
           <input
             id="new-admin-name"
@@ -80,11 +82,8 @@ export default function NewAdminUserPage() {
         </div>
 
         <div>
-          <label
-            htmlFor="new-admin-email"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
-            E-posta <span className="text-red-500">*</span>
+          <label htmlFor="new-admin-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {tForms('email')} <span className="text-red-500">*</span>
           </label>
           <input
             id="new-admin-email"
@@ -99,11 +98,8 @@ export default function NewAdminUserPage() {
         </div>
 
         <div>
-          <label
-            htmlFor="new-admin-password"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
-            Şifrə <span className="text-red-500">*</span>
+          <label htmlFor="new-admin-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {tForms('password')} <span className="text-red-500">*</span>
           </label>
           <input
             id="new-admin-password"
@@ -118,16 +114,13 @@ export default function NewAdminUserPage() {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
           <p id="new-admin-password-hint" className="text-xs text-gray-500 mt-1">
-            Ən azı 6 simvol
+            {tAccount('passwordMinHint')}
           </p>
         </div>
 
         <div>
-          <label
-            htmlFor="new-admin-role"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
-            Rol
+          <label htmlFor="new-admin-role" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {t('role')}
           </label>
           <select
             id="new-admin-role"
@@ -139,10 +132,7 @@ export default function NewAdminUserPage() {
             <option value="ADMIN">{ADMIN_ROLE_LABELS.ADMIN}</option>
             <option value="SUPER_ADMIN">{ADMIN_ROLE_LABELS.SUPER_ADMIN}</option>
           </select>
-          <p className="text-xs text-gray-500 mt-1">
-            Admin rolü: paneldə bütün məzmunu redaktə edə bilər. Super admin əlavə olaraq digər
-            adminləri idarə edir.
-          </p>
+          <p className="text-xs text-gray-500 mt-1">{t('roleHint')}</p>
         </div>
 
         <button
@@ -150,7 +140,7 @@ export default function NewAdminUserPage() {
           disabled={loading}
           className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium disabled:opacity-50"
         >
-          {loading ? 'Yaradılır...' : 'Admin Yarat'}
+          {loading ? t('creating') : t('createAdmin')}
         </button>
       </form>
     </div>

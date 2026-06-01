@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { getLocaleText } from '@/lib/locale-content';
 
 type TrashItem = {
@@ -23,16 +24,6 @@ type TrashData = {
   categories: TrashItem[];
 };
 
-const TYPE_LABELS: Record<string, string> = {
-  post: 'Blog',
-  service: 'Hizmet',
-  university: 'Üniversite',
-  faq: 'SSS',
-  pricing: 'Fiyat',
-  team: 'Ekip',
-  category: 'Blog kategorisi',
-};
-
 function itemLabel(item: TrashItem): string {
   const title = item.title != null ? getLocaleText(item.title, 'tr') : '';
   const name = item.name != null ? getLocaleText(item.name, 'tr') : '';
@@ -41,9 +32,20 @@ function itemLabel(item: TrashItem): string {
 }
 
 export default function XeyalTrashPage() {
+  const t = useTranslations('xeyal');
+  const tCommon = useTranslations('common');
   const [items, setItems] = useState<TrashItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
+
+  const typeLabel = (type: string) => {
+    const key = type as 'service' | 'university' | 'blog' | 'team' | 'faq' | 'post' | 'pricing' | 'category';
+    if (key === 'post') return t('types.post');
+    if (key in { service: 1, university: 1, blog: 1, team: 1, faq: 1, pricing: 1, category: 1 }) {
+      return t(`types.${key}` as 'types.service');
+    }
+    return type;
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -60,8 +62,7 @@ export default function XeyalTrashPage() {
           ...data.team,
           ...(data.categories ?? []),
         ].sort(
-          (a, b) =>
-            new Date(b.deletedAt || 0).getTime() - new Date(a.deletedAt || 0).getTime(),
+          (a, b) => new Date(b.deletedAt || 0).getTime() - new Date(a.deletedAt || 0).getTime(),
         );
         setItems(all);
       }
@@ -84,7 +85,7 @@ export default function XeyalTrashPage() {
         body: JSON.stringify({ type, id }),
       });
       if (res.ok) setItems((prev) => prev.filter((i) => !(i.type === type && i.id === id)));
-      else alert('Geri yüklenemedi.');
+      else alert(t('restoreFailed'));
     } finally {
       setBusyKey(null);
     }
@@ -92,9 +93,8 @@ export default function XeyalTrashPage() {
 
   const permanentDelete = async (item: TrashItem) => {
     const label = itemLabel(item);
-    const typeLabel = TYPE_LABELS[item.type] || item.type;
     const ok = window.confirm(
-      `"${label}" (${typeLabel}) kalıcı olarak silinecek.\n\nBu işlem geri alınamaz. Devam edilsin mi?`,
+      t('permanentDeleteConfirm', { label, type: typeLabel(item.type) }),
     );
     if (!ok) return;
 
@@ -110,17 +110,17 @@ export default function XeyalTrashPage() {
         setItems((prev) => prev.filter((i) => !(i.type === item.type && i.id === item.id)));
       } else {
         const data = await res.json().catch(() => ({}));
-        alert(data.error || 'Kalıcı silinemedi.');
+        alert(data.error || t('permanentDeleteFailed'));
       }
     } finally {
       setBusyKey(null);
     }
   };
 
-  if (loading) return <p className="text-gray-500">Yükleniyor...</p>;
+  if (loading) return <p className="text-gray-500">{tCommon('loading')}</p>;
 
   if (items.length === 0) {
-    return <p className="text-gray-500">Çöp kutusu boş.</p>;
+    return <p className="text-gray-500">{t('trashEmpty')}</p>;
   }
 
   return (
@@ -128,10 +128,10 @@ export default function XeyalTrashPage() {
       <table className="min-w-full text-sm">
         <thead className="bg-gray-50 dark:bg-zinc-900">
           <tr>
-            <th className="px-4 py-3 text-left">Tür</th>
-            <th className="px-4 py-3 text-left">Başlık</th>
-            <th className="px-4 py-3 text-left">Silinme</th>
-            <th className="px-4 py-3 text-right">İşlem</th>
+            <th className="px-4 py-3 text-left">{t('colType')}</th>
+            <th className="px-4 py-3 text-left">{tCommon('name')}</th>
+            <th className="px-4 py-3 text-left">{t('deletedAt')}</th>
+            <th className="px-4 py-3 text-right">{tCommon('actions')}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
@@ -141,14 +141,12 @@ export default function XeyalTrashPage() {
               <tr key={key} className="bg-white dark:bg-zinc-950">
                 <td className="px-4 py-3">
                   <span className="px-2 py-0.5 rounded bg-gray-100 dark:bg-zinc-800 text-xs">
-                    {TYPE_LABELS[item.type] || item.type}
+                    {typeLabel(item.type)}
                   </span>
                 </td>
                 <td className="px-4 py-3 font-medium">{itemLabel(item)}</td>
                 <td className="px-4 py-3 text-gray-500">
-                  {item.deletedAt
-                    ? new Date(item.deletedAt).toLocaleString('tr-TR')
-                    : '—'}
+                  {item.deletedAt ? new Date(item.deletedAt).toLocaleString() : '—'}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-3">
@@ -158,7 +156,7 @@ export default function XeyalTrashPage() {
                       onClick={() => restore(item.type, item.id)}
                       className="text-violet-600 hover:text-violet-800 font-medium disabled:opacity-50"
                     >
-                      {busyKey === `restore:${key}` ? 'Yükleniyor...' : 'Geri yükle'}
+                      {busyKey === `restore:${key}` ? tCommon('loading') : t('restore')}
                     </button>
                     <button
                       type="button"
@@ -166,7 +164,7 @@ export default function XeyalTrashPage() {
                       onClick={() => permanentDelete(item)}
                       className="text-red-600 hover:text-red-800 font-medium disabled:opacity-50"
                     >
-                      {busyKey === `delete:${key}` ? 'Siliniyor...' : 'Kalıcı sil'}
+                      {busyKey === `delete:${key}` ? tCommon('deleting') : t('permanentDelete')}
                     </button>
                   </div>
                 </td>

@@ -3,25 +3,24 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { getContentLocaleTabs } from '@/lib/admin-content-locales';
+import { useAdminContentLocale } from '@/lib/use-admin-locale-field';
 import ServiceIconSelect from '@/components/admin/ServiceIconSelect';
 import { normalizeServiceIconForAdmin } from '@/lib/service-icon-options';
 import type { ServiceIconKey } from '@/lib/services-defaults';
 
-const LOCALES = [
-  { code: 'tr', name: 'Türkçe' },
-  { code: 'en', name: 'English' },
-  { code: 'az', name: 'Azərbaycanca' },
-  { code: 'ru', name: 'Русский' },
-  { code: 'uk', name: 'Ukraïnska' },
-  { code: 'ge', name: 'ქართული' },
-];
-
 export default function EditServicePage() {
+  const t = useTranslations('services');
+  const tCommon = useTranslations('common');
+  const tLocales = useTranslations('contentLocales');
+  const LOCALES = getContentLocaleTabs(tLocales);
+  const adminLocale = useAdminContentLocale();
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
-  
-  const [activeTab, setActiveTab] = useState('az');
+
+  const [activeTab, setActiveTab] = useState(adminLocale);
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [error, setError] = useState('');
@@ -29,7 +28,7 @@ export default function EditServicePage() {
 
   const [formData, setFormData] = useState({
     slug: '',
-    icon: '',
+    icon: 'documents' as ServiceIconKey,
     title: { tr: '', en: '', az: '', ru: '', uk: '', ge: '' } as Record<string, string>,
     description: { tr: '', en: '', az: '', ru: '', uk: '', ge: '' } as Record<string, string>,
     features: { tr: '', en: '', az: '', ru: '', uk: '', ge: '' } as Record<string, string>,
@@ -41,7 +40,7 @@ export default function EditServicePage() {
         const res = await fetch(`/api/admin/services/${id}`);
         if (res.ok) {
           const data = await res.json();
-          
+
           const mergeJson = (field: unknown, localeOnly = false) => {
             const base = { tr: '', en: '', az: '', ru: '', uk: '', ge: '' };
             if (!field) return base;
@@ -58,11 +57,12 @@ export default function EditServicePage() {
             return base;
           };
 
-          const descObj = typeof data.description === 'string' ? JSON.parse(data.description) : data.description;
+          const descObj =
+            typeof data.description === 'string' ? JSON.parse(data.description) : data.description;
           const featuresBase = { tr: '', en: '', az: '', ru: '', uk: '', ge: '' };
-          
+
           if (descObj) {
-            LOCALES.forEach(lang => {
+            LOCALES.forEach((lang) => {
               if (descObj[`features_${lang.code}`]) {
                 featuresBase[lang.code as keyof typeof featuresBase] = descObj[`features_${lang.code}`];
               }
@@ -77,24 +77,26 @@ export default function EditServicePage() {
             features: featuresBase,
           });
         } else {
-          setError('Hizmet bulunamadı');
+          setError(t('notFound'));
         }
       } catch {
-        setError('Bağlantı hatası');
+        setError(tCommon('connectionError'));
       } finally {
         setPageLoading(false);
       }
     };
     if (id) fetchService();
-  }, [id]);
+    // LOCALES sabit tab siyahısı; fetch yalnız id dəyişəndə
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, t, tCommon]);
 
   const handleLangChange = (field: string, lang: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: {
         ...(prev[field as keyof typeof prev] as Record<string, string>),
-        [lang]: value
-      }
+        [lang]: value,
+      },
     }));
   };
 
@@ -106,12 +108,12 @@ export default function EditServicePage() {
     };
 
     if (!sourceData.title && !sourceData.description) {
-      alert('Lütfen önce mevcut dilde (aktif sekmede) içerik girin.');
+      alert(tCommon('fillActiveLocale'));
       return;
     }
 
     setTranslating(true);
-    const targetLocales = LOCALES.filter(l => l.code !== sourceLang);
+    const targetLocales = LOCALES.filter((l) => l.code !== sourceLang);
 
     try {
       for (const target of targetLocales) {
@@ -127,8 +129,8 @@ export default function EditServicePage() {
               body: JSON.stringify({
                 text,
                 targetLang: target.code,
-                sourceLang
-              })
+                sourceLang,
+              }),
             });
 
             if (res.ok) {
@@ -138,20 +140,21 @@ export default function EditServicePage() {
           }
         }
 
-        setFormData(prev => {
+        setFormData((prev) => {
           const newState = { ...prev };
-          fields.forEach(field => {
+          fields.forEach((field) => {
             if (updatedFields[field]) {
-              (newState[field as keyof typeof newState] as Record<string, string>)[target.code] = updatedFields[field];
+              (newState[field as keyof typeof newState] as Record<string, string>)[target.code] =
+                updatedFields[field];
             }
           });
           return newState;
         });
       }
-      alert('Çeviriler tamamlandı!');
+      alert(tCommon('translateComplete'));
     } catch (err) {
       console.error(err);
-      alert('Çeviri sırasında bir hata oluştu.');
+      alert(tCommon('translateFailed'));
     } finally {
       setTranslating(false);
     }
@@ -162,17 +165,20 @@ export default function EditServicePage() {
     setLoading(true);
     setError('');
 
-    // Fallback logic
     const processedFormData = { ...formData };
     const fieldsToFill = ['title', 'description'];
-    
-    fieldsToFill.forEach(field => {
-      const fieldData = { ...(processedFormData[field as keyof typeof processedFormData] as Record<string, string>) };
-      const firstNonEmptyLang = Object.keys(fieldData).find(lang => fieldData[lang] && fieldData[lang].trim() !== '');
-      
+
+    fieldsToFill.forEach((field) => {
+      const fieldData = {
+        ...(processedFormData[field as keyof typeof processedFormData] as Record<string, string>),
+      };
+      const firstNonEmptyLang = Object.keys(fieldData).find(
+        (lang) => fieldData[lang] && fieldData[lang].trim() !== '',
+      );
+
       if (firstNonEmptyLang) {
         const fallbackValue = fieldData[firstNonEmptyLang];
-        Object.keys(fieldData).forEach(lang => {
+        Object.keys(fieldData).forEach((lang) => {
           if (!fieldData[lang] || fieldData[lang].trim() === '') {
             fieldData[lang] = fallbackValue;
           }
@@ -184,9 +190,8 @@ export default function EditServicePage() {
       }
     });
 
-    // Merge features into description
     const descObj = { ...processedFormData.description } as Record<string, string>;
-    LOCALES.forEach(lang => {
+    LOCALES.forEach((lang) => {
       const featuresText = processedFormData.features[lang.code as keyof typeof processedFormData.features];
       if (featuresText && featuresText.trim() !== '') {
         descObj[`features_${lang.code}`] = featuresText;
@@ -198,7 +203,7 @@ export default function EditServicePage() {
       const res = await fetch(`/api/admin/services/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(processedFormData)
+        body: JSON.stringify(processedFormData),
       });
 
       if (res.ok) {
@@ -206,28 +211,28 @@ export default function EditServicePage() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error || 'Bir hata oluştu');
+        setError(data.error || tCommon('error'));
       }
     } catch {
-      setError('Bağlantı hatası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
   };
 
   if (pageLoading) {
-    return <div className="text-center py-10">Yükleniyor...</div>;
+    return <div className="text-center py-10">{tCommon('loading')}</div>;
   }
 
   return (
     <div className="max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Hizmeti Düzenle</h1>
-        <Link 
-          href="/admin/services" 
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('edit')}</h1>
+        <Link
+          href="/admin/services"
           className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          &larr; Geri Dön
+          {tCommon('backToList')}
         </Link>
       </div>
 
@@ -237,12 +242,14 @@ export default function EditServicePage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-gray-200 dark:border-zinc-800 p-6">
-        {/* Global Settings */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-gray-200 dark:border-zinc-800 p-6"
+      >
         <div className="mb-8 pb-8 border-b border-gray-200 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="slug" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              URL Slug <span className="text-red-500">*</span>
+              {t('slugField')} <span className="text-red-500">*</span>
             </label>
             <input
               id="slug"
@@ -250,7 +257,12 @@ export default function EditServicePage() {
               required
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={formData.slug}
-              onChange={e => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-')})}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'),
+                })
+              }
             />
           </div>
           <ServiceIconSelect
@@ -259,12 +271,13 @@ export default function EditServicePage() {
           />
         </div>
 
-        {/* Translation Tabs */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">Çoklu Dil İçerikleri</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">
+              {t('multiLocaleContent')}
+            </h2>
             <div className="flex border-b border-gray-200 dark:border-zinc-800 space-x-1 overflow-x-auto">
-              {LOCALES.map(lang => (
+              {LOCALES.map((lang) => (
                 <button
                   key={lang.code}
                   type="button"
@@ -286,49 +299,50 @@ export default function EditServicePage() {
             disabled={translating}
             className={`px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors flex items-center justify-center ${translating ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {translating ? 'Çevriliyor...' : `Bu Dilden (${activeTab.toUpperCase()}) Tüm Dillere Çevir`}
+            {translating ? tCommon('translating') : tCommon('translateButton', { locale: activeTab.toUpperCase() })}
           </button>
         </div>
 
-        {/* Active Language Fields */}
         <div className="space-y-6">
           <div>
             <label htmlFor="titleInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Hizmet Adı ({activeTab.toUpperCase()})
+              {t('titleLabel')} ({activeTab.toUpperCase()})
             </label>
             <input
               id="titleInput"
               type="text"
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={formData.title[activeTab as keyof typeof formData.title]}
-              onChange={e => handleLangChange('title', activeTab, e.target.value)}
+              onChange={(e) => handleLangChange('title', activeTab, e.target.value)}
             />
           </div>
-          
+
           <div>
             <label htmlFor="descInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Detaylı Açıklama ({activeTab.toUpperCase()})
+              {tCommon('description')} ({activeTab.toUpperCase()})
             </label>
             <textarea
               id="descInput"
               rows={10}
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={formData.description[activeTab as keyof typeof formData.description]}
-              onChange={e => handleLangChange('description', activeTab, e.target.value)}
+              onChange={(e) => handleLangChange('description', activeTab, e.target.value)}
             />
           </div>
 
           <div>
-            <label htmlFor="featuresInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Özellikler (Satır başına bir tane) ({activeTab.toUpperCase()})
+            <label
+              htmlFor="featuresInput"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+              {t('featuresLabel')} ({activeTab.toUpperCase()})
             </label>
             <textarea
               id="featuresInput"
               rows={5}
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={formData.features[activeTab as keyof typeof formData.features] || ''}
-              onChange={e => handleLangChange('features', activeTab, e.target.value)}
-              placeholder="Kişiye özel durum analizi&#10;Gerekli tüm evrakların kontrolü"
+              onChange={(e) => handleLangChange('features', activeTab, e.target.value)}
             />
           </div>
         </div>
@@ -339,7 +353,7 @@ export default function EditServicePage() {
             disabled={loading}
             className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {loading ? 'Kaydediliyor...' : 'Hizmeti Güncelle'}
+            {loading ? tCommon('saving') : t('update')}
           </button>
         </div>
       </form>

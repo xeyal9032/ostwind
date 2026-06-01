@@ -1,31 +1,26 @@
-import { prisma } from '@/prisma';
+import { getSiteContent, resolveHomeTextKey, resolveLocaleText } from '@/lib/site-content';
 
-type HomeOverrides = Record<string, Record<string, string>>;
-
-export async function getHomeContentOverrides(): Promise<HomeOverrides> {
-  try {
-    const row = await prisma.homePageContent.findUnique({ where: { id: 1 } });
-    return (row?.content as HomeOverrides) ?? {};
-  } catch {
-    return {};
-  }
+/** @deprecated getSiteContent istifadə edin */
+export async function getHomeContentOverrides() {
+  const site = await getSiteContent();
+  return site.texts;
 }
 
-/** DB override varsa istifadə et, yoxsa next-intl tərcüməsi */
-export function resolveHomeText(
-  overrides: HomeOverrides,
+export async function resolveHomeText(
+  key: string,
+  locale: string,
+  fallback: string,
+): Promise<string> {
+  const site = await getSiteContent();
+  return resolveHomeTextKey(site, key, locale, fallback);
+}
+
+/** @deprecated resolveHomeTextKey istifadə edin */
+export function resolveHomeTextFromSite(
+  texts: Record<string, Record<string, string>>,
   key: string,
   locale: string,
   fallback: string,
 ): string {
-  const entry = overrides[key];
-  if (!entry) return fallback;
-  return (
-    entry[locale] ||
-    entry.tr ||
-    entry.az ||
-    entry.en ||
-    Object.values(entry).find((v) => v?.trim()) ||
-    fallback
-  );
+  return resolveLocaleText(texts[key], locale, fallback);
 }

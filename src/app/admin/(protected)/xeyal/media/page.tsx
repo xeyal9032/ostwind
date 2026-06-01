@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 type MediaFile = {
   id: number;
@@ -20,6 +21,8 @@ function formatSize(bytes: number | null) {
 }
 
 export default function XeyalMediaPage() {
+  const tMedia = useTranslations('xeyal.media');
+  const tCommon = useTranslations('common');
   const [files, setFiles] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -40,21 +43,21 @@ export default function XeyalMediaPage() {
   }, [load]);
 
   const remove = async (id: number) => {
-    if (!confirm('Bu dosyayı silmek istiyor musunuz?')) return;
+    if (!confirm(tCommon('mediaDeleteConfirm'))) return;
     setDeletingId(id);
     try {
       const res = await fetch(`/api/admin/xeyal/media?id=${id}`, { method: 'DELETE' });
       if (res.ok) setFiles((prev) => prev.filter((f) => f.id !== id));
-      else alert('Silinemedi.');
+      else alert(tMedia('deleteFailed'));
     } finally {
       setDeletingId(null);
     }
   };
 
-  if (loading) return <p className="text-gray-500">Yükleniyor...</p>;
+  if (loading) return <p className="text-gray-500">{tCommon('loading')}</p>;
 
   if (files.length === 0) {
-    return <p className="text-gray-500">Medya dosyası yok.</p>;
+    return <p className="text-gray-500">{tCommon('mediaEmpty')}</p>;
   }
 
   return (
@@ -93,7 +96,7 @@ export default function XeyalMediaPage() {
                 onClick={() => remove(file.id)}
                 className="mt-2 text-red-600 hover:text-red-800 text-xs font-medium disabled:opacity-50"
               >
-                {deletingId === file.id ? 'Siliniyor...' : 'Sil'}
+                {deletingId === file.id ? tCommon('deleting') : tCommon('delete')}
               </button>
             </div>
           </div>

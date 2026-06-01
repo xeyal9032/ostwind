@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { slug, name, description, country, city, image, tuitionFee } = body;
+    const { slug, name, description, country, city, image, tuitionFee, tuitionFeePartTime } = body;
 
     const university = await prisma.university.create({
       data: {
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
         city,
         image,
         tuitionFee,
+        tuitionFeePartTime: tuitionFeePartTime ?? null,
       },
     });
 

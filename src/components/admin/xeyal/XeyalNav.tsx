@@ -2,24 +2,26 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-const links = [
-  { href: '/admin/xeyal', label: 'Özet', exact: true },
-  { href: '/admin/xeyal/audit-log', label: 'Audit Log' },
-  { href: '/admin/xeyal/notifications', label: 'Bildirişler' },
-  { href: '/admin/xeyal/inbox', label: 'Başvuru & Mesaj' },
-  { href: '/admin/xeyal/roles', label: 'Rol & İzinler' },
-  { href: '/admin/xeyal/security', label: 'Güvenlik (2FA)' },
-  { href: '/admin/xeyal/admins', label: 'Admin Yönetimi' },
-  { href: '/admin/xeyal/homepage', label: 'Ana Sayfa Metinleri' },
-  { href: '/admin/xeyal/media', label: 'Medya Kütüphanesi' },
-  { href: '/admin/xeyal/seo', label: 'SEO' },
-  { href: '/admin/xeyal/trash', label: 'Çöp Kutusu' },
-  { href: '/admin/xeyal/email', label: 'E-posta Ayarları' },
-];
+import { useTranslations } from 'next-intl';
 
 export default function XeyalNav() {
   const pathname = usePathname();
+  const t = useTranslations('xeyal');
+
+  const links = [
+    { href: '/admin/xeyal', label: t('navSummary'), exact: true },
+    { href: '/admin/xeyal/audit-log', label: t('audit') },
+    { href: '/admin/xeyal/notifications', label: t('notificationsTitle') },
+    { href: '/admin/xeyal/inbox', label: t('inbox') },
+    { href: '/admin/xeyal/roles', label: t('rolesTitle') },
+    { href: '/admin/xeyal/security', label: t('securityTitle') },
+    { href: '/admin/xeyal/admins', label: t('admins') },
+    { href: '/admin/xeyal/homepage', label: t('homepageTitle') },
+    { href: '/admin/xeyal/media', label: t('mediaTitle') },
+    { href: '/admin/xeyal/seo', label: t('seoTitle') },
+    { href: '/admin/xeyal/trash', label: t('trash') },
+    { href: '/admin/xeyal/email', label: t('emailTitle') },
+  ];
 
   return (
     <nav className="flex flex-wrap gap-2 mb-8 pb-4 border-b border-gray-200 dark:border-zinc-800">

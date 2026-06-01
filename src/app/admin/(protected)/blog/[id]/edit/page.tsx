@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import LocaleJsonEditor from '@/components/admin/LocaleJsonEditor';
 import { EMPTY_LOCALES } from '@/components/admin/LocaleJsonEditor';
 import ImageUploadField from '@/components/admin/ImageUploadField';
@@ -10,6 +11,8 @@ import BlogCategorySelect from '@/components/admin/BlogCategorySelect';
 import { mergeLocaleJson, sanitizeLocaleJson } from '@/lib/locale-content';
 
 export default function EditBlogPostPage() {
+  const t = useTranslations('blog');
+  const tCommon = useTranslations('common');
   const router = useRouter();
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('tr');
@@ -40,16 +43,16 @@ export default function EditBlogPostPage() {
             content: mergeLocaleJson(data.content),
           });
         } else {
-          setError('Yazı bulunamadı');
+          setError(t('notFound'));
         }
       } catch {
-        setError('Bağlantı hatası');
+        setError(tCommon('connectionError'));
       } finally {
         setPageLoading(false);
       }
     };
     if (id) fetchPost();
-  }, [id]);
+  }, [id, t, tCommon]);
 
   const handleLocaleChange = (fieldKey: string, locale: string, value: string) => {
     setLocaleValues((prev) => ({
@@ -82,28 +85,30 @@ export default function EditBlogPostPage() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error || 'Bir hata oluştu');
+        setError(data.error || tCommon('error'));
       }
     } catch {
-      setError('Bağlantı hatası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
   };
 
   if (pageLoading) {
-    return <div className="text-center py-12 text-gray-500 dark:text-gray-400">Yükleniyor...</div>;
+    return (
+      <div className="text-center py-12 text-gray-500 dark:text-gray-400">{tCommon('loading')}</div>
+    );
   }
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Blog Yazısını Düzenle</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('editPost')}</h1>
         <Link
           href="/admin/blog"
           className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          &larr; Geri Dön
+          {tCommon('backToList')}
         </Link>
       </div>
 
@@ -120,7 +125,7 @@ export default function EditBlogPostPage() {
         <div className="mb-8 pb-8 border-b border-gray-200 dark:border-zinc-800 space-y-6">
           <div>
             <label htmlFor="slug" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Slug <span className="text-red-500">*</span>
+              {t('slugField')} <span className="text-red-500">*</span>
             </label>
             <input
               id="slug"
@@ -133,7 +138,7 @@ export default function EditBlogPostPage() {
                   e.target.value
                     .toLowerCase()
                     .replace(/[^a-z0-9-]/g, '-')
-                    .replace(/-+/g, '-')
+                    .replace(/-+/g, '-'),
                 )
               }
             />
@@ -148,20 +153,21 @@ export default function EditBlogPostPage() {
                 onChange={(e) => setPublished(e.target.checked)}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Yayınla</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('publishOnSite')}</span>
             </label>
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t('publishDraftHint')}</p>
           </div>
         </div>
 
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Çoklu Dil İçerikleri</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('multiLocaleContent')}</h2>
         <LocaleJsonEditor
           activeTab={activeTab}
           onTabChange={setActiveTab}
           values={localeValues}
           onChange={handleLocaleChange}
           fields={[
-            { key: 'title', label: 'Başlık' },
-            { key: 'content', label: 'İçerik', multiline: true },
+            { key: 'title', label: t('titleField') },
+            { key: 'content', label: t('content'), multiline: true },
           ]}
         />
 
@@ -171,7 +177,7 @@ export default function EditBlogPostPage() {
             disabled={loading}
             className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {loading ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+            {loading ? tCommon('saving') : tCommon('saveChanges')}
           </button>
         </div>
       </form>

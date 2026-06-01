@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 type AuditEntry = {
   id: number;
@@ -21,74 +22,76 @@ type Stats = {
   recentAudit: AuditEntry[];
 };
 
-const quickLinks = [
-  { href: '/admin/xeyal/inbox', label: 'Başvuru & Mesaj', desc: 'Filtre ve export' },
-  { href: '/admin/xeyal/audit-log', label: 'Audit Log', desc: 'Tüm işlem kayıtları' },
-  { href: '/admin/xeyal/notifications', label: 'Bildirişler', desc: 'Okunmamış öğeler' },
-  { href: '/admin/xeyal/roles', label: 'Rol & İzinler', desc: 'Admin modül erişimi' },
-  { href: '/admin/xeyal/security', label: 'Güvenlik', desc: '2FA ve oturumlar' },
-  { href: '/admin/xeyal/homepage', label: 'Ana Sayfa', desc: 'Çok dilli metinler' },
-];
-
 export default function XeyalHubPage() {
+  const t = useTranslations('xeyal');
+  const tCommon = useTranslations('common');
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const quickLinks = [
+    { href: '/admin/xeyal/inbox', label: t('inbox'), desc: t('quickInboxDesc') },
+    { href: '/admin/xeyal/audit-log', label: t('audit'), desc: t('quickAuditDesc') },
+    { href: '/admin/xeyal/notifications', label: t('notificationsTitle'), desc: t('quickNotificationsDesc') },
+    { href: '/admin/xeyal/roles', label: t('rolesTitle'), desc: t('quickRolesDesc') },
+    { href: '/admin/xeyal/security', label: t('securityTitle'), desc: t('quickSecurityDesc') },
+    { href: '/admin/xeyal/homepage', label: t('homepageTitle'), desc: t('quickHomepageDesc') },
+  ];
 
   useEffect(() => {
     fetch('/api/admin/xeyal/stats')
       .then(async (r) => {
         const data = await r.json();
-        if (!r.ok) throw new Error(data.error || 'Yüklenemedi');
+        if (!r.ok) throw new Error(data.error || tCommon('loadFailed'));
         setStats(data);
       })
       .catch((e: Error) => setError(e.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [tCommon]);
 
   if (loading) {
-    return <p className="text-gray-500">Yükleniyor...</p>;
+    return <p className="text-gray-500">{tCommon('loading')}</p>;
   }
 
   if (error || !stats) {
     return (
       <div role="alert" className="text-red-600 dark:text-red-400">
-        {error || 'Veri alınamadı'}
+        {error || tCommon('dataLoadFailed')}
       </div>
     );
   }
 
   const cards = [
     {
-      label: 'Okunmamış başvuru',
+      label: t('unreadApplication'),
       value: stats.unreadApplications,
       href: '/admin/xeyal/inbox',
       color: 'text-red-600',
       badge: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
     },
     {
-      label: 'Okunmamış mesaj',
+      label: t('unreadMessage'),
       value: stats.unreadMessages,
       href: '/admin/xeyal/inbox',
       color: 'text-orange-600',
       badge: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
     },
     {
-      label: 'Toplam admin',
+      label: t('totalAdmins'),
       value: stats.totalAdmins,
       href: '/admin/xeyal/admins',
       color: 'text-blue-600',
       badge: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
     },
     {
-      label: 'Şu an çevrimiçi',
+      label: t('onlineAdminsNow'),
       value: stats.onlineAdmins,
       href: '/admin/users',
       color: 'text-green-600',
       badge: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
     },
     {
-      label: 'Dondurulmuş admin',
+      label: t('frozenAdmins'),
       value: stats.frozenAdmins,
       href: '/admin/xeyal/roles',
       color: 'text-violet-600',
@@ -107,15 +110,13 @@ export default function XeyalHubPage() {
           >
             <p className="text-sm text-gray-500 dark:text-gray-400">{c.label}</p>
             <p className={`mt-2 text-3xl font-bold ${c.color}`}>{c.value}</p>
-            <span className={`inline-block mt-3 text-xs px-2 py-0.5 rounded-full ${c.badge}`}>
-              Detay →
-            </span>
+            <span className={`inline-block mt-3 text-xs px-2 py-0.5 rounded-full ${c.badge}`}>{t('detailArrow')}</span>
           </Link>
         ))}
       </div>
 
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Hızlı erişim</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">{t('quickAccess')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {quickLinks.map((link) => (
             <Link
@@ -132,13 +133,13 @@ export default function XeyalHubPage() {
 
       <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100 dark:border-zinc-800 flex justify-between items-center">
-          <h2 className="font-semibold text-gray-900 dark:text-white">Son audit kayıtları</h2>
+          <h2 className="font-semibold text-gray-900 dark:text-white">{t('recentAuditTitle')}</h2>
           <Link href="/admin/xeyal/audit-log" className="text-sm text-violet-600 hover:underline">
-            Tümünü gör
+            {t('viewAll')}
           </Link>
         </div>
         {stats.recentAudit.length === 0 ? (
-          <p className="p-5 text-gray-500 text-sm">Henüz kayıt yok.</p>
+          <p className="p-5 text-gray-500 text-sm">{t('noRecords')}</p>
         ) : (
           <ul className="divide-y divide-gray-100 dark:divide-zinc-800">
             {stats.recentAudit.map((a) => (
@@ -147,9 +148,7 @@ export default function XeyalHubPage() {
                   <span className="font-medium text-gray-900 dark:text-white">
                     {a.action} · {a.entity}
                   </span>
-                  <span className="text-gray-400 text-xs">
-                    {new Date(a.createdAt).toLocaleString('tr-TR')}
-                  </span>
+                  <span className="text-gray-400 text-xs">{new Date(a.createdAt).toLocaleString()}</span>
                 </div>
                 <p className="text-gray-500 dark:text-gray-400 mt-0.5">
                   {a.userEmail}

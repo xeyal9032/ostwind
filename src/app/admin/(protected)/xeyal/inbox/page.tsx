@@ -1,7 +1,10 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import MessageReplyBox, { type MessageWithReply } from '@/components/admin/MessageReplyBox';
+import { useApplicationStatusLabel } from '@/components/admin/useApplicationStatusLabel';
+import { APPLICATION_STATUS_KEYS } from '@/lib/application-status';
 
 type Tab = 'applications' | 'messages';
 
@@ -28,9 +31,12 @@ type Message = {
   createdAt: string;
 };
 
-const STATUS_OPTIONS = ['PENDING', 'REVIEWING', 'APPROVED', 'REJECTED'];
-
 export default function XeyalInboxPage() {
+  const t = useTranslations('xeyal');
+  const tApps = useTranslations('applications');
+  const tCommon = useTranslations('common');
+  const statusLabel = useApplicationStatusLabel();
+
   const [tab, setTab] = useState<Tab>('applications');
   const [status, setStatus] = useState('');
   const [unreadOnly, setUnreadOnly] = useState(false);
@@ -98,7 +104,7 @@ export default function XeyalInboxPage() {
               : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300'
           }`}
         >
-          Başvurular
+          {t('applicationsTab')}
         </button>
         <button
           type="button"
@@ -109,7 +115,7 @@ export default function XeyalInboxPage() {
               : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300'
           }`}
         >
-          Mesajlar
+          {t('messagesTab')}
         </button>
         <div className="ml-auto flex gap-2">
           <button
@@ -117,14 +123,14 @@ export default function XeyalInboxPage() {
             onClick={() => exportCsv('applications')}
             className="px-3 py-1.5 text-sm border border-gray-300 dark:border-zinc-700 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800"
           >
-            Başvuru CSV
+            {t('exportAppCsv')}
           </button>
           <button
             type="button"
             onClick={() => exportCsv('messages')}
             className="px-3 py-1.5 text-sm border border-gray-300 dark:border-zinc-700 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800"
           >
-            Mesaj CSV
+            {t('exportMsgCsv')}
           </button>
         </div>
       </div>
@@ -139,7 +145,7 @@ export default function XeyalInboxPage() {
         {tab === 'applications' && (
           <div>
             <label htmlFor="inbox-status" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Durum
+              {tCommon('statusLabel')}
             </label>
             <select
               id="inbox-status"
@@ -148,10 +154,10 @@ export default function XeyalInboxPage() {
               onChange={(e) => setStatus(e.target.value)}
               className="w-full rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm"
             >
-              <option value="">Tümü</option>
-              {STATUS_OPTIONS.map((s) => (
+              <option value="">{tCommon('all')}</option>
+              {APPLICATION_STATUS_KEYS.map((s) => (
                 <option key={s} value={s}>
-                  {s}
+                  {statusLabel(s)}
                 </option>
               ))}
             </select>
@@ -159,7 +165,7 @@ export default function XeyalInboxPage() {
         )}
         <div>
           <label htmlFor="inbox-from" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Başlangıç tarihi
+            {tCommon('dateFrom')}
           </label>
           <input
             id="inbox-from"
@@ -172,7 +178,7 @@ export default function XeyalInboxPage() {
         </div>
         <div>
           <label htmlFor="inbox-to" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Bitiş tarihi
+            {tCommon('dateTo')}
           </label>
           <input
             id="inbox-to"
@@ -185,7 +191,7 @@ export default function XeyalInboxPage() {
         </div>
         <div>
           <label htmlFor="inbox-q" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Ara
+            {tCommon('search')}
           </label>
           <input
             id="inbox-q"
@@ -193,7 +199,7 @@ export default function XeyalInboxPage() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="w-full rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm"
-            placeholder="İsim, e-posta..."
+            placeholder={tCommon('searchPlaceholder')}
           />
         </div>
         <div className="flex items-end gap-3 sm:col-span-2">
@@ -206,32 +212,32 @@ export default function XeyalInboxPage() {
               onChange={(e) => setUnreadOnly(e.target.checked)}
               className="rounded border-gray-300"
             />
-            Sadece okunmamış
+            {tCommon('unreadOnly')}
           </label>
           <button
             type="submit"
             className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium"
           >
-            Filtrele
+            {tCommon('filter')}
           </button>
         </div>
       </form>
 
       {loading ? (
-        <p className="text-gray-500">Yükleniyor...</p>
+        <p className="text-gray-500">{tCommon('loading')}</p>
       ) : tab === 'applications' ? (
         applications.length === 0 ? (
-          <p className="text-gray-500">Kayıt bulunamadı.</p>
+          <p className="text-gray-500">{tCommon('empty')}</p>
         ) : (
           <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-zinc-800">
             <table className="min-w-full text-sm">
               <thead className="bg-gray-50 dark:bg-zinc-900">
                 <tr>
-                  <th className="px-4 py-3 text-left">Öğrenci</th>
-                  <th className="px-4 py-3 text-left">E-posta</th>
-                  <th className="px-4 py-3 text-left">Durum</th>
-                  <th className="px-4 py-3 text-left">Tarih</th>
-                  <th className="px-4 py-3 text-left">Okundu</th>
+                  <th className="px-4 py-3 text-left">{tApps('colStudent')}</th>
+                  <th className="px-4 py-3 text-left">{tApps('colEmail')}</th>
+                  <th className="px-4 py-3 text-left">{tApps('colStatus')}</th>
+                  <th className="px-4 py-3 text-left">{tApps('colDate')}</th>
+                  <th className="px-4 py-3 text-left">{tCommon('readCol')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
@@ -239,11 +245,11 @@ export default function XeyalInboxPage() {
                   <tr key={a.id} className={`bg-white dark:bg-zinc-950 ${!a.readAt ? 'font-medium' : ''}`}>
                     <td className="px-4 py-3">{a.studentName}</td>
                     <td className="px-4 py-3">{a.email}</td>
-                    <td className="px-4 py-3">{a.status}</td>
+                    <td className="px-4 py-3">{statusLabel(a.status)}</td>
                     <td className="px-4 py-3 text-gray-500">
                       {new Date(a.createdAt).toLocaleDateString('tr-TR')}
                     </td>
-                    <td className="px-4 py-3">{a.readAt ? 'Evet' : 'Hayır'}</td>
+                    <td className="px-4 py-3">{a.readAt ? tCommon('readYes') : tCommon('readNo')}</td>
                   </tr>
                 ))}
               </tbody>
@@ -251,7 +257,7 @@ export default function XeyalInboxPage() {
           </div>
         )
       ) : messages.length === 0 ? (
-        <p className="text-gray-500">Kayıt bulunamadı.</p>
+        <p className="text-gray-500">{tCommon('empty')}</p>
       ) : (
         <div className="space-y-3">
           {messages.map((m) => (

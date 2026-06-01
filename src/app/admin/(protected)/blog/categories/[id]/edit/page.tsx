@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import LocaleJsonEditor from '@/components/admin/LocaleJsonEditor';
 import { EMPTY_LOCALES } from '@/components/admin/LocaleJsonEditor';
 import { mergeLocaleJson, sanitizeLocaleJson } from '@/lib/locale-content';
@@ -10,6 +11,8 @@ import { mergeLocaleJson, sanitizeLocaleJson } from '@/lib/locale-content';
 export default function EditBlogCategoryPage() {
   const router = useRouter();
   const { id } = useParams();
+  const t = useTranslations('blog');
+  const tCommon = useTranslations('common');
   const [activeTab, setActiveTab] = useState('az');
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
@@ -26,16 +29,16 @@ export default function EditBlogCategoryPage() {
           setSlug(data.slug || '');
           setName(mergeLocaleJson(data.name));
         } else {
-          setError('Kateqoriya tapılmadı');
+          setError(t('categoryNotFound'));
         }
       } catch {
-        setError('Bağlantı xətası');
+        setError(tCommon('connectionError'));
       } finally {
         setPageLoading(false);
       }
     };
     if (id) fetchCategory();
-  }, [id]);
+  }, [id, t, tCommon]);
 
   const handleLocaleChange = (fieldKey: string, locale: string, value: string) => {
     if (fieldKey === 'name') {
@@ -63,25 +66,25 @@ export default function EditBlogCategoryPage() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error || 'Xəta baş verdi');
+        setError(data.error || tCommon('error'));
       }
     } catch {
-      setError('Bağlantı xətası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
   };
 
   if (pageLoading) {
-    return <div className="text-center py-12 text-gray-500">Yüklənir...</div>;
+    return <div className="text-center py-12 text-gray-500">{tCommon('loading')}</div>;
   }
 
   return (
     <div className="max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Kateqoriyanı Redaktə Et</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('editCategory')}</h1>
         <Link href="/admin/blog/categories" className="text-gray-500 hover:text-gray-700 dark:text-gray-400">
-          &larr; Geri
+          &larr; {tCommon('back')}
         </Link>
       </div>
 
@@ -97,7 +100,7 @@ export default function EditBlogCategoryPage() {
       >
         <div className="mb-8">
           <label htmlFor="slug" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Slug <span className="text-red-500">*</span>
+            {t('slugField')} <span className="text-red-500">*</span>
           </label>
           <input
             id="slug"
@@ -121,7 +124,7 @@ export default function EditBlogCategoryPage() {
           onTabChange={setActiveTab}
           values={{ name }}
           onChange={handleLocaleChange}
-          fields={[{ key: 'name', label: 'Kateqoriya adı' }]}
+          fields={[{ key: 'name', label: t('categoryNameField') }]}
         />
 
         <div className="mt-8 pt-6 border-t border-gray-200 dark:border-zinc-800 flex justify-end">
@@ -130,7 +133,7 @@ export default function EditBlogCategoryPage() {
             disabled={loading}
             className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {loading ? 'Saxlanılır...' : 'Saxla'}
+            {loading ? tCommon('saving') : tCommon('save')}
           </button>
         </div>
       </form>

@@ -3,21 +3,20 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-
-const LOCALES = [
-  { code: 'tr', name: 'Türkçe' },
-  { code: 'en', name: 'English' },
-  { code: 'az', name: 'Azərbaycanca' },
-  { code: 'ru', name: 'Русский' },
-  { code: 'uk', name: 'Українська' },
-  { code: 'ge', name: 'ქართული' },
-];
+import { useTranslations } from 'next-intl';
+import { getContentLocaleTabs } from '@/lib/admin-content-locales';
+import { useAdminContentLocale } from '@/lib/use-admin-locale-field';
 
 export default function EditUniversityPage() {
+  const t = useTranslations('universities');
+  const tCommon = useTranslations('common');
+  const tLocales = useTranslations('contentLocales');
+  const LOCALES = getContentLocaleTabs(tLocales);
+  const adminLocale = useAdminContentLocale();
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
-  const [activeTab, setActiveTab] = useState('tr');
+  const [activeTab, setActiveTab] = useState(adminLocale);
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [error, setError] = useState('');
@@ -28,6 +27,7 @@ export default function EditUniversityPage() {
     slug: '',
     image: '',
     tuitionFee: '',
+    tuitionFeePartTime: '',
     name: { tr: '', en: '', az: '', ru: '', uk: '', ge: '' },
     description: { tr: '', en: '', az: '', ru: '', uk: '', ge: '' },
     country: { tr: '', en: '', az: '', ru: '', uk: '', ge: '' },
@@ -40,7 +40,6 @@ export default function EditUniversityPage() {
         const res = await fetch(`/api/admin/universities/${id}`);
         if (res.ok) {
           const data = await res.json();
-          // Ensure JSON fields are parsed correctly if they come as strings, or just use as objects
           const mergeJson = (field: unknown) => {
             const base = { tr: '', en: '', az: '', ru: '', uk: '', ge: '' };
             if (!field) return base;
@@ -51,30 +50,31 @@ export default function EditUniversityPage() {
             slug: data.slug || '',
             image: data.image || '',
             tuitionFee: data.tuitionFee || '',
+            tuitionFeePartTime: data.tuitionFeePartTime || '',
             name: mergeJson(data.name),
             description: mergeJson(data.description),
             country: mergeJson(data.country),
             city: mergeJson(data.city),
           });
         } else {
-          setError('Üniversite bulunamadı');
+          setError(t('notFound'));
         }
       } catch {
-        setError('Bağlantı hatası');
+        setError(tCommon('connectionError'));
       } finally {
         setPageLoading(false);
       }
     };
     if (id) fetchUniversity();
-  }, [id]);
+  }, [id, t, tCommon]);
 
   const handleLangChange = (field: string, lang: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: {
         ...(prev[field as keyof typeof prev] as Record<string, string>),
-        [lang]: value
-      }
+        [lang]: value,
+      },
     }));
   };
 
@@ -91,12 +91,12 @@ export default function EditUniversityPage() {
         method: 'POST',
         body: uploadData,
       });
-      
+
       if (res.ok) {
         const data = await res.json();
-        setFormData(prev => ({ ...prev, image: data.url }));
+        setFormData((prev) => ({ ...prev, image: data.url }));
       } else {
-        alert('Resim yüklenemedi!');
+        alert(tCommon('uploadImageFailed'));
       }
     } finally {
       setUploading(false);
@@ -113,12 +113,12 @@ export default function EditUniversityPage() {
     };
 
     if (!sourceData.name && !sourceData.description) {
-      alert('Lütfen önce mevcut dilde (aktif sekmede) içerik girin.');
+      alert(tCommon('fillActiveLocale'));
       return;
     }
 
     setTranslating(true);
-    const targetLocales = LOCALES.filter(l => l.code !== sourceLang);
+    const targetLocales = LOCALES.filter((l) => l.code !== sourceLang);
 
     try {
       for (const target of targetLocales) {
@@ -134,8 +134,8 @@ export default function EditUniversityPage() {
               body: JSON.stringify({
                 text,
                 targetLang: target.code,
-                sourceLang
-              })
+                sourceLang,
+              }),
             });
 
             if (res.ok) {
@@ -145,20 +145,21 @@ export default function EditUniversityPage() {
           }
         }
 
-        setFormData(prev => {
+        setFormData((prev) => {
           const newState = { ...prev };
-          fields.forEach(field => {
+          fields.forEach((field) => {
             if (updatedFields[field]) {
-              (newState[field as keyof typeof newState] as Record<string, string>)[target.code] = updatedFields[field];
+              (newState[field as keyof typeof newState] as Record<string, string>)[target.code] =
+                updatedFields[field];
             }
           });
           return newState;
         });
       }
-      alert('Çeviriler tamamlandı!');
+      alert(tCommon('translateComplete'));
     } catch (err) {
       console.error(err);
-      alert('Çeviri sırasında bir hata oluştu.');
+      alert(tCommon('translateFailed'));
     } finally {
       setTranslating(false);
     }
@@ -169,24 +170,24 @@ export default function EditUniversityPage() {
     setLoading(true);
     setError('');
 
-    // Otomatik doldurma (Fallback) mantığı
     const processedFormData = { ...formData };
     const fieldsToFill = ['name', 'description', 'country', 'city'];
-    
-    fieldsToFill.forEach(field => {
-      const fieldData = { ...(processedFormData[field as keyof typeof processedFormData] as Record<string, string>) };
-      // İlk dolu olan dili bul
-      const firstNonEmptyLang = Object.keys(fieldData).find(lang => fieldData[lang] && fieldData[lang].trim() !== '');
-      
+
+    fieldsToFill.forEach((field) => {
+      const fieldData = {
+        ...(processedFormData[field as keyof typeof processedFormData] as Record<string, string>),
+      };
+      const firstNonEmptyLang = Object.keys(fieldData).find(
+        (lang) => fieldData[lang] && fieldData[lang].trim() !== '',
+      );
+
       if (firstNonEmptyLang) {
         const fallbackValue = fieldData[firstNonEmptyLang];
-        // Boş olan dilleri bu değerle doldur
-        Object.keys(fieldData).forEach(lang => {
+        Object.keys(fieldData).forEach((lang) => {
           if (!fieldData[lang] || fieldData[lang].trim() === '') {
             fieldData[lang] = fallbackValue;
           }
         });
-        // Güncellenmiş alanı geri yaz
         const key = field as keyof typeof processedFormData;
         if (key === 'name' || key === 'description' || key === 'country' || key === 'city') {
           processedFormData[key] = fieldData as typeof formData.name;
@@ -198,7 +199,7 @@ export default function EditUniversityPage() {
       const res = await fetch(`/api/admin/universities/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(processedFormData)
+        body: JSON.stringify(processedFormData),
       });
 
       if (res.ok) {
@@ -206,28 +207,28 @@ export default function EditUniversityPage() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error || 'Bir hata oluştu');
+        setError(data.error || tCommon('error'));
       }
     } catch {
-      setError('Bağlantı hatası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
   };
 
   if (pageLoading) {
-    return <div className="text-center py-10">Yükleniyor...</div>;
+    return <div className="text-center py-10">{tCommon('loading')}</div>;
   }
 
   return (
     <div className="max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Üniversiteyi Düzenle</h1>
-        <Link 
-          href="/admin/universities" 
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('edit')}</h1>
+        <Link
+          href="/admin/universities"
           className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          &larr; Geri Dön
+          {tCommon('backToList')}
         </Link>
       </div>
 
@@ -237,12 +238,14 @@ export default function EditUniversityPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-gray-200 dark:border-zinc-800 p-6">
-        {/* Global Settings */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-gray-200 dark:border-zinc-800 p-6"
+      >
         <div className="mb-8 pb-8 border-b border-gray-200 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="slug" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              URL Slug <span className="text-red-500">*</span>
+              {t('slugField')} <span className="text-red-500">*</span>
             </label>
             <input
               id="slug"
@@ -250,40 +253,61 @@ export default function EditUniversityPage() {
               required
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={formData.slug}
-              onChange={e => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-')})}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'),
+                })
+              }
             />
+            <p className="text-xs text-gray-500 mt-1">{t('slugHint')}</p>
           </div>
           <div>
             <label htmlFor="tuitionFee" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Harç Ücreti
+              {t('tuitionFeeFullTime')}
             </label>
             <input
               id="tuitionFee"
               type="text"
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={formData.tuitionFee}
-              onChange={e => setFormData({...formData, tuitionFee: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, tuitionFee: e.target.value })}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="tuitionFeePartTime"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+              {t('tuitionFeePartTime')}
+            </label>
+            <input
+              id="tuitionFeePartTime"
+              type="text"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
+              value={formData.tuitionFeePartTime}
+              onChange={(e) => setFormData({ ...formData, tuitionFeePartTime: e.target.value })}
             />
           </div>
           <div className="md:col-span-2">
             <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Görsel URL veya Yükle
+              {t('imageUrlOrUpload')}
             </label>
             <div className="flex space-x-4">
               <input
                 id="image"
                 type="text"
-                placeholder="Görsel URL'si veya bilgisayardan seçin"
+                placeholder={tCommon('imageUrlPlaceholder')}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
                 value={formData.image}
-                onChange={e => setFormData({...formData, image: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
               />
               <div className="relative">
                 <input
                   type="file"
                   accept="image/*"
-                  title="Görsel seç"
-                  aria-label="Görsel seç"
+                  title={tCommon('selectImage')}
+                  aria-label={tCommon('selectImage')}
                   onChange={handleFileUpload}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
@@ -292,25 +316,26 @@ export default function EditUniversityPage() {
                   disabled={uploading}
                   className="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-300 rounded-md text-sm font-medium transition-colors border border-gray-300 dark:border-zinc-700 h-full flex items-center justify-center whitespace-nowrap"
                 >
-                  {uploading ? 'Yükleniyor...' : 'Bilgisayardan Seç'}
+                  {uploading ? tCommon('uploading') : tCommon('selectFromComputer')}
                 </button>
               </div>
             </div>
             {formData.image && (
               <div className="mt-3 relative w-32 h-32 rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={formData.image} alt="Preview" className="object-cover w-full h-full" />
+                <img src={formData.image} alt={tCommon('preview')} className="object-cover w-full h-full" />
               </div>
             )}
           </div>
         </div>
 
-        {/* Translation Tabs */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">Çoklu Dil İçerikleri</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">
+              {t('multiLocaleContent')}
+            </h2>
             <div className="flex border-b border-gray-200 dark:border-zinc-800 space-x-1 overflow-x-auto">
-              {LOCALES.map(lang => (
+              {LOCALES.map((lang) => (
                 <button
                   key={lang.code}
                   type="button"
@@ -332,62 +357,64 @@ export default function EditUniversityPage() {
             disabled={translating}
             className={`px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors flex items-center justify-center ${translating ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {translating ? 'Çevriliyor...' : `Bu Dilden (${activeTab.toUpperCase()}) Tüm Dillere Çevir`}
+            {translating ? tCommon('translating') : tCommon('translateButton', { locale: activeTab.toUpperCase() })}
           </button>
         </div>
 
-        {/* Active Language Fields */}
         <div className="space-y-6">
           <div>
             <label htmlFor="nameInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Üniversite Adı ({activeTab.toUpperCase()})
+              {t('nameField')} ({activeTab.toUpperCase()})
             </label>
             <input
               id="nameInput"
               type="text"
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={(formData.name as Record<string, string>)[activeTab]}
-              onChange={e => handleLangChange('name', activeTab, e.target.value)}
+              onChange={(e) => handleLangChange('name', activeTab, e.target.value)}
             />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="countryInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Ülke ({activeTab.toUpperCase()})
+              <label
+                htmlFor="countryInput"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                {tCommon('country')} ({activeTab.toUpperCase()})
               </label>
               <input
                 id="countryInput"
                 type="text"
                 className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
                 value={(formData.country as Record<string, string>)[activeTab]}
-                onChange={e => handleLangChange('country', activeTab, e.target.value)}
+                onChange={(e) => handleLangChange('country', activeTab, e.target.value)}
               />
             </div>
             <div>
               <label htmlFor="cityInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Şehir ({activeTab.toUpperCase()})
+                {tCommon('city')} ({activeTab.toUpperCase()})
               </label>
               <input
                 id="cityInput"
                 type="text"
                 className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
                 value={(formData.city as Record<string, string>)[activeTab]}
-                onChange={e => handleLangChange('city', activeTab, e.target.value)}
+                onChange={(e) => handleLangChange('city', activeTab, e.target.value)}
               />
             </div>
           </div>
 
           <div>
             <label htmlFor="descInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Detaylı Açıklama ({activeTab.toUpperCase()})
+              {t('detailedDescription')} ({activeTab.toUpperCase()})
             </label>
             <textarea
               id="descInput"
               rows={15}
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={(formData.description as Record<string, string>)[activeTab]}
-              onChange={e => handleLangChange('description', activeTab, e.target.value)}
+              onChange={(e) => handleLangChange('description', activeTab, e.target.value)}
             />
           </div>
         </div>
@@ -398,7 +425,7 @@ export default function EditUniversityPage() {
             disabled={loading}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-medium disabled:opacity-50 transition-colors"
           >
-            {loading ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+            {loading ? tCommon('saving') : tCommon('saveChanges')}
           </button>
         </div>
       </form>

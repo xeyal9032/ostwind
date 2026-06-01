@@ -3,19 +3,18 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
-const LOCALES = [
-  { code: 'tr', name: 'Türkçe' },
-  { code: 'en', name: 'English' },
-  { code: 'az', name: 'Azərbaycanca' },
-  { code: 'ru', name: 'Русский' },
-  { code: 'uk', name: 'Українська' },
-  { code: 'ge', name: 'ქართული' },
-];
+import { useTranslations } from 'next-intl';
+import { getContentLocaleTabs } from '@/lib/admin-content-locales';
+import { useAdminContentLocale } from '@/lib/use-admin-locale-field';
 
 export default function NewUniversityPage() {
+  const t = useTranslations('universities');
+  const tCommon = useTranslations('common');
+  const tLocales = useTranslations('contentLocales');
+  const LOCALES = getContentLocaleTabs(tLocales);
+  const adminLocale = useAdminContentLocale();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('tr');
+  const [activeTab, setActiveTab] = useState(adminLocale);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -60,7 +59,7 @@ export default function NewUniversityPage() {
         const data = await res.json();
         setFormData(prev => ({ ...prev, image: data.url }));
       } else {
-        alert('Resim yüklenemedi!');
+        alert(tCommon('uploadImageFailed'));
       }
     } finally {
       setUploading(false);
@@ -77,7 +76,7 @@ export default function NewUniversityPage() {
     };
 
     if (!sourceData.name && !sourceData.description) {
-      alert('Lütfen önce mevcut dilde (aktif sekmede) içerik girin.');
+      alert(tCommon('fillActiveLocale'));
       return;
     }
 
@@ -119,10 +118,10 @@ export default function NewUniversityPage() {
           return newState;
         });
       }
-      alert('Çeviriler tamamlandı!');
+      alert(tCommon('translateComplete'));
     } catch (err) {
       console.error(err);
-      alert('Çeviri sırasında bir hata oluştu.');
+      alert(tCommon('translateFailed'));
     } finally {
       setTranslating(false);
     }
@@ -170,10 +169,10 @@ export default function NewUniversityPage() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error || 'Bir hata oluştu');
+        setError(data.error || tCommon('error'));
       }
     } catch {
-      setError('Bağlantı hatası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
@@ -182,12 +181,12 @@ export default function NewUniversityPage() {
   return (
     <div className="max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Yeni Üniversite Ekle</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('add')}</h1>
         <Link 
           href="/admin/universities" 
           className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          &larr; Geri Dön
+          {tCommon('backToList')}
         </Link>
       </div>
 
@@ -202,7 +201,7 @@ export default function NewUniversityPage() {
         <div className="mb-8 pb-8 border-b border-gray-200 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="slug" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              URL Slug <span className="text-red-500">*</span>
+              {t('slugField')} <span className="text-red-500">*</span>
             </label>
             <input
               id="slug"
@@ -213,11 +212,11 @@ export default function NewUniversityPage() {
               value={formData.slug}
               onChange={e => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-')})}
             />
-            <p className="text-xs text-gray-500 mt-1">Sadece küçük harf ve tire (-) kullanın.</p>
+            <p className="text-xs text-gray-500 mt-1">{t('slugHint')}</p>
           </div>
           <div>
             <label htmlFor="tuitionFee" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Harç Ücreti (Örn: $2,500/yıl)
+              {t('tuitionFee')}
             </label>
             <input
               id="tuitionFee"
@@ -229,13 +228,13 @@ export default function NewUniversityPage() {
           </div>
           <div className="md:col-span-2">
             <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Görsel URL veya Yükle
+              {t('imageUrlOrUpload')}
             </label>
             <div className="flex space-x-4">
               <input
                 id="image"
                 type="text"
-                placeholder="Görsel URL'si veya bilgisayardan seçin"
+                placeholder={tCommon('imageUrlPlaceholder')}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
                 value={formData.image}
                 onChange={e => setFormData({...formData, image: e.target.value})}
@@ -244,8 +243,8 @@ export default function NewUniversityPage() {
                 <input
                   type="file"
                   accept="image/*"
-                  title="Görsel seç"
-                  aria-label="Görsel seç"
+                  title={tCommon('selectImage')}
+                  aria-label={tCommon('selectImage')}
                   onChange={handleFileUpload}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
@@ -254,14 +253,14 @@ export default function NewUniversityPage() {
                   disabled={uploading}
                   className="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-300 rounded-md text-sm font-medium transition-colors border border-gray-300 dark:border-zinc-700 h-full flex items-center justify-center whitespace-nowrap"
                 >
-                  {uploading ? 'Yükleniyor...' : 'Bilgisayardan Seç'}
+                  {uploading ? tCommon('uploading') : tCommon('selectFromComputer')}
                 </button>
               </div>
             </div>
             {formData.image && (
               <div className="mt-3 relative w-32 h-32 rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={formData.image} alt="Preview" className="object-cover w-full h-full" />
+                <img src={formData.image} alt={tCommon('preview')} className="object-cover w-full h-full" />
               </div>
             )}
           </div>
@@ -270,7 +269,7 @@ export default function NewUniversityPage() {
         {/* Translation Tabs */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">Çoklu Dil İçerikleri</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">{t('multiLocaleContent')}</h2>
             <div className="flex border-b border-gray-200 dark:border-zinc-800 space-x-1 overflow-x-auto">
               {LOCALES.map(lang => (
                 <button
@@ -294,7 +293,7 @@ export default function NewUniversityPage() {
             disabled={translating}
             className={`px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors flex items-center justify-center ${translating ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {translating ? 'Çevriliyor...' : `Bu Dilden (${activeTab.toUpperCase()}) Tüm Dillere Çevir`}
+            {translating ? tCommon('translating') : tCommon('translateButton', { locale: activeTab.toUpperCase() })}
           </button>
         </div>
 
@@ -302,7 +301,7 @@ export default function NewUniversityPage() {
         <div className="space-y-6">
           <div>
             <label htmlFor="nameInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Üniversite Adı ({activeTab.toUpperCase()})
+              {t('nameField')} ({activeTab.toUpperCase()})
             </label>
             <input
               id="nameInput"
@@ -316,7 +315,7 @@ export default function NewUniversityPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="countryInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Ülke ({activeTab.toUpperCase()})
+                {tCommon('country')} ({activeTab.toUpperCase()})
               </label>
               <input
                 id="countryInput"
@@ -328,7 +327,7 @@ export default function NewUniversityPage() {
             </div>
             <div>
               <label htmlFor="cityInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Şehir ({activeTab.toUpperCase()})
+                {tCommon('city')} ({activeTab.toUpperCase()})
               </label>
               <input
                 id="cityInput"
@@ -342,7 +341,7 @@ export default function NewUniversityPage() {
 
           <div>
             <label htmlFor="descInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Detaylı Açıklama ({activeTab.toUpperCase()})
+              {t('detailedDescription')} ({activeTab.toUpperCase()})
             </label>
             <textarea
               id="descInput"
@@ -360,7 +359,7 @@ export default function NewUniversityPage() {
             disabled={loading}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-medium disabled:opacity-50 transition-colors"
           >
-            {loading ? 'Kaydediliyor...' : 'Üniversiteyi Kaydet'}
+            {loading ? tCommon('saving') : t('save')}
           </button>
         </div>
       </form>

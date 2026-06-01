@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   PERMISSION_KEYS,
   PERMISSION_LABELS,
@@ -26,6 +27,9 @@ type UserState = {
 };
 
 export default function XeyalRolesPage() {
+  const t = useTranslations('xeyal');
+  const tRoles = useTranslations('xeyal.roles');
+  const tCommon = useTranslations('common');
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [states, setStates] = useState<Record<number, UserState>>({});
   const [loading, setLoading] = useState(true);
@@ -35,7 +39,7 @@ export default function XeyalRolesPage() {
     try {
       const res = await fetch('/api/admin/users');
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Yüklenemedi');
+      if (!res.ok) throw new Error(data.error || tCommon('loadFailed'));
       const list: AdminUser[] = data.users.filter((u: AdminUser) => u.role !== 'SUPER_ADMIN');
       setUsers(list);
       const next: Record<number, UserState> = {};
@@ -50,11 +54,11 @@ export default function XeyalRolesPage() {
       }
       setStates(next);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Hata');
+      setError(e instanceof Error ? e.message : tCommon('error'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [tCommon]);
 
   useEffect(() => {
     load();
@@ -86,26 +90,24 @@ export default function XeyalRolesPage() {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Kaydedilemedi');
+      if (!res.ok) throw new Error(data.error || tCommon('saveFailed'));
       await load();
     } catch (e) {
-      alert(e instanceof Error ? e.message : 'Hata');
+      alert(e instanceof Error ? e.message : tCommon('error'));
     } finally {
       updateState(user.id, { saving: false });
     }
   };
 
-  if (loading) return <p className="text-gray-500">Yükleniyor...</p>;
+  if (loading) return <p className="text-gray-500">{tCommon('loading')}</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-gray-500 dark:text-gray-400">
-        Super admin hesapları bu listede görünmez. Tam erişim = tüm modüller. Dondur = giriş engellenir.
-      </p>
+      <p className="text-sm text-gray-500 dark:text-gray-400">{tRoles('intro')}</p>
 
       {users.length === 0 ? (
-        <p className="text-gray-500">Düzenlenebilir admin yok.</p>
+        <p className="text-gray-500">{t('noAdmins')}</p>
       ) : (
         <div className="space-y-4">
           {users.map((user) => {
@@ -136,7 +138,7 @@ export default function XeyalRolesPage() {
                         checked={!s.isActive}
                         onChange={(e) => updateState(user.id, { isActive: !e.target.checked })}
                       />
-                      Hesabı dondur
+                      {tRoles('freezeAccount')}
                     </label>
                     <label htmlFor={`full-${user.id}`} className="flex items-center gap-2 text-sm">
                       <input
@@ -150,7 +152,7 @@ export default function XeyalRolesPage() {
                           })
                         }
                       />
-                      Tam erişim
+                      {tRoles('fullAccess')}
                     </label>
                     <button
                       type="button"
@@ -158,7 +160,7 @@ export default function XeyalRolesPage() {
                       onClick={() => save(user)}
                       className="px-4 py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-lg text-sm font-medium"
                     >
-                      {s.saving ? 'Kaydediliyor...' : 'Kaydet'}
+                      {s.saving ? tCommon('saving') : tCommon('save')}
                     </button>
                   </div>
                 </div>

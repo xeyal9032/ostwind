@@ -12,7 +12,10 @@
     "pricing": "Pricing",
     "faq": "FAQ",
     "blog": "Blog",
-    "applyNow": "Apply Now"
+    "applyNow": "Apply Now",
+    "login": "Login",
+    "register": "Register",
+    "onlineAdmission": "Online Admission"
   },
   "ScrollTop": {
     "label": "Scroll to top"
@@ -193,5 +196,88 @@
     "sending": "Sending...",
     "success": "Your application was received. We will contact you soon.",
     "error": "Could not send. Please try again."
+  },
+  "StudentAuth": {
+    "loginTitle": "Login",
+    "registerTitle": "Register",
+    "subtitle": "After registration you can complete the online admission form.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Sign in",
+    "registerButton": "Register",
+    "loading": "Please wait...",
+    "noAccount": "No account?",
+    "hasAccount": "Already registered?",
+    "goRegister": "Register",
+    "goLogin": "Login",
+    "backHome": "Home",
+    "logout": "Log out",
+    "errors": {
+      "missing": "Fill in all fields.",
+      "emailExists": "This email is already registered.",
+      "invalidCredentials": "Invalid email or password.",
+      "weakPassword": "Password must be at least 6 characters.",
+      "server": "An error occurred. Try again."
+    }
+  },
+  "OnlineAdmission": {
+    "title": "Online Admission",
+    "intro": "Enter your registration address from your ID card and upload documents.",
+    "sectionPersonal": "Personal details",
+    "sectionPassport": "Foreign passport",
+    "sectionUniversity": "University & study",
+    "sectionDocuments": "Document upload",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "birthDate": "Date of birth",
+    "email": "Email",
+    "phone": "Phone",
+    "registrationAddress": "Registration address",
+    "registrationAddressHint": "Address on the back of your AZ ID card",
+    "foreignPassportNumber": "Foreign passport number",
+    "foreignPassportIssueDate": "Issue date",
+    "foreignPassportExpiryDate": "Expiry date",
+    "university": "University",
+    "selectUniversity": "Select university",
+    "studyType": "Study mode",
+    "studyTypeFull": "Full-time",
+    "studyTypePart": "Part-time",
+    "studyLanguage": "Language of study",
+    "langEn": "English",
+    "langUk": "Ukrainian",
+    "langRu": "Russian",
+    "tuitionFee": "Tuition fee",
+    "attestat": "Certificate with apostille (PDF)",
+    "attestatHint": "PDF only, max 15 MB",
+    "passportDoc": "Foreign passport (PDF)",
+    "passportHint": "PDF only, max 15 MB",
+    "photo": "3/4 photo",
+    "photoHint": "JPG, PNG or PDF, max 8 MB",
+    "submit": "Submit form",
+    "submitting": "Submitting...",
+    "successTitle": "Application received",
+    "successDesc": "Your documents and PDF summary were sent to our team.",
+    "errors": {
+      "missing": "Complete all fields and uploads.",
+      "alreadySubmitted": "You have already submitted an application.",
+      "invalidPdf": "Certificate and passport must be PDF.",
+      "invalidPhoto": "Photo must be JPG, PNG or PDF.",
+      "fileTooLarge": "File is too large.",
+      "unauthorized": "Please sign in again.",
+      "server": "Could not submit. Try again."
+    }
+  },
+  "Portal": {
+    "submittedTitle": "Your application has been registered",
+    "statusLabel": "Status",
+    "submittedAt": "Submitted on"
+  },
+  "ApplicationStatus": {
+    "PENDING": "Pending",
+    "REVIEWING": "Under review",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected"
   }
 }

@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { useAdminLocaleFieldText } from '@/lib/use-admin-locale-field';
 
 interface University {
   id: number;
@@ -11,8 +13,12 @@ interface University {
 }
 
 export default function UniversitiesPage() {
+  const t = useTranslations('universities');
+  const tCommon = useTranslations('common');
+  const fieldText = useAdminLocaleFieldText();
   const [universities, setUniversities] = useState<University[]>([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchUniversities = async () => {
       try {
@@ -32,16 +38,16 @@ export default function UniversitiesPage() {
   }, []);
 
   const handleDelete = async (id: number) => {
-    if (confirm('Bu üniversiteyi silmek istediğinize emin misiniz?')) {
+    if (confirm(t('confirmDelete'))) {
       try {
         const res = await fetch(`/api/admin/universities/${id}`, {
-          method: 'DELETE'
+          method: 'DELETE',
         });
         if (res.ok) {
-          setUniversities(prev => prev.filter(uni => uni.id !== id));
+          setUniversities((prev) => prev.filter((uni) => uni.id !== id));
         }
       } catch {
-        alert('Silme işlemi başarısız oldu.');
+        alert(tCommon('deleteFailed'));
       }
     }
   };
@@ -49,12 +55,12 @@ export default function UniversitiesPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Üniversiteler</h1>
-        <Link 
-          href="/admin/universities/new" 
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('title')}</h1>
+        <Link
+          href="/admin/universities/new"
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
         >
-          + Yeni Ekle
+          {t('addButton')}
         </Link>
       </div>
 
@@ -63,47 +69,51 @@ export default function UniversitiesPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 dark:bg-zinc-800/50 border-b border-gray-200 dark:border-zinc-800">
-                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">ID</th>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">Üniversite Adı (TR)</th>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">Ülke (TR)</th>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">Şehir (TR)</th>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white text-right">İşlemler</th>
+                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">{tCommon('id')}</th>
+                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">{t('colName')}</th>
+                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">{t('colCountry')}</th>
+                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">{t('colCity')}</th>
+                <th className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white text-right">{tCommon('actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">Yükleniyor...</td>
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                    {tCommon('loading')}
+                  </td>
                 </tr>
               ) : universities.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">Henüz üniversite eklenmemiş.</td>
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                    {t('empty')}
+                  </td>
                 </tr>
               ) : (
                 universities.map((uni) => (
                   <tr key={uni.id} className="hover:bg-gray-50 dark:hover:bg-zinc-800/30 transition-colors">
                     <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{uni.id}</td>
                     <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                      {uni.name?.tr || uni.name?.en || 'İsimsiz'}
+                      {fieldText(uni.name) || tCommon('unnamed')}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      {uni.country?.tr || '-'}
+                      {fieldText(uni.country) || '—'}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      {uni.city?.tr || '-'}
+                      {fieldText(uni.city) || '—'}
                     </td>
                     <td className="px-6 py-4 text-sm text-right space-x-3">
-                      <Link 
+                      <Link
                         href={`/admin/universities/${uni.id}/edit`}
                         className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
                       >
-                        Düzenle
+                        {tCommon('edit')}
                       </Link>
-                      <button 
+                      <button
                         onClick={() => handleDelete(uni.id)}
                         className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 font-medium"
                       >
-                        Sil
+                        {tCommon('delete')}
                       </button>
                     </td>
                   </tr>

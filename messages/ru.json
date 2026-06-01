@@ -12,7 +12,10 @@
     "blog": "Блог",
     "about": "О нас",
     "contact": "Контакты",
-    "applyNow": "Подать заявку"
+    "applyNow": "Подать заявку",
+    "login": "Вход",
+    "register": "Регистрация",
+    "onlineAdmission": "Онлайн-приём"
   },
   "ScrollTop": {
     "label": "Наверх"
@@ -193,5 +196,88 @@
     "sending": "Отправка...",
     "success": "Заявка получена. Мы свяжемся с вами.",
     "error": "Не удалось отправить. Попробуйте снова."
+  },
+  "StudentAuth": {
+    "loginTitle": "Вход",
+    "registerTitle": "Регистрация",
+    "subtitle": "После регистрации вы сможете заполнить форму онлайн-приёма.",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "email": "Email",
+    "password": "Пароль",
+    "loginButton": "Войти",
+    "registerButton": "Зарегистрироваться",
+    "loading": "Подождите...",
+    "noAccount": "Нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?",
+    "goRegister": "Регистрация",
+    "goLogin": "Вход",
+    "backHome": "На главную",
+    "logout": "Выйти",
+    "errors": {
+      "missing": "Заполните все поля.",
+      "emailExists": "Этот email уже зарегистрирован.",
+      "invalidCredentials": "Неверный email или пароль.",
+      "weakPassword": "Пароль не менее 6 символов.",
+      "server": "Ошибка. Попробуйте снова."
+    }
+  },
+  "OnlineAdmission": {
+    "title": "Онлайн-приём",
+    "intro": "Укажите адрес регистрации с оборота ID и загрузите документы.",
+    "sectionPersonal": "Личные данные",
+    "sectionPassport": "Загранпаспорт",
+    "sectionUniversity": "Университет и обучение",
+    "sectionDocuments": "Загрузка документов",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "birthDate": "Дата рождения",
+    "email": "Email",
+    "phone": "Телефон",
+    "registrationAddress": "Адрес регистрации",
+    "registrationAddressHint": "Адрес на обороте AZ удостоверения",
+    "foreignPassportNumber": "Номер загранпаспорта",
+    "foreignPassportIssueDate": "Дата выдачи",
+    "foreignPassportExpiryDate": "Срок действия",
+    "university": "Университет",
+    "selectUniversity": "Выберите университет",
+    "studyType": "Форма обучения",
+    "studyTypeFull": "Очная",
+    "studyTypePart": "Заочная",
+    "studyLanguage": "Язык обучения",
+    "langEn": "Английский",
+    "langUk": "Украинский",
+    "langRu": "Русский",
+    "tuitionFee": "Стоимость обучения",
+    "attestat": "Аттестат с апостилем (PDF)",
+    "attestatHint": "Только PDF, макс. 15 МБ",
+    "passportDoc": "Загранпаспорт (PDF)",
+    "passportHint": "Только PDF, макс. 15 МБ",
+    "photo": "Фото 3/4",
+    "photoHint": "JPG, PNG или PDF, макс. 8 МБ",
+    "submit": "Отправить форму",
+    "submitting": "Отправка...",
+    "successTitle": "Заявка принята",
+    "successDesc": "Документы и PDF отправлены в админ-панель.",
+    "errors": {
+      "missing": "Заполните все поля и файлы.",
+      "alreadySubmitted": "Вы уже отправили заявку.",
+      "invalidPdf": "Аттестат и паспорт — только PDF.",
+      "invalidPhoto": "Фото — JPG, PNG или PDF.",
+      "fileTooLarge": "Файл слишком большой.",
+      "unauthorized": "Войдите снова.",
+      "server": "Не удалось отправить."
+    }
+  },
+  "Portal": {
+    "submittedTitle": "Ваша заявка зарегистрирована",
+    "statusLabel": "Статус",
+    "submittedAt": "Дата отправки"
+  },
+  "ApplicationStatus": {
+    "PENDING": "В ожидании",
+    "REVIEWING": "На рассмотрении",
+    "APPROVED": "Одобрено",
+    "REJECTED": "Отклонено"
   }
 }

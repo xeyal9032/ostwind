@@ -3,12 +3,16 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { ADMIN_ROLE_LABELS, type AdminRole } from '@/lib/admin-roles';
 
 export default function EditAdminUserPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
+  const t = useTranslations('users');
+  const tCommon = useTranslations('common');
+  const tForms = useTranslations('forms');
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -36,16 +40,16 @@ export default function EditAdminUserPage() {
           });
         } else {
           const data = await res.json().catch(() => ({}));
-          setError(data.error || 'İstifadəçi tapılmadı');
+          setError(data.error || t('userNotFound'));
         }
       } catch {
-        setError('Bağlantı xətası');
+        setError(tCommon('connectionError'));
       } finally {
         setLoading(false);
       }
     };
     fetchUser();
-  }, [id]);
+  }, [id, t, tCommon]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,12 +63,12 @@ export default function EditAdminUserPage() {
     };
     if (form.password.trim()) {
       if (form.password.length < 6) {
-        setError('Yeni şifrə ən azı 6 simvol olmalıdır');
+        setError(t('newPasswordMin'));
         setSaving(false);
         return;
       }
       if (form.password !== form.confirmPassword) {
-        setError('Şifrə və təsdiq uyğun gəlmir');
+        setError(t('passwordMismatch'));
         setSaving(false);
         return;
       }
@@ -83,25 +87,25 @@ export default function EditAdminUserPage() {
         router.push('/admin/users');
         router.refresh();
       } else {
-        setError(data.error || 'Yenilənə bilmədi');
+        setError(data.error || t('updateFailed'));
       }
     } catch {
-      setError('Bağlantı xətası');
+      setError(tCommon('connectionError'));
     } finally {
       setSaving(false);
     }
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-gray-500">Yüklənir...</div>;
+    return <div className="text-center py-12 text-gray-500">{tCommon('loading')}</div>;
   }
 
   return (
     <div className="max-w-xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Düzəlt</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('edit')}</h1>
         <Link href="/admin/users" className="text-gray-500 hover:text-gray-700 dark:text-gray-400">
-          &larr; Geri
+          &larr; {tCommon('back')}
         </Link>
       </div>
 
@@ -120,7 +124,7 @@ export default function EditAdminUserPage() {
             htmlFor="edit-admin-name"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
           >
-            Ad
+            {t('name')}
           </label>
           <input
             id="edit-admin-name"
@@ -138,7 +142,7 @@ export default function EditAdminUserPage() {
             htmlFor="edit-admin-email"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
           >
-            E-posta <span className="text-red-500">*</span>
+            {tForms('email')} <span className="text-red-500">*</span>
           </label>
           <input
             id="edit-admin-email"
@@ -157,7 +161,7 @@ export default function EditAdminUserPage() {
             htmlFor="edit-admin-password"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
           >
-            Yeni şifrə (boş buraxın — dəyişməz)
+            {t('passwordOptionalLabel')}
           </label>
           <input
             id="edit-admin-password"
@@ -171,7 +175,7 @@ export default function EditAdminUserPage() {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
           <p id="edit-admin-password-hint" className="text-xs text-gray-500 mt-1">
-            Boş buraxılsa şifrə dəyişməz; doldurularsa ən azı 6 simvol olmalıdır.
+            {t('passwordOptionalHint')}
           </p>
         </div>
 
@@ -180,7 +184,7 @@ export default function EditAdminUserPage() {
             htmlFor="edit-admin-confirm-password"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
           >
-            Yeni şifrə (təsdiq)
+            {t('confirmNewPassword')}
           </label>
           <input
             id="edit-admin-confirm-password"
@@ -199,7 +203,7 @@ export default function EditAdminUserPage() {
             htmlFor="edit-admin-role"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
           >
-            Rol
+            {t('role')}
           </label>
           <select
             id="edit-admin-role"
@@ -218,7 +222,7 @@ export default function EditAdminUserPage() {
           disabled={saving}
           className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium disabled:opacity-50"
         >
-          {saving ? 'Saxlanılır...' : 'Yadda saxla'}
+          {saving ? tCommon('saving') : tCommon('save')}
         </button>
       </form>
     </div>

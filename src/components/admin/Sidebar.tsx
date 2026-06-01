@@ -4,38 +4,56 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { isSuperAdmin } from '@/lib/admin-roles';
-import {
-  hasPermission,
-  type PermissionKey,
-} from '@/lib/admin-permissions';
+import { hasPermission, type PermissionKey } from '@/lib/admin-permissions';
+import AdminBrandLogo from '@/components/admin/AdminBrandLogo';
+
+type MenuKey =
+  | 'dashboard'
+  | 'universities'
+  | 'services'
+  | 'pricing'
+  | 'faq'
+  | 'blog'
+  | 'blogCategories'
+  | 'applications'
+  | 'onlineAdmissions'
+  | 'messages'
+  | 'contact'
+  | 'team'
+  | 'about'
+  | 'account'
+  | 'users';
 
 type MenuItem = {
-  name: string;
+  key: MenuKey;
   href: string;
   icon: string;
   permission?: PermissionKey;
 };
 
 const ALL_MENU: MenuItem[] = [
-  { name: 'Dashboard', href: '/admin/dashboard', icon: '📊' },
-  { name: 'Üniversiteler', href: '/admin/universities', icon: '🎓', permission: 'universities' },
-  { name: 'Hizmetler', href: '/admin/services', icon: '🛠️', permission: 'services' },
-  { name: 'Fiyatlandırma', href: '/admin/pricing', icon: '💰', permission: 'pricing' },
-  { name: 'SSS', href: '/admin/faq', icon: '❓', permission: 'faq' },
-  { name: 'Blog', href: '/admin/blog', icon: '📰', permission: 'blog' },
-  { name: 'Blog Kategorileri', href: '/admin/blog/categories', icon: '🏷️', permission: 'blog' },
-  { name: 'Başvurular', href: '/admin/applications', icon: '📝', permission: 'applications' },
-  { name: 'Mesajlar', href: '/admin/messages', icon: '✉️', permission: 'messages' },
-  { name: 'Əlaqə', href: '/admin/contact', icon: '📞', permission: 'contact' },
-  { name: 'Ekip', href: '/admin/team', icon: '👥', permission: 'team' },
-  { name: 'Hakkımızda', href: '/admin/about', icon: '📖', permission: 'about' },
-  { name: 'Hesab / Şifrə', href: '/admin/account', icon: '🔑' },
+  { key: 'dashboard', href: '/admin/dashboard', icon: '📊' },
+  { key: 'universities', href: '/admin/universities', icon: '🎓', permission: 'universities' },
+  { key: 'services', href: '/admin/services', icon: '🛠️', permission: 'services' },
+  { key: 'pricing', href: '/admin/pricing', icon: '💰', permission: 'pricing' },
+  { key: 'faq', href: '/admin/faq', icon: '❓', permission: 'faq' },
+  { key: 'blog', href: '/admin/blog', icon: '📰', permission: 'blog' },
+  { key: 'blogCategories', href: '/admin/blog/categories', icon: '🏷️', permission: 'blog' },
+  { key: 'applications', href: '/admin/applications', icon: '📝', permission: 'applications' },
+  { key: 'onlineAdmissions', href: '/admin/online-admissions', icon: '📋', permission: 'onlineAdmissions' },
+  { key: 'messages', href: '/admin/messages', icon: '✉️', permission: 'messages' },
+  { key: 'contact', href: '/admin/contact', icon: '📞', permission: 'contact' },
+  { key: 'team', href: '/admin/team', icon: '👥', permission: 'team' },
+  { key: 'about', href: '/admin/about', icon: '📖', permission: 'about' },
+  { key: 'account', href: '/admin/account', icon: '🔑' },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const tMenu = useTranslations('menu');
   const [permissions, setPermissions] = useState<unknown>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -55,22 +73,22 @@ export default function Sidebar() {
     return hasPermission(role, permissions, item.permission);
   });
 
-  const extraItems = isSuperAdmin(role)
-    ? [{ name: 'Adminlər', href: '/admin/users', icon: '🔐' }]
+  const extraItems: MenuItem[] = isSuperAdmin(role)
+    ? [{ key: 'users', href: '/admin/users', icon: '🔐' }]
     : [];
 
   return (
     <div className="w-64 bg-zinc-900 text-white min-h-screen flex flex-col">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold text-blue-400">OstWind CMS</h2>
+      <div className="p-6 flex justify-center">
+        <AdminBrandLogo size={64} />
       </div>
 
-      <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-4 space-y-1 overflow-y-auto scrollbar-none">
         {[...menuItems, ...extraItems].map((item) => {
           const isActive = pathname.startsWith(item.href);
           return (
             <Link
-              key={item.name}
+              key={item.key}
               href={item.href}
               className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
                 isActive
@@ -79,7 +97,7 @@ export default function Sidebar() {
               }`}
             >
               <span className="mr-3">{item.icon}</span>
-              {item.name}
+              {tMenu(item.key)}
             </Link>
           );
         })}
@@ -92,7 +110,7 @@ export default function Sidebar() {
           className="flex items-center w-full px-4 py-3 text-zinc-400 hover:bg-red-600 hover:text-white rounded-lg transition-colors"
         >
           <span className="mr-3">🚪</span>
-          Çıkış Yap
+          {tMenu('logout')}
         </button>
       </div>
     </div>

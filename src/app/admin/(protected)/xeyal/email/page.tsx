@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 type EmailSettings = {
   enabled: boolean;
@@ -34,6 +35,8 @@ const defaultForm: EmailSettings & { smtpPass: string } = {
 };
 
 export default function XeyalEmailPage() {
+  const t = useTranslations('xeyal');
+  const tCommon = useTranslations('common');
   const [form, setForm] = useState(defaultForm);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -89,10 +92,10 @@ export default function XeyalEmailPage() {
         body: JSON.stringify(body),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || data.error || 'Test başarısız');
-      setMessage(data.message || 'Test e-postası gönderildi.');
+      if (!res.ok) throw new Error(data.message || data.error || t('email.testFailed'));
+      setMessage(data.message || t('email.testSent'));
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : 'Test başarısız');
+      setMessage(err instanceof Error ? err.message : t('email.testFailed'));
     } finally {
       setTesting(false);
     }
@@ -111,17 +114,17 @@ export default function XeyalEmailPage() {
         body: JSON.stringify(body),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Kaydedilemedi');
-      setMessage('Ayarlar kaydedildi.');
+      if (!res.ok) throw new Error(data.error || tCommon('saveFailed'));
+      setMessage(t('email.settingsSaved'));
       setForm((f) => ({ ...f, smtpPass: '' }));
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : 'Hata');
+      setMessage(err instanceof Error ? err.message : tCommon('error'));
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <p className="text-gray-500">Yükleniyor...</p>;
+  if (loading) return <p className="text-gray-500">{tCommon('loading')}</p>;
 
   return (
     <form
@@ -136,12 +139,12 @@ export default function XeyalEmailPage() {
           checked={form.enabled}
           onChange={(e) => setForm((f) => ({ ...f, enabled: e.target.checked }))}
         />
-        E-posta gönderimini etkinleştir
+        {t('email.enableSending')}
       </label>
 
       <div>
         <label htmlFor="smtp-host" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          SMTP sunucusu
+          {t('email.smtpHost')}
         </label>
         <input
           id="smtp-host"
@@ -155,7 +158,7 @@ export default function XeyalEmailPage() {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label htmlFor="smtp-port" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Port
+            {t('email.port')}
           </label>
           <input
             id="smtp-port"
@@ -182,7 +185,7 @@ export default function XeyalEmailPage() {
 
       <div>
         <label htmlFor="smtp-user" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          SMTP kullanıcı
+          {t('email.smtpUser')}
         </label>
         <input
           id="smtp-user"
@@ -196,7 +199,7 @@ export default function XeyalEmailPage() {
 
       <div>
         <label htmlFor="smtp-pass" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          SMTP şifre
+          {t('email.smtpPass')}
         </label>
         <input
           id="smtp-pass"
@@ -205,14 +208,14 @@ export default function XeyalEmailPage() {
           value={form.smtpPass}
           onChange={(e) => setForm((f) => ({ ...f, smtpPass: e.target.value }))}
           className="w-full rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm"
-          placeholder="Değiştirmek için doldurun"
+          placeholder={t('email.passPlaceholder')}
           autoComplete="new-password"
         />
       </div>
 
       <div>
         <label htmlFor="from-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Gönderen e-posta
+          {t('email.fromEmail')}
         </label>
         <input
           id="from-email"
@@ -226,7 +229,7 @@ export default function XeyalEmailPage() {
 
       <div>
         <label htmlFor="admin-notify-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Admin bildirim e-postası
+          {t('email.adminNotifyEmail')}
         </label>
         <input
           id="admin-notify-email"
@@ -239,7 +242,7 @@ export default function XeyalEmailPage() {
       </div>
 
       <fieldset className="space-y-2 border-t border-gray-100 dark:border-zinc-800 pt-4">
-        <legend className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bildirimler</legend>
+        <legend className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('email.notificationsLegend')}</legend>
         <label htmlFor="notify-app" className="flex items-center gap-2 text-sm">
           <input
             id="notify-app"
@@ -247,7 +250,7 @@ export default function XeyalEmailPage() {
             checked={form.notifyAdminOnApplication}
             onChange={(e) => setForm((f) => ({ ...f, notifyAdminOnApplication: e.target.checked }))}
           />
-          Yeni başvuruda admin bilgilendir
+          {t('email.notifyOnApp')}
         </label>
         <label htmlFor="notify-msg" className="flex items-center gap-2 text-sm">
           <input
@@ -256,7 +259,7 @@ export default function XeyalEmailPage() {
             checked={form.notifyAdminOnMessage}
             onChange={(e) => setForm((f) => ({ ...f, notifyAdminOnMessage: e.target.checked }))}
           />
-          Yeni mesajda admin bilgilendir
+          {t('email.notifyOnMsg')}
         </label>
         <label htmlFor="notify-applicant" className="flex items-center gap-2 text-sm">
           <input
@@ -265,18 +268,16 @@ export default function XeyalEmailPage() {
             checked={form.sendApplicantConfirmation}
             onChange={(e) => setForm((f) => ({ ...f, sendApplicantConfirmation: e.target.checked }))}
           />
-          Başvurana onay e-postası gönder
+          {t('email.applicantConfirm')}
         </label>
       </fieldset>
 
       <div className="border-t border-gray-100 dark:border-zinc-800 pt-4 space-y-3">
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">SMTP testi</p>
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          Kaydetmeden önce de test edebilirsiniz. Şifre alanı boşsa veritabanındaki kayıtlı şifre kullanılır.
-        </p>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('email.smtpTest')}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">{t('email.smtpTestHint')}</p>
         <div>
           <label htmlFor="test-to" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Test alıcısı (isteğe bağlı)
+            {t('email.testRecipient')}
           </label>
           <input
             id="test-to"
@@ -295,7 +296,7 @@ export default function XeyalEmailPage() {
           disabled={saving || testing}
           className="px-4 py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-lg text-sm font-medium"
         >
-          {saving ? 'Kaydediliyor...' : 'Kaydet'}
+          {saving ? tCommon('saving') : tCommon('save')}
         </button>
         <button
           type="button"
@@ -303,12 +304,12 @@ export default function XeyalEmailPage() {
           onClick={testSmtp}
           className="px-4 py-2 border border-violet-300 dark:border-violet-700 text-violet-700 dark:text-violet-300 hover:bg-violet-50 dark:hover:bg-violet-950/40 disabled:opacity-50 rounded-lg text-sm font-medium"
         >
-          {testing ? 'Test ediliyor...' : 'SMTP test et'}
+          {testing ? t('email.testing') : t('email.testSmtp')}
         </button>
         {message && (
           <p
             className={`text-sm w-full ${
-              message.includes('kaydedildi') || message.includes('gönderildi') || message.includes('başarı')
+              message === t('email.settingsSaved') || message === t('email.testSent')
                 ? 'text-green-600 dark:text-green-400'
                 : 'text-red-500 dark:text-red-400'
             }`}

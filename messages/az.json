@@ -12,7 +12,10 @@
     "blog": "Bloq",
     "about": "Haqqımızda",
     "contact": "Əlaqə",
-    "applyNow": "İndi Müraciət Et"
+    "applyNow": "İndi Müraciət Et",
+    "login": "Giriş",
+    "register": "Qeydiyyat",
+    "onlineAdmission": "Onlayn Qəbul"
   },
   "ScrollTop": {
     "label": "Yuxarı qalx"
@@ -193,5 +196,88 @@
     "sending": "Göndərilir...",
     "success": "Müraciətiniz qəbul edildi. Tezliklə sizinlə əlaqə saxlayacağıq.",
     "error": "Göndərilmədi. Yenidən cəhd edin."
+  },
+  "StudentAuth": {
+    "loginTitle": "Giriş",
+    "registerTitle": "Qeydiyyat",
+    "subtitle": "Qeydiyyatdan sonra onlayn qəbul formasını doldura bilərsiniz.",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "email": "E-poçt",
+    "password": "Şifrə",
+    "loginButton": "Daxil ol",
+    "registerButton": "Qeydiyyat ol",
+    "loading": "Gözləyin...",
+    "noAccount": "Hesabınız yoxdur?",
+    "hasAccount": "Artıq hesabınız var?",
+    "goRegister": "Qeydiyyat",
+    "goLogin": "Giriş",
+    "backHome": "Ana səhifə",
+    "logout": "Çıxış",
+    "errors": {
+      "missing": "Bütün sahələri doldurun.",
+      "emailExists": "Bu e-poçt artıq qeydiyyatdadır.",
+      "invalidCredentials": "E-poçt və ya şifrə səhvdir.",
+      "weakPassword": "Şifrə ən azı 6 simvol olmalıdır.",
+      "server": "Xəta baş verdi. Yenidən cəhd edin."
+    }
+  },
+  "OnlineAdmission": {
+    "title": "Onlayn Qəbul",
+    "intro": "Şəxsiyyət vəsiqənizin arxasındakı qeydiyyat ünvanını və sənədlərinizi daxil edin.",
+    "sectionPersonal": "Şəxsi məlumatlar",
+    "sectionPassport": "Xarici pasport",
+    "sectionUniversity": "Universitet və təhsil",
+    "sectionDocuments": "Sənəd yükləmə",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "birthDate": "Doğum tarixi",
+    "email": "E-poçt",
+    "phone": "Telefon",
+    "registrationAddress": "Qeydiyyat ünvanı",
+    "registrationAddressHint": "AZ şəxsiyyət vəsiqəsinin arxasındakı qeydiyyat ünvanı",
+    "foreignPassportNumber": "Xarici pasport nömrəsi",
+    "foreignPassportIssueDate": "Verilmə tarixi",
+    "foreignPassportExpiryDate": "Son etibarlılıq tarixi",
+    "university": "Universitet",
+    "selectUniversity": "Universitet seçin",
+    "studyType": "Təhsil növü",
+    "studyTypeFull": "Əyani təhsil",
+    "studyTypePart": "Qiyabi təhsil",
+    "studyLanguage": "Təhsil dili",
+    "langEn": "İngilis dili",
+    "langUk": "Ukrayna dili",
+    "langRu": "Rus dili",
+    "tuitionFee": "Təhsil haqqı",
+    "attestat": "Attestat (apostil ilə, PDF)",
+    "attestatHint": "Yalnız PDF, maks. 15 MB",
+    "passportDoc": "Xarici pasport (PDF)",
+    "passportHint": "Yalnız PDF, maks. 15 MB",
+    "photo": "3/4 elektron foto",
+    "photoHint": "JPG, PNG və ya PDF, maks. 8 MB",
+    "submit": "Formanı göndər",
+    "submitting": "Göndərilir...",
+    "successTitle": "Müraciətiniz qəbul edildi",
+    "successDesc": "Sənədləriniz və PDF xülasə admin panelə ötürüldü. Tezliklə sizinlə əlaqə saxlayacağıq.",
+    "errors": {
+      "missing": "Bütün sahələri və sənədləri doldurun.",
+      "alreadySubmitted": "Artıq bir müraciət göndərmisiniz.",
+      "invalidPdf": "Attestat və pasport yalnız PDF olmalıdır.",
+      "invalidPhoto": "Foto JPG, PNG və ya PDF formatında olmalıdır.",
+      "fileTooLarge": "Fayl çox böyükdür.",
+      "unauthorized": "Zəhmət olmasa yenidən daxil olun.",
+      "server": "Göndərilmədi. Yenidən cəhd edin."
+    }
+  },
+  "Portal": {
+    "submittedTitle": "Müraciətiniz qeydə alınıb",
+    "statusLabel": "Status",
+    "submittedAt": "Göndərilmə tarixi"
+  },
+  "ApplicationStatus": {
+    "PENDING": "Gözləmədə",
+    "REVIEWING": "Yoxlanılır",
+    "APPROVED": "Təsdiqləndi",
+    "REJECTED": "Rədd edildi"
   }
 }

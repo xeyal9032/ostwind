@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 type Application = {
   id: number;
@@ -26,6 +27,9 @@ type Data = {
 };
 
 export default function XeyalNotificationsPage() {
+  const t = useTranslations('xeyal');
+  const tNotif = useTranslations('xeyal.notifications');
+  const tCommon = useTranslations('common');
   const [data, setData] = useState<Data | null>(null);
   const [loading, setLoading] = useState(true);
   const [marking, setMarking] = useState<string | null>(null);
@@ -50,24 +54,24 @@ export default function XeyalNotificationsPage() {
         body: JSON.stringify({ type }),
       });
       if (res.ok) await load();
-      else alert('İşlem başarısız.');
+      else alert(tCommon('operationFailed'));
     } finally {
       setMarking(null);
     }
   };
 
-  if (loading) return <p className="text-gray-500">Yükleniyor...</p>;
-  if (!data) return <p className="text-red-500">Veri yüklenemedi.</p>;
+  if (loading) return <p className="text-gray-500">{tCommon('loading')}</p>;
+  if (!data) return <p className="text-red-500">{tCommon('dataLoadError')}</p>;
 
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap gap-3 items-center justify-between">
         <div className="flex flex-wrap gap-3">
           <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 text-sm font-medium">
-            {data.unreadApplications} okunmamış başvuru
+            {tNotif('unreadApps', { count: data.unreadApplications })}
           </span>
           <span className="px-3 py-1 rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300 text-sm font-medium">
-            {data.unreadMessages} okunmamış mesaj
+            {tNotif('unreadMsgs', { count: data.unreadMessages })}
           </span>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -77,7 +81,7 @@ export default function XeyalNotificationsPage() {
             onClick={() => markRead('applications')}
             className="px-3 py-1.5 text-sm bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-lg"
           >
-            Başvuruları okundu işaretle
+            {t('markAppsRead')}
           </button>
           <button
             type="button"
@@ -85,7 +89,7 @@ export default function XeyalNotificationsPage() {
             onClick={() => markRead('messages')}
             className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg"
           >
-            Mesajları okundu işaretle
+            {t('markMsgsRead')}
           </button>
           <button
             type="button"
@@ -93,20 +97,20 @@ export default function XeyalNotificationsPage() {
             onClick={() => markRead('all')}
             className="px-3 py-1.5 text-sm border border-gray-300 dark:border-zinc-700 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800"
           >
-            Tümünü okundu işaretle
+            {tCommon('markAllRead')}
           </button>
         </div>
       </div>
 
       <section>
         <div className="flex justify-between items-center mb-3">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Son başvurular</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{tNotif('recentApps')}</h2>
           <Link href="/admin/xeyal/inbox" className="text-sm text-violet-600 hover:underline">
-            Tümünü gör →
+            {t('viewAll')} →
           </Link>
         </div>
         {data.recentApplications.length === 0 ? (
-          <p className="text-gray-500 text-sm">Okunmamış başvuru yok.</p>
+          <p className="text-gray-500 text-sm">{tNotif('noUnreadApps')}</p>
         ) : (
           <ul className="space-y-2">
             {data.recentApplications.map((a) => (
@@ -127,13 +131,13 @@ export default function XeyalNotificationsPage() {
 
       <section>
         <div className="flex justify-between items-center mb-3">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Son mesajlar</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{tNotif('recentMsgs')}</h2>
           <Link href="/admin/xeyal/inbox" className="text-sm text-violet-600 hover:underline">
-            Tümünü gör →
+            {t('viewAll')} →
           </Link>
         </div>
         {data.recentMessages.length === 0 ? (
-          <p className="text-gray-500 text-sm">Okunmamış mesaj yok.</p>
+          <p className="text-gray-500 text-sm">{tNotif('noUnreadMsgs')}</p>
         ) : (
           <ul className="space-y-2">
             {data.recentMessages.map((m) => (

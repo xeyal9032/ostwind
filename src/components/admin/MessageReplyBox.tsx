@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export type MessageWithReply = {
   id: number;
@@ -22,9 +23,12 @@ type MessageReplyBoxProps = {
 };
 
 export default function MessageReplyBox({ message, onReplied, compact }: MessageReplyBoxProps) {
+  const t = useTranslations('messages');
+  const tCommon = useTranslations('common');
   const [reply, setReply] = useState('');
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
+  const [partialSave, setPartialSave] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +37,7 @@ export default function MessageReplyBox({ message, onReplied, compact }: Message
 
     setSending(true);
     setError('');
+    setPartialSave(false);
     try {
       const res = await fetch(`/api/admin/messages/${message.id}`, {
         method: 'PATCH',
@@ -40,16 +45,17 @@ export default function MessageReplyBox({ message, onReplied, compact }: Message
         body: JSON.stringify({ reply: text }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Yanıt gönderilemedi');
+      if (!res.ok) throw new Error(data.error || t('replySendFailed'));
 
       setReply('');
       onReplied(data as MessageWithReply);
 
       if (data.emailSent === false && data.emailError) {
-        setError(`Yanıt kaydedildi ancak e-posta gönderilemedi: ${data.emailError}`);
+        setPartialSave(true);
+        setError(t('replySavedEmailFailed', { error: data.emailError }));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Hata oluştu');
+      setError(err instanceof Error ? err.message : tCommon('error'));
     } finally {
       setSending(false);
     }
@@ -59,10 +65,10 @@ export default function MessageReplyBox({ message, onReplied, compact }: Message
     return (
       <div className={`${compact ? 'mt-3' : 'mt-4'} pt-4 border-t border-gray-100 dark:border-zinc-800`}>
         <p className="text-xs font-semibold uppercase tracking-wide text-green-600 dark:text-green-400 mb-2">
-          Yanıtınız
+          {t('yourReply')}
           {message.repliedAt && (
             <span className="font-normal text-gray-400 normal-case ml-2">
-              {new Date(message.repliedAt).toLocaleString('tr-TR')}
+              {new Date(message.repliedAt).toLocaleString()}
               {message.repliedByEmail ? ` · ${message.repliedByEmail}` : ''}
             </span>
           )}
@@ -80,18 +86,18 @@ export default function MessageReplyBox({ message, onReplied, compact }: Message
       className={`${compact ? 'mt-3' : 'mt-4'} pt-4 border-t border-gray-100 dark:border-zinc-800 space-y-3`}
     >
       <label htmlFor={`reply-${message.id}`} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-        Yanıt yaz
+        {t('reply')}
       </label>
       <textarea
         id={`reply-${message.id}`}
         rows={compact ? 3 : 4}
         value={reply}
         onChange={(e) => setReply(e.target.value)}
-        placeholder="Kullanıcıya gönderilecek yanıt..."
+        placeholder={t('replyPlaceholder')}
         className="w-full rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 dark:text-white px-3 py-2 text-sm resize-y"
       />
       {error && (
-        <p className={`text-sm ${error.includes('kaydedildi') ? 'text-amber-600' : 'text-red-500'}`}>
+        <p className={`text-sm ${partialSave ? 'text-amber-600' : 'text-red-500'}`}>
           {error}
         </p>
       )}
@@ -100,10 +106,10 @@ export default function MessageReplyBox({ message, onReplied, compact }: Message
         disabled={sending || !reply.trim()}
         className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg text-sm font-medium"
       >
-        {sending ? 'Gönderiliyor...' : 'Yanıtı gönder'}
+        {sending ? t('sending') : t('sendReply')}
       </button>
       <p className="text-xs text-gray-500 dark:text-gray-400">
-        Yanıt {message.email} adresine e-posta ile iletilir (SMTP ayarları açıksa).
+        {t('replyEmailHint', { email: message.email })}
       </p>
     </form>
   );

@@ -12,7 +12,10 @@
     "blog": "ბლოგი",
     "about": "ჩვენს შესახებ",
     "contact": "კონტაქტი",
-    "applyNow": "განაცხადის შეტანა"
+    "applyNow": "განაცხადის შეტანა",
+    "login": "შესვლა",
+    "register": "რეგისტრაცია",
+    "onlineAdmission": "ონლაინ მიღება"
   },
   "ScrollTop": {
     "label": "ზევით ასვლა"
@@ -193,5 +196,88 @@
     "sending": "იგზავნება...",
     "success": "განაცხადი მიღებულია. მალე დაგიკავშირდებით.",
     "error": "გაგზავნა ვერ მოხერხდა. სცადეთ თავიდან."
+  },
+  "StudentAuth": {
+    "loginTitle": "შესვლა",
+    "registerTitle": "რეგისტრაცია",
+    "subtitle": "რეგისტრაციის შემდეგ შეგიძლიათ ონლაინ მიღების ფორმის შევსება.",
+    "firstName": "სახელი",
+    "lastName": "გვარი",
+    "email": "ელფოსტა",
+    "password": "პაროლი",
+    "loginButton": "შესვლა",
+    "registerButton": "რეგისტრაცია",
+    "loading": "მიმდინარეობს...",
+    "noAccount": "ანგარიში არ გაქვთ?",
+    "hasAccount": "უკვე გაქვთ ანგარიში?",
+    "goRegister": "რეგისტრაცია",
+    "goLogin": "შესვლა",
+    "backHome": "მთავარი",
+    "logout": "გასვლა",
+    "errors": {
+      "missing": "შეავსეთ ყველა ველი.",
+      "emailExists": "ეს ელფოსტა უკვე რეგისტრირებულია.",
+      "invalidCredentials": "არასწორი ელფოსტა ან პაროლი.",
+      "weakPassword": "პაროლი მინიმუმ 6 სიმბოლო.",
+      "server": "შეცდომა. სცადეთ თავიდან."
+    }
+  },
+  "OnlineAdmission": {
+    "title": "ონლაინ მიღება",
+    "intro": "შეიყვანეთ რეგისტრაციის მისამართი და ატვირთეთ დოკუმენტები.",
+    "sectionPersonal": "პირადი მონაცემები",
+    "sectionPassport": "საზღვარგარეთის პასპორტი",
+    "sectionUniversity": "უნივერსიტეტი და სწავლა",
+    "sectionDocuments": "დოკუმენტების ატვირთვა",
+    "firstName": "სახელი",
+    "lastName": "გვარი",
+    "birthDate": "დაბადების თარიღი",
+    "email": "ელფოსტა",
+    "phone": "ტელეფონი",
+    "registrationAddress": "რეგისტრაციის მისამართი",
+    "registrationAddressHint": "AZ პირადობის ბარათის უკანა მხარის მისამართი",
+    "foreignPassportNumber": "პასპორტის ნომერი",
+    "foreignPassportIssueDate": "გაცემის თარიღი",
+    "foreignPassportExpiryDate": "ვადის გასვლა",
+    "university": "უნივერსიტეტი",
+    "selectUniversity": "აირჩიეთ უნივერსიტეტი",
+    "studyType": "სწავლის ფორმა",
+    "studyTypeFull": "სრული",
+    "studyTypePart": "განუწყვეტი",
+    "studyLanguage": "სწავლის ენა",
+    "langEn": "ინგლისური",
+    "langUk": "უკრაინული",
+    "langRu": "რუსული",
+    "tuitionFee": "სწავლის ფასი",
+    "attestat": "ატესტატი აპოსტილით (PDF)",
+    "attestatHint": "მხოლოდ PDF, მაქს. 15 MB",
+    "passportDoc": "პასპორტი (PDF)",
+    "passportHint": "მხოლოდ PDF, მაქს. 15 MB",
+    "photo": "ფოტო 3/4",
+    "photoHint": "JPG, PNG ან PDF, მაქს. 8 MB",
+    "submit": "ფორმის გაგზავნა",
+    "submitting": "იგზავნება...",
+    "successTitle": "განაცხადი მიღებულია",
+    "successDesc": "დოკუმენტები და PDF გაგზავნილია ადმინ პანელში.",
+    "errors": {
+      "missing": "შეავსეთ ყველა ველი და ფაილი.",
+      "alreadySubmitted": "თქვენ უკვე გაგზავნეთ განაცხადს.",
+      "invalidPdf": "ატესტატი და პასპორტი — მხოლოდ PDF.",
+      "invalidPhoto": "ფოტო — JPG, PNG ან PDF.",
+      "fileTooLarge": "ფაილი ძალიან დიდია.",
+      "unauthorized": "თავიდან შედით.",
+      "server": "გაგზავნა ვერ მოხერხდა."
+    }
+  },
+  "Portal": {
+    "submittedTitle": "თქვენი განაცხადი დარეგისტრირდა",
+    "statusLabel": "სტატუსი",
+    "submittedAt": "გაგზავნის თარიღი"
+  },
+  "ApplicationStatus": {
+    "PENDING": "მოლოდინში",
+    "REVIEWING": "განხილვაში",
+    "APPROVED": "დამტკიცებული",
+    "REJECTED": "უარყოფილი"
   }
 }

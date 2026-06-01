@@ -212,6 +212,26 @@ OstWind Group`;
   });
 }
 
+export async function notifyNewOnlineAdmission(admissionId: number) {
+  const settings = await getEmailSettings();
+  if (!settings.enabled || !settings.notifyAdminOnApplication) return;
+
+  const to = settings.adminNotifyEmail || settings.fromEmail;
+  if (!to) return;
+
+  const row = await prisma.onlineAdmission.findUnique({
+    where: { id: admissionId },
+    include: { university: true },
+  });
+  if (!row) return;
+
+  await sendAdminEmail({
+    to,
+    subject: `[OstWind] Yeni onlayn qəbul: ${row.firstName} ${row.lastName}`,
+    text: `Yeni onlayn qəbul formu göndərildi.\n\nAd: ${row.firstName} ${row.lastName}\nE-poçt: ${row.email}\nTelefon: ${row.phone}\n\nAdmin paneldə PDF və sənədlərə baxın: /admin/online-admissions/${row.id}`,
+  });
+}
+
 export async function sendApplicantConfirmation(
   application: { studentName: string; email: string },
   locale = 'tr',

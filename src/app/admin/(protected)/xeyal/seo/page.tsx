@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 type SeoItem = {
   id: number;
@@ -42,6 +43,8 @@ function jsonField(value: unknown): string {
 }
 
 export default function XeyalSeoPage() {
+  const tSeo = useTranslations('xeyal.seo');
+  const tCommon = useTranslations('common');
   const [data, setData] = useState<SeoData | null>(null);
   const [edits, setEdits] = useState<Record<string, EditState>>({});
   const [loading, setLoading] = useState(true);
@@ -94,10 +97,10 @@ export default function XeyalSeoPage() {
       });
       if (!res.ok) {
         const d = await res.json();
-        throw new Error(d.error || 'Kaydedilemedi');
+        throw new Error(d.error || tCommon('saveFailed'));
       }
     } catch (e) {
-      alert(e instanceof Error ? e.message : 'Hata');
+      alert(e instanceof Error ? e.message : tCommon('error'));
     } finally {
       setSavingKey(null);
     }
@@ -112,7 +115,7 @@ export default function XeyalSeoPage() {
     <section className="space-y-4">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
       {items.length === 0 ? (
-        <p className="text-gray-500 text-sm">Kayıt yok.</p>
+        <p className="text-gray-500 text-sm">{tSeo('noRecords')}</p>
       ) : (
         items.map((item) => {
           const key = `${type}-${item.id}`;
@@ -130,7 +133,7 @@ export default function XeyalSeoPage() {
               <div className="grid sm:grid-cols-2 gap-3">
                 <div>
                   <label htmlFor={`${key}-title`} className="block text-xs font-medium text-gray-500 mb-1">
-                    Meta başlık
+                    {tSeo('metaTitle')}
                   </label>
                   <input
                     id={`${key}-title`}
@@ -146,7 +149,7 @@ export default function XeyalSeoPage() {
                 </div>
                 <div>
                   <label htmlFor={`${key}-og`} className="block text-xs font-medium text-gray-500 mb-1">
-                    OG görsel URL
+                    {tSeo('ogImage')}
                   </label>
                   <input
                     id={`${key}-og`}
@@ -163,7 +166,7 @@ export default function XeyalSeoPage() {
               </div>
               <div>
                 <label htmlFor={`${key}-desc`} className="block text-xs font-medium text-gray-500 mb-1">
-                  Meta açıklama
+                  {tSeo('metaDescription')}
                 </label>
                 <textarea
                   id={`${key}-desc`}
@@ -184,7 +187,7 @@ export default function XeyalSeoPage() {
                 onClick={() => save(type, item.id)}
                 className="px-3 py-1.5 text-sm bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-lg"
               >
-                {savingKey === key ? 'Kaydediliyor...' : 'Kaydet'}
+                {savingKey === key ? tCommon('saving') : tCommon('save')}
               </button>
             </div>
           );
@@ -193,14 +196,14 @@ export default function XeyalSeoPage() {
     </section>
   );
 
-  if (loading) return <p className="text-gray-500">Yükleniyor...</p>;
-  if (!data) return <p className="text-red-500">Veri yüklenemedi.</p>;
+  if (loading) return <p className="text-gray-500">{tCommon('loading')}</p>;
+  if (!data) return <p className="text-red-500">{tCommon('dataLoadError')}</p>;
 
   return (
     <div className="space-y-10">
-      {renderSection('Blog yazıları', 'post', data.posts, 'title')}
-      {renderSection('Hizmetler', 'service', data.services, 'title')}
-      {renderSection('Üniversiteler', 'university', data.universities, 'name')}
+      {renderSection(tSeo('posts'), 'post', data.posts, 'title')}
+      {renderSection(tSeo('services'), 'service', data.services, 'title')}
+      {renderSection(tSeo('universities'), 'university', data.universities, 'name')}
     </div>
   );
 }

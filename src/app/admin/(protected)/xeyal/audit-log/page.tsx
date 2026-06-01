@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 type AuditLog = {
   id: number;
@@ -14,6 +15,8 @@ type AuditLog = {
 };
 
 export default function XeyalAuditLogPage() {
+  const t = useTranslations('xeyal');
+  const tCommon = useTranslations('common');
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [entity, setEntity] = useState('');
@@ -42,7 +45,7 @@ export default function XeyalAuditLogPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Audit Log</h2>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{t('auditTitle')}</h2>
 
       <form
         className="flex flex-wrap gap-3 items-end bg-white dark:bg-zinc-900 p-4 rounded-xl border border-gray-200 dark:border-zinc-800"
@@ -53,7 +56,7 @@ export default function XeyalAuditLogPage() {
       >
         <div>
           <label htmlFor="audit-entity" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Varlık
+            {tCommon('colEntity')}
           </label>
           <input
             id="audit-entity"
@@ -61,12 +64,12 @@ export default function XeyalAuditLogPage() {
             value={entity}
             onChange={(e) => setEntity(e.target.value)}
             className="rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm w-40"
-            placeholder="ör. user"
+            placeholder={tCommon('entityPlaceholder')}
           />
         </div>
         <div>
           <label htmlFor="audit-action" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            İşlem
+            {tCommon('colAction')}
           </label>
           <input
             id="audit-action"
@@ -74,12 +77,12 @@ export default function XeyalAuditLogPage() {
             value={action}
             onChange={(e) => setAction(e.target.value)}
             className="rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm w-40"
-            placeholder="ör. UPDATE"
+            placeholder={tCommon('actionPlaceholder')}
           />
         </div>
         <div className="flex-1 min-w-[200px]">
           <label htmlFor="audit-q" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Ara
+            {tCommon('search')}
           </label>
           <input
             id="audit-q"
@@ -87,31 +90,31 @@ export default function XeyalAuditLogPage() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="w-full rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm"
-            placeholder="E-posta, özet, ID..."
+            placeholder={tCommon('auditSearchPlaceholder')}
           />
         </div>
         <button
           type="submit"
           className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium"
         >
-          Filtrele
+          {tCommon('filter')}
         </button>
       </form>
 
       {loading ? (
-        <p className="text-gray-500">Yükleniyor...</p>
+        <p className="text-gray-500">{tCommon('loading')}</p>
       ) : logs.length === 0 ? (
-        <p className="text-gray-500">Kayıt bulunamadı.</p>
+        <p className="text-gray-500">{tCommon('empty')}</p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-zinc-800">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 dark:bg-zinc-900">
               <tr>
-                <th className="px-4 py-3 text-left">Tarih</th>
-                <th className="px-4 py-3 text-left">Kullanıcı</th>
-                <th className="px-4 py-3 text-left">İşlem</th>
-                <th className="px-4 py-3 text-left">Varlık</th>
-                <th className="px-4 py-3 text-left">Özet</th>
+                <th className="px-4 py-3 text-left">{tCommon('dateCol')}</th>
+                <th className="px-4 py-3 text-left">{tCommon('colUser')}</th>
+                <th className="px-4 py-3 text-left">{tCommon('colAction')}</th>
+                <th className="px-4 py-3 text-left">{tCommon('colEntity')}</th>
+                <th className="px-4 py-3 text-left">{tCommon('colSummary')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">

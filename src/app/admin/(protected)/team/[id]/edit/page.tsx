@@ -3,20 +3,17 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { getContentLocaleTabs } from '@/lib/admin-content-locales';
 import ImageUploadField from '@/components/admin/ImageUploadField';
 import TeamSocialLinksFields from '@/components/admin/TeamSocialLinksFields';
 import { EMPTY_SOCIAL_LINKS, normalizeSocialLinks, parseSocialLinks } from '@/lib/team-social';
 
-const LOCALES = [
-  { code: 'tr', name: 'Türkçe' },
-  { code: 'en', name: 'English' },
-  { code: 'az', name: 'Azərbaycanca' },
-  { code: 'ru', name: 'Русский' },
-  { code: 'uk', name: 'Українська' },
-  { code: 'ge', name: 'ქართული' },
-];
-
 export default function EditTeamMemberPage() {
+  const t = useTranslations('team');
+  const tCommon = useTranslations('common');
+  const tLocales = useTranslations('contentLocales');
+  const LOCALES = getContentLocaleTabs(tLocales);
   const router = useRouter();
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('az');
@@ -37,7 +34,7 @@ export default function EditTeamMemberPage() {
         const res = await fetch(`/api/admin/team/${id}`);
         if (res.ok) {
           const data = await res.json();
-          
+
           const mergeJson = (field: unknown) => {
             const base = { tr: '', en: '', az: '', ru: '', uk: '', ge: '' };
             if (!field) return base;
@@ -51,24 +48,24 @@ export default function EditTeamMemberPage() {
             socialLinks: parseSocialLinks(data.socialLinks),
           });
         } else {
-          setError('Ekip üyesi bulunamadı');
+          setError(t('notFound'));
         }
       } catch {
-        setError('Bağlantı hatası');
+        setError(tCommon('connectionError'));
       } finally {
         setPageLoading(false);
       }
     };
     if (id) fetchMember();
-  }, [id]);
+  }, [id, t, tCommon]);
 
   const handleLangChange = (lang: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       role: {
         ...prev.role,
-        [lang]: value
-      }
+        [lang]: value,
+      },
     }));
   };
 
@@ -77,13 +74,14 @@ export default function EditTeamMemberPage() {
     setLoading(true);
     setError('');
 
-    // Fallback logic for role
     const roleData = { ...formData.role };
-    const firstNonEmptyLang = Object.keys(roleData).find(lang => roleData[lang as keyof typeof roleData] && roleData[lang as keyof typeof roleData].trim() !== '');
-    
+    const firstNonEmptyLang = Object.keys(roleData).find(
+      (lang) => roleData[lang as keyof typeof roleData] && roleData[lang as keyof typeof roleData].trim() !== '',
+    );
+
     if (firstNonEmptyLang) {
       const fallbackValue = roleData[firstNonEmptyLang as keyof typeof roleData];
-      Object.keys(roleData).forEach(lang => {
+      Object.keys(roleData).forEach((lang) => {
         if (!roleData[lang as keyof typeof roleData] || roleData[lang as keyof typeof roleData].trim() === '') {
           roleData[lang as keyof typeof roleData] = fallbackValue;
         }
@@ -98,7 +96,7 @@ export default function EditTeamMemberPage() {
           ...formData,
           role: roleData,
           socialLinks: normalizeSocialLinks(formData.socialLinks),
-        })
+        }),
       });
 
       if (res.ok) {
@@ -106,28 +104,28 @@ export default function EditTeamMemberPage() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error || 'Bir hata oluştu');
+        setError(data.error || tCommon('error'));
       }
     } catch {
-      setError('Bağlantı hatası');
+      setError(tCommon('connectionError'));
     } finally {
       setLoading(false);
     }
   };
 
   if (pageLoading) {
-    return <div className="text-center py-12 text-gray-500 dark:text-gray-400">Yükleniyor...</div>;
+    return <div className="text-center py-12 text-gray-500 dark:text-gray-400">{tCommon('loading')}</div>;
   }
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Ekip Üyesini Düzenle</h1>
-        <Link 
-          href="/admin/team" 
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('edit')}</h1>
+        <Link
+          href="/admin/team"
           className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          &larr; Geri Dön
+          {tCommon('backToList')}
         </Link>
       </div>
 
@@ -137,12 +135,14 @@ export default function EditTeamMemberPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-gray-200 dark:border-zinc-800 p-6">
-        {/* Global Settings */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-gray-200 dark:border-zinc-800 p-6"
+      >
         <div className="mb-8 pb-8 border-b border-gray-200 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Ad Soyad <span className="text-red-500">*</span>
+              {t('fullNameRequired')} <span className="text-red-500">*</span>
             </label>
             <input
               id="name"
@@ -150,7 +150,7 @@ export default function EditTeamMemberPage() {
               required
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={formData.name}
-              onChange={e => setFormData({...formData, name: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
           </div>
           <ImageUploadField
@@ -159,12 +159,13 @@ export default function EditTeamMemberPage() {
           />
         </div>
 
-        {/* Translation Tabs */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">Çoklu Dil Rol Tanımı</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-0">
+              {t('multiLocaleRole')}
+            </h2>
             <div className="flex border-b border-gray-200 dark:border-zinc-800 space-x-1 overflow-x-auto">
-              {LOCALES.map(lang => (
+              {LOCALES.map((lang) => (
                 <button
                   key={lang.code}
                   type="button"
@@ -182,19 +183,18 @@ export default function EditTeamMemberPage() {
           </div>
         </div>
 
-        {/* Active Language Fields */}
         <div className="space-y-6">
           <div>
             <label htmlFor="roleInput" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Rol / Ünvan ({activeTab.toUpperCase()})
+              {t('roleField')} ({activeTab.toUpperCase()})
             </label>
             <input
               id="roleInput"
               type="text"
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent dark:text-white focus:ring-2 focus:ring-blue-500"
               value={formData.role[activeTab as keyof typeof formData.role]}
-              onChange={e => handleLangChange(activeTab, e.target.value)}
-              placeholder="Örn: CEO, Eğitim Danışmanı vb."
+              onChange={(e) => handleLangChange(activeTab, e.target.value)}
+              placeholder={t('rolePlaceholder')}
             />
           </div>
         </div>
@@ -210,7 +210,7 @@ export default function EditTeamMemberPage() {
             disabled={loading}
             className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {loading ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+            {loading ? tCommon('saving') : tCommon('saveChanges')}
           </button>
         </div>
       </form>
