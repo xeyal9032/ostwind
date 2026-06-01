@@ -62,6 +62,25 @@ GitHub → **Releases** bölməsində bütün versiyalar görünür.
 
 ---
 
+## Admin: Yeniləmələr (production deploy)
+
+**Xeyal → Yeniləmələr** (`/admin/xeyal/updates`)
+
+Serverdə (cPanel) `.env` / Environment Variables:
+
+```
+DEPLOY_ENABLED=true
+GITHUB_REPO=xeyal9032/ostwind
+DEPLOY_BRANCH=main
+```
+
+Tələb: Application root **git clone** olmalıdır (`git pull` işləməlidir).
+
+Düymə: **GitHub-dan yenilə və build et** → `git pull` + `npm ci` + `prisma generate` + `npm run build`  
+Sonra cPanel-də **Node.js app → Restart**.
+
+---
+
 ## `.env` və şəxsi fayllar
 
 `.env` və `public/uploads/` repoya **daxil olmur** (`.gitignore`). Yalnız kod və konfiq nümunələri (`/.env.example`) push olunur.

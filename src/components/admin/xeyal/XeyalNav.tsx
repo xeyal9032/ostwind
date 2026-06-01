@@ -17,6 +17,7 @@ export default function XeyalNav() {
     { href: '/admin/xeyal/security', label: t('securityTitle') },
     { href: '/admin/xeyal/admins', label: t('admins') },
     { href: '/admin/xeyal/homepage', label: t('homepageTitle') },
+    { href: '/admin/xeyal/updates', label: t('updatesTitle') },
     { href: '/admin/xeyal/media', label: t('mediaTitle') },
     { href: '/admin/xeyal/seo', label: t('seoTitle') },
     { href: '/admin/xeyal/trash', label: t('trash') },
