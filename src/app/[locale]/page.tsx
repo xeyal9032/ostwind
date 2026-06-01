@@ -42,10 +42,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="relative isolate overflow-hidden min-h-[85vh] bg-zinc-950">
+      <section className="relative isolate overflow-hidden min-h-[100svh] min-h-[100dvh] sm:min-h-[85vh] bg-zinc-950">
         <HeroBackgroundSlider slides={site.heroSlides} />
 
-        <div className="relative z-10 flex min-h-[85vh] items-center justify-center px-4 py-28 sm:px-6 lg:px-8 lg:py-40">
+        <div className="relative z-10 flex min-h-[100svh] min-h-[100dvh] sm:min-h-[85vh] items-center justify-center px-4 py-24 sm:py-28 sm:px-6 lg:px-8 lg:py-40">
           <div className="w-full max-w-7xl mx-auto text-center">
             <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight drop-shadow-sm">
               {ht('heroTitle1')} <br className="hidden md:block" />

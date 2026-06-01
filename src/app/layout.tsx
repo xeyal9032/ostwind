@@ -6,6 +6,13 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "OstWind Group - Eğitim Danışmanlığı",
   description: "Yurtdışı eğitim danışmanlığı, üniversite başvuruları ve daha fazlası.",
+  icons: {
+    icon: [
+      { url: "/images/ostwind-logo-round.png", type: "image/png" },
+    ],
+    apple: "/images/ostwind-logo-round.png",
+    shortcut: "/images/ostwind-logo-round.png",
+  },
 };
 
 export default async function RootLayout({

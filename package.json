@@ -11,7 +11,12 @@
     "predeploy": "prisma generate && npm run build",
     "deploy:check": "node scripts/pre-deploy-check.mjs && node scripts/db-stats.mjs",
     "seed:site-content": "node scripts/seed-site-content-6locales.mjs",
-    "seed:site-content:dry": "node scripts/seed-site-content-6locales.mjs --dry-run"
+    "seed:site-content:dry": "node scripts/seed-site-content-6locales.mjs --dry-run",
+    "git:hooks:install": "node scripts/setup-git-hooks.mjs",
+    "git:auto-push:on": "node scripts/git-auto-push-toggle.mjs on",
+    "git:auto-push:off": "node scripts/git-auto-push-toggle.mjs off",
+    "git:auto-push:status": "node scripts/git-auto-push-toggle.mjs",
+    "git:sync": "node scripts/git-sync.mjs"
   },
   "dependencies": {
     "@fontsource/manrope": "^5.2.8",

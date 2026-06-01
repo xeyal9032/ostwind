@@ -46,3 +46,7 @@ next-env.d.ts
 
 # Yerli test faylları
 test-latin*.pdf
+
+# Lokal avtomatik push seçimi (hər developer özündə)
+.git-auto-push
+.git-commit-msg.tmp

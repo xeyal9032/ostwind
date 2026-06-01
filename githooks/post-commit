@@ -1,0 +1,22 @@
+#!/bin/sh
+# Hər commit-dən sonra GitHub-a push (yalnız .git-auto-push faylı varsa)
+# Aktiv: npm run git:auto-push:on
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT" || exit 0
+
+if [ ! -f "$ROOT/.git-auto-push" ]; then
+  exit 0
+fi
+
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+
+echo ""
+echo "→ [ostwind] GitHub-a avtomatik push: $BRANCH"
+
+if git push origin "$BRANCH"; then
+  echo "✓ Push tamamlandı."
+else
+  echo "✗ Push uğursuz — internet, token və ya conflict yoxlayın."
+  exit 0
+fi

@@ -225,6 +225,20 @@ node scripts/ensure-admin-users.mjs
 
 ---
 
+## Git & GitHub (versiya tarixçəsi)
+
+Bütün commit-lər GitHub-da qalır. Avtomatik push və etiketlər:
+
+**[docs/GIT-VERSIONLAMA.md](./docs/GIT-VERSIONLAMA.md)**
+
+```bash
+npm run git:hooks:install    # bir dəfə
+npm run git:auto-push:on     # hər commit-dən sonra push
+npm run git:sync -- "mesaj"  # add + commit + push
+```
+
+---
+
 ## Deploy
 
 cPanel Node.js App üçün hazırlanıb. Ətraflı:
