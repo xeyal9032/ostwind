@@ -12,10 +12,10 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const subtitle = getContactSubtitle(contact, locale, t('subtitle'));
 
   return (
-    <div className="py-24 min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-zinc-950 dark:to-zinc-900">
+    <div className="section-pad min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-zinc-950 dark:to-zinc-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{t('title')}</h1>
+        <div className="text-center mb-10 sm:mb-12">
+          <h1 className="page-title font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">{t('title')}</h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{subtitle}</p>
         </div>
 

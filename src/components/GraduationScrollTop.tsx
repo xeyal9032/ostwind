@@ -25,7 +25,7 @@ export default function GraduationScrollTop() {
       onClick={scrollToTop}
       aria-label={t('label')}
       title={t('label')}
-      className={`group fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full border border-accent/40 bg-primary/95 text-white shadow-lg shadow-black/25 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-110 hover:border-accent hover:shadow-xl hover:shadow-accent/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:bg-zinc-900/95 dark:shadow-black/50 sm:bottom-8 sm:right-8 sm:h-16 sm:w-16 ${
+      className={`group fixed z-40 flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-full border border-accent/40 bg-primary/95 text-white shadow-lg shadow-black/25 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-110 hover:border-accent hover:shadow-xl hover:shadow-accent/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:bg-zinc-900/95 dark:shadow-black/50 bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] sm:bottom-8 sm:right-8 ${
         visible
           ? 'pointer-events-auto translate-y-0 opacity-100'
           : 'pointer-events-none translate-y-6 opacity-0'

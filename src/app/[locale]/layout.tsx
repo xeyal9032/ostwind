@@ -26,7 +26,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages}>
       <SiteContentProvider content={siteContent}>
         <Header />
-        <main className="flex-grow pt-16">
+        <main className="flex-grow pt-[calc(3.5rem+env(safe-area-inset-top,0px))] sm:pt-[calc(4rem+env(safe-area-inset-top,0px))]">
           {children}
         </main>
         <Footer contact={contact} />

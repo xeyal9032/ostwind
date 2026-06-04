@@ -8,10 +8,11 @@ type Props = {
   alt: string;
   fallbackSrc?: string | null;
   className?: string;
+  priority?: boolean;
 };
 
 /** Kampus şəkli — səhv URL-də fallback və ya placeholder */
-export default function HubCampusPhoto({ src, alt, fallbackSrc, className }: Props) {
+export default function HubCampusPhoto({ src, alt, fallbackSrc, className, priority }: Props) {
   const [current, setCurrent] = useState(src);
   const [failed, setFailed] = useState(false);
 
@@ -33,6 +34,8 @@ export default function HubCampusPhoto({ src, alt, fallbackSrc, className }: Pro
       src={current}
       alt={alt}
       fill
+      priority={priority}
+      loading={priority ? 'eager' : 'lazy'}
       sizes="(max-width: 640px) 100vw, 320px"
       className={className ?? 'object-cover'}
       onError={() => {

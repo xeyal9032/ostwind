@@ -5,7 +5,7 @@ import { prisma } from '@/prisma';
 export async function GET() {
   const session = await getStudentSession();
   if (!session) {
-    return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
+    return NextResponse.json({ student: null, admission: null });
   }
 
   const admission = await prisma.onlineAdmission.findFirst({

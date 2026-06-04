@@ -84,11 +84,11 @@ export default function UniversityListGrid({
                   {description}
                 </p>
 
-                <div className="pt-4 border-t border-gray-100 dark:border-zinc-800 flex justify-between items-center">
-                  <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                <div className="pt-4 border-t border-gray-100 dark:border-zinc-800 flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white break-words">
                     {uni.tuitionFee || labels.noFeeInfo}
                   </span>
-                  <span className="text-blue-600 font-medium text-sm group-hover:underline">
+                  <span className="text-blue-600 font-medium text-sm group-hover:underline shrink-0">
                     {labels.viewDetails} &rarr;
                   </span>
                 </div>

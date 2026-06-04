@@ -27,9 +27,9 @@ export default function Footer({ contact }: { contact: ContactContentPublic }) {
   const allRightsReserved = useSiteText('footer', 'allRightsReserved', locale, t('allRightsReserved'));
 
   return (
-    <footer className="bg-zinc-900 text-white py-12">
+    <footer className="bg-zinc-900 text-white py-10 sm:py-12 pb-[max(2.5rem,env(safe-area-inset-bottom))]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10">
           <div className="space-y-4 sm:col-span-2 lg:col-span-1">
             <AnimatedBrandLogo variant="footer" />
             <p className="text-gray-400 text-sm text-center">{description}</p>

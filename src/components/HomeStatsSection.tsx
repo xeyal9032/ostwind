@@ -88,21 +88,21 @@ function AnimatedStat({
   return (
     <div ref={ref}>
       <div
-        className="text-4xl md:text-5xl font-bold mb-2 tabular-nums tracking-tight"
+        className="text-2xl sm:text-4xl md:text-5xl font-bold mb-1 sm:mb-2 tabular-nums tracking-tight"
         aria-label={`${formatValue(end, thousands)}${suffix}`}
       >
         {text}
       </div>
-      <div className="text-blue-100 font-medium">{label}</div>
+      <div className="text-blue-100 font-medium text-xs sm:text-base leading-snug px-1">{label}</div>
     </div>
   );
 }
 
 export default function HomeStatsSection({ items }: HomeStatsSectionProps) {
   return (
-    <section className="py-16 bg-blue-600 dark:bg-blue-900 text-white">
+    <section className="py-12 sm:py-16 bg-blue-600 dark:bg-blue-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
           {items.map((item, index) => (
             <AnimatedStat key={item.label} {...item} delayMs={index * 120} />
           ))}

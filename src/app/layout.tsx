@@ -24,8 +24,8 @@ export default async function RootLayout({
   const locale = cookieStore.get('NEXT_LOCALE')?.value || 'az';
 
   return (
-    <html lang={locale} className={`${fontClassNames} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans">
+    <html lang={locale} className={`${fontClassNames} h-full antialiased overflow-x-hidden`}>
+      <body className="min-h-full flex flex-col font-sans overflow-x-hidden max-w-[100vw]">
         {children}
       </body>
     </html>

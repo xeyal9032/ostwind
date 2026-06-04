@@ -45,27 +45,27 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <section className="relative isolate overflow-hidden min-h-[100svh] min-h-[100dvh] sm:min-h-[85vh] bg-zinc-950">
         <HeroBackgroundSlider slides={site.heroSlides} />
 
-        <div className="relative z-10 flex min-h-[100svh] min-h-[100dvh] sm:min-h-[85vh] items-center justify-center px-4 py-24 sm:py-28 sm:px-6 lg:px-8 lg:py-40">
+        <div className="relative z-10 flex min-h-[100svh] min-h-[100dvh] sm:min-h-[85vh] items-center justify-center px-4 py-20 sm:py-28 sm:px-6 lg:px-8 lg:py-40">
           <div className="w-full max-w-7xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight drop-shadow-sm">
-              {ht('heroTitle1')} <br className="hidden md:block" />
+            <h1 className="text-[clamp(1.75rem,7vw,4.5rem)] font-extrabold text-white tracking-tight mb-6 sm:mb-8 leading-[1.15] drop-shadow-sm px-1">
+              {ht('heroTitle1')} <br className="hidden sm:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-indigo-300">
                 {ht('heroTitleHighlight')}
               </span>
             </h1>
-            <p className="mt-6 text-xl md:text-2xl text-gray-100 max-w-3xl mx-auto font-light leading-relaxed mb-10 drop-shadow-sm">
+            <p className="mt-4 sm:mt-6 text-base sm:text-xl md:text-2xl text-gray-100 max-w-3xl mx-auto font-light leading-relaxed mb-8 sm:mb-10 drop-shadow-sm px-1">
               {ht('heroDescription')}
             </p>
-            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+            <div className="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 sm:gap-6 w-full max-w-md sm:max-w-none mx-auto">
               <Link
                 href="/apply"
-                className="w-full sm:w-auto px-8 py-4 text-lg font-bold rounded-full text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+                className="w-full sm:w-auto min-h-[48px] flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-bold rounded-full text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all sm:hover:-translate-y-1"
               >
                 {ht('heroApplyNow')}
               </Link>
               <Link
                 href="/universities"
-                className="w-full sm:w-auto px-8 py-4 text-lg font-semibold rounded-full text-white bg-white/10 border border-white/30 hover:bg-white/20 backdrop-blur-sm transition-all"
+                className="w-full sm:w-auto min-h-[48px] flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold rounded-full text-white bg-white/10 border border-white/30 hover:bg-white/20 backdrop-blur-sm transition-all"
               >
                 {ht('heroExplore')}
               </Link>
@@ -76,7 +76,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
       <HomeStatsSection items={statItems} />
 
-      <section className="py-24 bg-white dark:bg-zinc-950">
+      <section className="section-pad bg-white dark:bg-zinc-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{featuresTitle}</h2>
@@ -114,15 +114,15 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
       <section className="py-24 bg-gray-50 dark:bg-zinc-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-12">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-10 sm:mb-12">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-4">
                 {resolveLocaleText(site.featured.title, locale, t('featured.title'))}
               </h2>
             </div>
             <Link
               href="/universities"
-              className="hidden sm:inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
+              className="inline-flex min-h-[44px] items-center text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base"
             >
               {resolveLocaleText(site.featured.viewAll, locale, t('featured.viewAll'))} &rarr;
             </Link>

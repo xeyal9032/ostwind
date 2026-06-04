@@ -52,7 +52,11 @@ const ALL_MENU: MenuItem[] = [
   { key: 'account', href: '/admin/account', icon: '🔑' },
 ];
 
-export default function Sidebar() {
+type SidebarProps = {
+  onNavigate?: () => void;
+};
+
+export default function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const tMenu = useTranslations('menu');
@@ -80,7 +84,7 @@ export default function Sidebar() {
     : [];
 
   return (
-    <div className="w-64 bg-zinc-900 text-white min-h-screen flex flex-col">
+    <div className="w-full h-full min-h-screen lg:w-64 bg-zinc-900 text-white flex flex-col shadow-xl lg:shadow-none">
       <div className="p-6 flex justify-center">
         <AdminBrandLogo size={64} />
       </div>
@@ -92,7 +96,8 @@ export default function Sidebar() {
             <Link
               key={item.key}
               href={item.href}
-              className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+              onClick={onNavigate}
+              className={`flex items-center min-h-[44px] px-4 py-3 rounded-lg transition-colors ${
                 isActive
                   ? 'bg-blue-600 text-white'
                   : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'

@@ -2,9 +2,10 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AnimatedBrandLogo from '@/components/AnimatedBrandLogo';
 import StudentAuthLinks from '@/components/StudentAuthLinks';
+import CompactLanguageSwitcher from '@/components/CompactLanguageSwitcher';
 import { useSiteText } from '@/components/SiteContentProvider';
 
 const NAV_KEYS = [
@@ -20,6 +21,7 @@ const NAV_KEYS = [
 
 export default function Header() {
   const t = useTranslations('Header');
+  const tFooter = useTranslations('Footer');
   const locale = useLocale();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -35,21 +37,38 @@ export default function Header() {
   };
 
   const applyNowLabel = useSiteText('header', 'applyNow', locale, t('applyNow'));
+  const languageLabel = tFooter('language');
 
   const navItems = NAV_KEYS.map((item) => ({
     name: navLabels[item.key],
     href: item.href,
   }));
 
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isMenuOpen]);
+
+  const closeMenu = () => setIsMenuOpen(false);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-black/70 backdrop-blur-md shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-black/85 backdrop-blur-md shadow-sm pt-[env(safe-area-inset-top,0px)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-[auto_1fr_auto] items-center h-16 w-full gap-x-2 lg:gap-x-4">
-          <div className="flex shrink-0 items-center -ml-2 sm:-ml-3 lg:-ml-4 py-1 pr-1">
+        <div className="grid grid-cols-[auto_1fr_auto] items-center h-14 sm:h-16 w-full gap-x-2 lg:gap-x-4">
+          <div className="flex shrink-0 items-center -ml-1 sm:-ml-3 lg:-ml-4 py-1 pr-1">
             <AnimatedBrandLogo variant="header" priority />
           </div>
 
-          <nav className="hidden md:flex justify-center items-center gap-x-3 lg:gap-x-5 min-w-0 px-1">
+          <nav className="hidden lg:flex justify-center items-center gap-x-2 xl:gap-x-4 min-w-0 px-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -61,63 +80,101 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center justify-end gap-2 shrink-0">
+          <div className="hidden lg:flex items-center justify-end gap-2 shrink-0">
             <Link
               href="/apply"
-              className="inline-flex items-center justify-center px-3.5 py-1.5 border border-transparent text-xs sm:text-sm font-semibold rounded-full text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors whitespace-nowrap"
+              className="inline-flex min-h-[44px] items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-full text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors whitespace-nowrap"
             >
               {applyNowLabel}
             </Link>
             <StudentAuthLinks />
           </div>
 
-          <div className="flex md:hidden col-start-3 justify-self-end">
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800"
-            >
-              <span className="sr-only">Menüyü aç</span>
-              {isMenuOpen ? (
-                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="flex lg:hidden col-start-3 justify-self-end">
+            {isMenuOpen ? (
+              <button
+                type="button"
+                onClick={() => setIsMenuOpen(false)}
+                aria-expanded="true"
+                aria-controls="mobile-nav"
+                className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800"
+              >
+                <span className="sr-only">Menünü bağla</span>
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
-              ) : (
-                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsMenuOpen(true)}
+                aria-expanded="false"
+                aria-controls="mobile-nav"
+                className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800"
+              >
+                <span className="sr-only">Menünü aç</span>
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
-              )}
-            </button>
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {isMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-zinc-900 shadow-lg">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+      {/* Mobil tam ekran menü */}
+      <div
+        id="mobile-nav"
+        className={`lg:hidden fixed inset-x-0 bottom-0 top-[calc(3.5rem+env(safe-area-inset-top,0px))] sm:top-[calc(4rem+env(safe-area-inset-top,0px))] z-40 transition-opacity duration-200 ${
+          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        {...(!isMenuOpen ? { 'aria-hidden': 'true' as const } : {})}
+      >
+        <div
+          className="absolute inset-0 bg-black/40"
+          onClick={closeMenu}
+          aria-hidden
+        />
+        <nav
+          className={`relative h-full overflow-y-auto overscroll-contain bg-white dark:bg-zinc-900 shadow-2xl transition-transform duration-300 ease-out ${
+            isMenuOpen ? 'translate-y-0' : 'translate-y-4'
+          }`}
+        >
+          <div className="px-4 py-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] space-y-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-zinc-800"
-                onClick={() => setIsMenuOpen(false)}
+                className="flex min-h-[48px] items-center rounded-xl px-4 text-base font-medium text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-zinc-800 active:bg-gray-100"
+                onClick={closeMenu}
               >
                 {item.name}
               </Link>
             ))}
-            <Link
-              href="/apply"
-              className="block px-3 py-2 rounded-md text-base font-medium text-primary"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {applyNowLabel}
-            </Link>
-            <div className="px-3 py-2">
+
+            <div className="pt-3 pb-2 border-t border-gray-100 dark:border-zinc-800 mt-2">
+              <Link
+                href="/apply"
+                className="flex min-h-[48px] w-full items-center justify-center rounded-xl text-base font-semibold text-white bg-primary hover:bg-primary/90 shadow-sm"
+                onClick={closeMenu}
+              >
+                {applyNowLabel}
+              </Link>
+            </div>
+
+            <div className="px-1 py-3 flex justify-center">
               <StudentAuthLinks />
             </div>
+
+            <div className="pt-4 border-t border-gray-100 dark:border-zinc-800">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3 px-1">
+                {languageLabel}
+              </p>
+              <CompactLanguageSwitcher />
+            </div>
           </div>
-        </div>
-      )}
+        </nav>
+      </div>
     </header>
   );
 }

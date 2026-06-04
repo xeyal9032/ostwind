@@ -14,15 +14,15 @@ export default async function UniversitiesPage({
   const hubs = await getActiveUniversityHubs();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-      <div className="text-center mb-12 md:mb-16">
-        <p className="text-sm font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-3">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 md:py-16">
+      <div className="text-center mb-10 sm:mb-12 md:mb-16">
+        <p className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-2 sm:mb-3">
           {tHub('eyebrow')}
         </p>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        <h1 className="page-title font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
           {tHeader('universities')}
         </h1>
-        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-1">
           {tHub('subtitle')}
         </p>
       </div>

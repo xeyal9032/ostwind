@@ -44,7 +44,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <BackgroundImageSlider slides={ABOUT_HERO_SLIDES} />
         <div className="relative z-10 flex min-h-[55vh] items-center justify-center px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
           <div className="w-full max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl font-extrabold text-white sm:text-5xl mb-4 drop-shadow-sm">
+          <h1 className="page-title font-extrabold text-white mb-4 drop-shadow-sm px-2">
             {t('title')}
           </h1>
           <p className="text-lg text-gray-100 max-w-3xl mx-auto drop-shadow-sm">{t('description')}</p>
@@ -54,7 +54,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-gradient-to-b from-zinc-950 to-gray-50 dark:to-zinc-900">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24">
-          <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl">
+          <div className="relative aspect-[4/3] sm:aspect-auto sm:h-[400px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
             <Image
               src={storyImage}
               alt={storyTitle}
