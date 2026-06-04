@@ -279,5 +279,14 @@
     "REVIEWING": "Under review",
     "APPROVED": "Approved",
     "REJECTED": "Rejected"
+  },
+  "UniversitiesHub": {
+    "eyebrow": "Study destinations",
+    "subtitle": "Choose partner universities by country or region.",
+    "explore": "Explore",
+    "backToRegions": "All regions",
+    "universityCount": "{count} universities",
+    "emptyList": "No universities in this section yet.",
+    "noHubs": "New destinations coming soon."
   }
 }

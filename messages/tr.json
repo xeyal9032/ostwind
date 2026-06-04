@@ -279,5 +279,14 @@
     "REVIEWING": "İnceleniyor",
     "APPROVED": "Onaylandı",
     "REJECTED": "Reddedildi"
+  },
+  "UniversitiesHub": {
+    "eyebrow": "Eğitim yönleri",
+    "subtitle": "Ülke ve bölgeye göre partner üniversitelerimizi seçin.",
+    "explore": "Keşfet",
+    "backToRegions": "Tüm yönler",
+    "universityCount": "{count} üniversite",
+    "emptyList": "Bu bölümde henüz üniversite yok.",
+    "noHubs": "Yakında yeni yönler eklenecek."
   }
 }

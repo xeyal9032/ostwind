@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { getContentLocaleTabs } from '@/lib/admin-content-locales';
 import { useAdminContentLocale } from '@/lib/use-admin-locale-field';
+import UniversityHubSelect from '@/components/admin/UniversityHubSelect';
 
 export default function EditUniversityPage() {
   const t = useTranslations('universities');
@@ -22,6 +23,8 @@ export default function EditUniversityPage() {
   const [error, setError] = useState('');
   const [uploading, setUploading] = useState(false);
   const [translating, setTranslating] = useState(false);
+
+  const [hubId, setHubId] = useState<number | ''>('');
 
   const [formData, setFormData] = useState({
     slug: '',
@@ -46,6 +49,7 @@ export default function EditUniversityPage() {
             return { ...base, ...(typeof field === 'string' ? JSON.parse(field) : field) };
           };
 
+          setHubId(data.hubId ?? '');
           setFormData({
             slug: data.slug || '',
             image: data.image || '',
@@ -199,7 +203,7 @@ export default function EditUniversityPage() {
       const res = await fetch(`/api/admin/universities/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(processedFormData),
+        body: JSON.stringify({ ...processedFormData, hubId }),
       });
 
       if (res.ok) {
@@ -261,6 +265,9 @@ export default function EditUniversityPage() {
               }
             />
             <p className="text-xs text-gray-500 mt-1">{t('slugHint')}</p>
+          </div>
+          <div className="md:col-span-2">
+            <UniversityHubSelect value={hubId} onChange={setHubId} />
           </div>
           <div>
             <label htmlFor="tuitionFee" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

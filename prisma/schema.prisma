@@ -57,9 +57,30 @@ model AdminSession {
   @@index([userId])
 }
 
+model UniversityHub {
+  id          Int          @id @default(autoincrement())
+  slug        String       @unique
+  title       Json
+  subtitle    Json?
+  description Json?
+  image       String?
+  flagImage   String?
+  icon        String?
+  accentColor String       @default("blue")
+  sortOrder   Int          @default(0)
+  isActive    Boolean      @default(true)
+  deletedAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  universities University[]
+
+  @@index([sortOrder])
+}
+
 model University {
   id                 Int                @id @default(autoincrement())
   slug               String             @unique
+  hubId              Int?
   name               Json
   description        Json
   country            Json
@@ -73,7 +94,10 @@ model University {
   deletedAt          DateTime?
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
+  hub                UniversityHub?     @relation(fields: [hubId], references: [id], onDelete: SetNull)
   onlineAdmissions   OnlineAdmission[]
+
+  @@index([hubId])
 }
 
 model StudentUser {

@@ -25,7 +25,8 @@
     "account": "ანგარიში / პაროლი",
     "users": "ადმინები",
     "logout": "გასვლა",
-    "xeyal": "Xeyal პანელი"
+    "xeyal": "Xeyal პანელი",
+    "universityHubs": "მიმართულებები"
   },
   "layout": {
     "brand": "OstWind CMS",
@@ -742,5 +743,33 @@
     "ru": "რუსული",
     "uk": "უკრაინული",
     "ge": "ქართული"
+  },
+  "universityHubs": {
+    "title": "Universitet istiqamətləri",
+    "intro": "Saytda ölkə/region kartları (Ukrayna, Türkiyə və s.). Yeni ölkə əlavə edə bilərsiniz.",
+    "addButton": "Yeni istiqamət",
+    "slug": "Slug (URL)",
+    "slugHint": "Məs: kazakhstan → /universities/kazakhstan",
+    "icon": "İkon (emoji)",
+    "sortOrder": "Sıra",
+    "accentColor": "Kart rəngi",
+    "coverImage": "Örtük şəkli",
+    "isActive": "Saytda aktiv",
+    "subtitle": "Alt başlıq",
+    "colOrder": "Sıra",
+    "colName": "Ad",
+    "colUniversities": "Universitet",
+    "colStatus": "Status",
+    "active": "Aktiv",
+    "inactive": "Passiv",
+    "empty": "İstiqamət yoxdur",
+    "confirmDelete": "Bu istiqaməti silmək?",
+    "assignHub": "Ölkə / region",
+    "selectHub": "Seçin",
+    "fieldTitle": "Başlıq",
+    "flagImage": "Country flag",
+    "flagImageHint": "Leave empty to use default flag for this slug.",
+    "campusImage": "University / campus photo",
+    "campusImageHint": "Shown on the right side of the hub card. Upload or paste URL."
   }
 }

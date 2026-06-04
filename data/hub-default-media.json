@@ -1,0 +1,18 @@
+{
+  "ukraine": {
+    "flag": "https://flagcdn.com/w160/ua.png",
+    "image": "/images/hubs/ukraine.jpg"
+  },
+  "turkey": {
+    "flag": "https://flagcdn.com/w160/tr.png",
+    "image": "/images/hubs/turkey.jpg"
+  },
+  "europe": {
+    "flag": "https://flagcdn.com/w160/eu.png",
+    "image": "/images/hubs/europe.jpg"
+  },
+  "uzbekistan": {
+    "flag": "https://flagcdn.com/w160/uz.png",
+    "image": "/images/hubs/uzbekistan.jpg"
+  }
+}

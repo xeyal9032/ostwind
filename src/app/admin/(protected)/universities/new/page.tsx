@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { getContentLocaleTabs } from '@/lib/admin-content-locales';
 import { useAdminContentLocale } from '@/lib/use-admin-locale-field';
+import UniversityHubSelect from '@/components/admin/UniversityHubSelect';
 
 export default function NewUniversityPage() {
   const t = useTranslations('universities');
@@ -21,6 +22,8 @@ export default function NewUniversityPage() {
   const [translating, setTranslating] = useState(false);
 
   // Form State (Multi-language JSON fields)
+  const [hubId, setHubId] = useState<number | ''>('');
+
   const [formData, setFormData] = useState({
     slug: '',
     image: '',
@@ -30,6 +33,15 @@ export default function NewUniversityPage() {
     country: { tr: '', en: '', az: '', ru: '', uk: '', ge: '' },
     city: { tr: '', en: '', az: '', ru: '', uk: '', ge: '' },
   });
+
+  useEffect(() => {
+    fetch('/api/admin/university-hubs')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((hubs: { id: number; slug: string }[]) => {
+        const ukraine = hubs.find((h) => h.slug === 'ukraine');
+        if (ukraine) setHubId(ukraine.id);
+      });
+  }, []);
 
   const handleLangChange = (field: string, lang: string, value: string) => {
     setFormData(prev => ({
@@ -161,7 +173,7 @@ export default function NewUniversityPage() {
       const res = await fetch('/api/admin/universities', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(processedFormData)
+        body: JSON.stringify({ ...processedFormData, hubId })
       });
 
       if (res.ok) {
@@ -213,6 +225,9 @@ export default function NewUniversityPage() {
               onChange={e => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-')})}
             />
             <p className="text-xs text-gray-500 mt-1">{t('slugHint')}</p>
+          </div>
+          <div className="md:col-span-2">
+            <UniversityHubSelect value={hubId} onChange={setHubId} />
           </div>
           <div>
             <label htmlFor="tuitionFee" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

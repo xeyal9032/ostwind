@@ -25,7 +25,8 @@
     "account": "Hesab / Şifrə",
     "users": "Adminlər",
     "logout": "Çıxış",
-    "xeyal": "Xeyal paneli"
+    "xeyal": "Xeyal paneli",
+    "universityHubs": "Universitet istiqamətləri"
   },
   "layout": {
     "brand": "OstWind CMS",
@@ -762,5 +763,33 @@
     "ru": "Rusca",
     "uk": "Ukraynaca",
     "ge": "Gürcücə"
+  },
+  "universityHubs": {
+    "title": "Universitet istiqamətləri",
+    "fieldTitle": "Başlıq",
+    "intro": "Saytda ölkə/region kartları (Ukrayna, Türkiyə və s.). Yeni ölkə əlavə edə bilərsiniz.",
+    "addButton": "Yeni istiqamət",
+    "slug": "Slug (URL)",
+    "slugHint": "Məs: kazakhstan → /universities/kazakhstan",
+    "icon": "İkon (emoji)",
+    "sortOrder": "Sıra",
+    "accentColor": "Kart rəngi",
+    "flagImage": "Ölkə bayrağı",
+    "flagImageHint": "Boş buraxsanız, slug üzrə default bayraq göstərilir (məs. ukraine → UA).",
+    "campusImage": "Universitet / kampus şəkli",
+    "campusImageHint": "Kartın sağında görünən məşhur universitet və ya şəhər görüntüsü.",
+    "coverImage": "Örtük şəkli",
+    "isActive": "Saytda aktiv",
+    "subtitle": "Alt başlıq",
+    "colOrder": "Sıra",
+    "colName": "Ad",
+    "colUniversities": "Universitet",
+    "colStatus": "Status",
+    "active": "Aktiv",
+    "inactive": "Passiv",
+    "empty": "İstiqamət yoxdur",
+    "confirmDelete": "Bu istiqaməti silmək?",
+    "assignHub": "Ölkə / region",
+    "selectHub": "Seçin"
   }
 }

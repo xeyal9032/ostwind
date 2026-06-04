@@ -12,6 +12,7 @@ import AdminBrandLogo from '@/components/admin/AdminBrandLogo';
 type MenuKey =
   | 'dashboard'
   | 'universities'
+  | 'universityHubs'
   | 'services'
   | 'pricing'
   | 'faq'
@@ -36,6 +37,7 @@ type MenuItem = {
 const ALL_MENU: MenuItem[] = [
   { key: 'dashboard', href: '/admin/dashboard', icon: '📊' },
   { key: 'universities', href: '/admin/universities', icon: '🎓', permission: 'universities' },
+  { key: 'universityHubs', href: '/admin/university-hubs', icon: '🌍', permission: 'universities' },
   { key: 'services', href: '/admin/services', icon: '🛠️', permission: 'services' },
   { key: 'pricing', href: '/admin/pricing', icon: '💰', permission: 'pricing' },
   { key: 'faq', href: '/admin/faq', icon: '❓', permission: 'faq' },

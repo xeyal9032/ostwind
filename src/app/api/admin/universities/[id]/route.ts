@@ -37,12 +37,23 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await req.json();
-    const { slug, name, description, country, city, image, tuitionFee, tuitionFeePartTime } = body;
+    const {
+      slug,
+      name,
+      description,
+      country,
+      city,
+      image,
+      tuitionFee,
+      tuitionFeePartTime,
+      hubId,
+    } = body;
 
     const university = await prisma.university.update({
       where: { id: parseInt(id, 10) },
       data: {
         slug,
+        hubId: hubId != null && hubId !== '' ? parseInt(String(hubId), 10) : null,
         name,
         description,
         country,

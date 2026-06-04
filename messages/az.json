@@ -279,5 +279,14 @@
     "REVIEWING": "Yoxlanılır",
     "APPROVED": "Təsdiqləndi",
     "REJECTED": "Rədd edildi"
+  },
+  "UniversitiesHub": {
+    "eyebrow": "Təhsil istiqamətləri",
+    "subtitle": "Ölkə və region üzrə tərəfdaş universitetlərimizi seçin.",
+    "explore": "Kəşf et",
+    "backToRegions": "Bütün istiqamətlər",
+    "universityCount": "{count} universitet",
+    "emptyList": "Bu bölmədə hələ universitet yoxdur.",
+    "noHubs": "Tezliklə yeni istiqamətlər əlavə olunacaq."
   }
 }
